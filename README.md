@@ -22,7 +22,6 @@ A partire dalla forma finale espansa, si può estrarre la categoria del dominio 
 Tutto questo verrà effettuato in tempo reale, usando [Storm][01]
 
 
-###References: 
 [01]: https://github.com/nathanmarz/storm/wiki "Wiki di Storm"
 
 [02]: http://twitter4j.org/en/ "Sito di riferimento per le APIs di Twitter in Java"
