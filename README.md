@@ -34,13 +34,7 @@ Tutto questo verrà effettuato in tempo reale, usando [Storm][01]
 * In the Project Explorer, create a new Maven Project. Make sure only "Use default workspace location" is checked and press Next. Wait for the windows to download all the archetypes, then select maven-archetype-webapp. In the next screen you'll have to fill in some details, such as the group Id (e.g. ggd), archetype id (e.g. RTwUP). Then you can press "Finish" and the project will be created.
 It may depends on how your buildpath is configured, but if Eclipse highlights a problem with the Java version set in your buildpath, go fixing the issue.
 * You can integrate the latest Twitter4J build easily by just including the following lines in your pom.xml.
- ```<dependencies>```  
->   	<dependency> 
->   		<groupId>org.twitter4j</groupId>
->   		<artifactId>twitter4j-core</artifactId>
->   		<version>[3.0,)</version>  
->   	</dependency>  
->```</dependencies>```  
+<pre class="codeSample">   &lt;dependencies&gt;<br/>      &lt;dependency&gt;<br/>           &lt;groupId&gt;org.twitter4j&lt;/groupId&gt;<br/>           &lt;artifactId&gt;twitter4j-core&lt;/artifactId&gt;<br/>           &lt;version&gt;[3.0,)&lt;/version&gt;<br/>       &lt;/dependency&gt;<br/>       ...<br/>   &lt;/dependencies&gt;<br/></pre>
 If you use Eclipse to open and modify pom.xml, hit the Dependencies tab and click Add (on the left), then fill in the fields with the details given above in the XML format.
 
 ##Creation of a Twitter account to use
