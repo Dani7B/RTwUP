@@ -14,7 +14,7 @@ foursquare.com: expanded.url.com/123 - 9 times; expanded.url.com/456 - 8 times
 	All  
 
 ###Descrizione del flusso dei dati: 
-I Tweets sono scaricati a partire da una query con le Twitter APIs (ad esempio [Twitter4j][02]), filtrate opportunamente (ad esempio, in base alle coordinate di un poligono centrato su Roma, oppure Milano, etc... a scelta) per poi essere elaborati, usando il client [Hosebird][03].  
+I Tweets sono scaricati a partire da una query con le Twitter APIs (ad esempio [Twitter4j][02], [Hosebird][03]), filtrate opportunamente (ad esempio, in base alle coordinate di un poligono centrato su Roma, oppure Milano, etc... a scelta).  
 I link trovati nel campo entities/urls del json del tweet sono quelli di interesse: 
 * se è già presente nel tweet la forma espansa dell’url, il conteggio viene assegnato allo stesso; 
 * se è presente una forma “shortened” (ad esempio bit.ly/13NHE7v , goo.gl/uJH2Y , http://instagr.am/p/S3l5rQjCcA/, ecc ...), allora è necessario espanderla, arrivando (eventualmente con diverse espansioni) alla forma finale completamente espansa.
