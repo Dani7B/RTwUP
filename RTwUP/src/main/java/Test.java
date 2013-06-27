@@ -1,4 +1,3 @@
-
 import twitter4j.Location;
 import twitter4j.AccountSettings;
 import twitter4j.Twitter;
