@@ -37,7 +37,7 @@ It may depends on how your buildpath is configured, but if Eclipse highlights a 
 * You can integrate the latest Twitter4J build easily by just including the following lines in your pom.xml.
 <pre class="codeSample">   &lt;dependencies&gt;<br/>      &lt;dependency&gt;<br/>           &lt;groupId&gt;org.twitter4j&lt;/groupId&gt;<br/>           &lt;artifactId&gt;twitter4j-core&lt;/artifactId&gt;<br/>           &lt;version&gt;[3.0,)&lt;/version&gt;<br/>       &lt;/dependency&gt;<br/>       ...<br/>   &lt;/dependencies&gt;<br/></pre>
 If you use Eclipse to open and modify pom.xml, hit the Dependencies tab and click Add (on the left), then fill in the fields with the details given above in the XML format.
-* You should also integrate Storm in your Maven project. The first thing to do is to add a dependency in your pom.xml (before the "<repositories>" tag) like this:
+* You should also integrate Storm in your Maven project. The first thing to do is to add a dependency in your pom.xml (before the &lt;dependencies&gt; tag) like this:
 <pre class="codeSample">   &lt;repositories&gt;<br/>      &lt;repository&gt;<br/>           &lt;id&gt;clojars.org&lt;/id&gt;<br/>           &lt;url&gt;http://clojars.org/repo &lt;/url&gt;<br/>       &lt;/repository&gt;<br/>   &lt;/repositories&gt;<br/></pre>
 Then, like what you did before with the Twitter4J dependency, add the Storm dependency:
 <pre class="codeSample">   &lt;dependencies&gt;<br/>      &lt;dependency&gt;<br/>           &lt;groupId&gt;storm&lt;/groupId&gt;<br/>           &lt;artifactId&gt;storm&lt;/artifactId&gt;<br/>           &lt;version&gt;0.7.2&lt;/version&gt;<br/>           &lt;scope&gt;test&lt;/scope&gt;<br/>       &lt;/dependency&gt;<br/>   &lt;/dependencies&gt;<br/></pre>
