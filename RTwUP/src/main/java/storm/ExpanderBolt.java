@@ -17,7 +17,7 @@ public class ExpanderBolt extends BaseBasicBolt {
 	private static final long serialVersionUID = 1L;
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
-		String url = (String) input.getValue(0);
+		String url = input.getStringByField("url");
 		try {
 			URL url_da_verificare;
 			boolean flag = false;

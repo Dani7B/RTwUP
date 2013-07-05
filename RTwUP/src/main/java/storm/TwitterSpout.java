@@ -89,7 +89,7 @@ public class TwitterSpout extends BaseRichSpout {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("tweet"));
+		declarer.declare(new Fields("url"));
 
 	}
 
