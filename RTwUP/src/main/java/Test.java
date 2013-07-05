@@ -19,7 +19,8 @@ public class Test {
 			
 			StatusListener listener = new StatusListener() {
 	            public void onStatus(Status status) {
-	                System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+	            	if(status.getURLEntities().length != 0)
+	            		System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
 	            }
 
 	            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
