@@ -19,6 +19,15 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 
+/** 
+ * 
+ * This spout listen to tweet stream, then filter the tweets by location (e.g. city of Rome)
+ * and retrieve only the links contained in tweets.
+ * 
+ * @author Gabriele de Capoa
+ * 
+ * **/
+
 public class TwitterSpout extends BaseRichSpout {
 
 	private static final long serialVersionUID = 1L;

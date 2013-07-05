@@ -12,10 +12,25 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
+/**
+ * This bolt expand the URL, if it is a shortner URL, until we retrieve
+ * the effective URL.
+ * 
+ * @author Gabriele de Capoa
+ *
+ */
+
 public class ExpanderBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Expand the URL.
+	 * We use code by Thomas Taschauer ({@link https://gist.github.com/TomTasche/1104272}
+	 * modified for our purpose.
+	 * 
+	 */
+	
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		String url = input.getStringByField("url");
 		try {
