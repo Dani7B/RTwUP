@@ -23,8 +23,7 @@
     <dependency>
     	<groupId>storm</groupId>
     	<artifactId>storm</artifactId>
-    	<version>0.7.2</version>
-    	<scope>test</scope>
+    	<version>[0.7.2,)</version>
     </dependency>
     <dependency>
     	<groupId>org.twitter4j</groupId>
