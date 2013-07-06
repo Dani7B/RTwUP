@@ -1,8 +1,6 @@
 #RTwUP
 
 ##Realtime Twitter Url Popularity
-
-=======
 Dato un flusso di documenti provenienti da una query su Twitter, filtrata in modo opportuno , realizzare delle statistiche aggiornate in tempo reale che mostrino la classifica degli URL più twittati da quando il sistema è attivo.
 Le statistiche vengono stampate a schermo ogni N secondi.  
 Le statistiche mostrano i link organizzati in varie categorie di domini, ognuno con il suo conteggio di popolarità:  
