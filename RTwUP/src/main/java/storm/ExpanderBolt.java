@@ -16,7 +16,7 @@ import backtype.storm.tuple.Values;
  * This bolt expand the URL, if it is a shortner URL, until we retrieve
  * the effective URL.
  * 
- * @author Gabriele de Capoa
+ * @author Gabriele de Capoa, Gabriele Proni
  *
  */
 
