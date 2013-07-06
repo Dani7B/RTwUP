@@ -1,5 +1,6 @@
 package storm;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import backtype.storm.topology.BasicOutputCollector;

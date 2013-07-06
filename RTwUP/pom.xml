@@ -21,11 +21,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    	<groupId>org.twitter4j</groupId>
-    	<artifactId>twitter4j-stream</artifactId>
-    	<version>[3.0,)</version>
-    </dependency>
-    <dependency>
     	<groupId>storm</groupId>
     	<artifactId>storm</artifactId>
     	<version>0.7.2</version>
