@@ -56,5 +56,5 @@ Go to https://dev.twitter.com/apps and login. Click on "Create an Application" a
 * You can test that Twitter4j is working properly and that you've got everything set up. You can create a Test class in your project and start playing around with Twitter4j.
 
 ##The story so far...
-After properly setting up the project, we created a Test class, whose job is retrieving all the tweets from Rome urban area. We switched from Twitter Search API to Twitter Stream API because it's more suitable to what our final goal is.
+After properly setting up the project, we started working with Storm and created a Spout that retrieves all the tweets with links from Rome urban area. Test class is used to try methods without involving the Spout.
 
