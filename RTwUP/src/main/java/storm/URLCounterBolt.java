@@ -11,7 +11,7 @@ import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
 /**
- * This bolt count the URL.
+ * This bolt counts the URL.
  * 
  * @author Gabriele de Capoa, Gabriele Proni
  *

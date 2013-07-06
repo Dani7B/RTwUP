@@ -21,8 +21,8 @@ import backtype.storm.tuple.Values;
 
 /** 
  * 
- * This spout listen to tweet stream, then filter the tweets by location (e.g. city of Rome)
- * and retrieve only the links contained in tweets.
+ * This spout listens to tweet stream, then filters the tweets by location (e.g. city of Rome)
+ * and retrieves only the links contained in tweets.
  * 
  * @author Gabriele de Capoa, Gabriele Proni, Daniele Morgantini
  * 
