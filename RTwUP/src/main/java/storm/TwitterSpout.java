@@ -11,7 +11,7 @@ import twitter4j.StatusListener;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.URLEntity;
-import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.auth.AccessToken;
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -41,17 +41,10 @@ public class TwitterSpout extends BaseRichSpout {
 		this.queue = new LinkedBlockingQueue<Status>();
 		this.collector = collector;
 
-		ConfigurationBuilder cb = new ConfigurationBuilder();
-		cb.setDebugEnabled(true)
-				.setOAuthConsumerKey("P9c5PqNZ2HvANU6B8Rrp1A")
-				.setOAuthConsumerSecret(
-						"iKUCqCYbvI8Tam7zGgIRiO6Zcyh2hw7Nm0v97lE")
-				.setOAuthAccessToken(
-						"1546231212-TKDS2JM9sBp351uEuvnbn1VSPLR5mUKhZxwmfLr")
-				.setOAuthAccessTokenSecret(
-						"8krjiVUEAoLvFrLC8ryw8iaU2PKTU80WHZaWevKGk2Y");
-
-		TwitterStream ts = new TwitterStreamFactory(cb.build()).getInstance();
+		TwitterStream ts = new TwitterStreamFactory().getInstance();
+		ts.setOAuthConsumer("P9c5PqNZ2HvANU6B8Rrp1A", "iKUCqCYbvI8Tam7zGgIRiO6Zcyh2hw7Nm0v97lE");
+		AccessToken accessToken = new AccessToken("1546231212-TKDS2JM9sBp351uEuvnbn1VSPLR5mUKhZxwmfLr","8krjiVUEAoLvFrLC8ryw8iaU2PKTU80WHZaWevKGk2Y");
+		ts.setOAuthAccessToken(accessToken);
 
 		StatusListener listener = new StatusListener() {
 
@@ -68,7 +61,8 @@ public class TwitterSpout extends BaseRichSpout {
 			}
 
 			public void onStatus(Status status) {
-				queue.add(status);
+				if(status.getURLEntities().length != 0)
+					queue.add(status);
 			}
 
 			public void onTrackLimitationNotice(int arg0) {
@@ -87,10 +81,8 @@ public class TwitterSpout extends BaseRichSpout {
 		try {
 			Status retrieve = queue.take();
 			URLEntity[] urls = retrieve.getURLEntities();
-			if (urls != null) {
-				for (URLEntity url : urls)
+			for (URLEntity url : urls)
 				this.collector.emit(new Values(url.getURL()));
-			}
 		} catch (InterruptedException e) {
 			System.err.println("ERRORE SULLO SPOUT: " + e.getMessage());
 		}

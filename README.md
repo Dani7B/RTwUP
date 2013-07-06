@@ -34,8 +34,8 @@ Tutto questo verrà effettuato in tempo reale, usando [Storm][01]
 * If you haven't got *Eclipse IDE for Java EE Developers*, you should download and install the M2E plugin for Eclipse from the Eclipse Marketplace
 * In the Project Explorer, create a new Maven Project. Make sure only "Use default workspace location" is checked and press Next. Wait for the windows to download all the archetypes, then select maven-archetype-webapp. In the next screen you'll have to fill in some details, such as the group Id (e.g. ggd), archetype id (e.g. RTwUP). Then you can press "Finish" and the project will be created.
 It may depends on how your buildpath is configured, but if Eclipse highlights a problem with the Java version set in your buildpath, go fixing the issue.
-* You can integrate the latest Twitter4J build easily by just including the following lines in your pom.xml.
-<pre class="codeSample">   &lt;dependencies&gt;<br/>      &lt;dependency&gt;<br/>           &lt;groupId&gt;org.twitter4j&lt;/groupId&gt;<br/>           &lt;artifactId&gt;twitter4j-core&lt;/artifactId&gt;<br/>           &lt;version&gt;[3.0,)&lt;/version&gt;<br/>       &lt;/dependency&gt;<br/>       ...<br/>   &lt;/dependencies&gt;<br/></pre>
+* You can integrate the latest Twitter4J build easily by just including the following lines in your pom.xml (We are using Twitter Stream API).
+<pre class="codeSample">   &lt;dependencies&gt;<br/>      &lt;dependency&gt;<br/>           &lt;groupId&gt;org.twitter4j&lt;/groupId&gt;<br/>           &lt;artifactId&gt;twitter4j-stream&lt;/artifactId&gt;<br/>           &lt;version&gt;[3.0,)&lt;/version&gt;<br/>       &lt;/dependency&gt;<br/>       ...<br/>   &lt;/dependencies&gt;<br/></pre>
 If you use Eclipse to open and modify pom.xml, hit the Dependencies tab and click Add (on the left), then fill in the fields with the details given above in the XML format.
 * You should also integrate Storm in your Maven project. The first thing to do is to add a dependency in your pom.xml (before the &lt;dependencies&gt; tag) like this:
 <pre class="codeSample">   &lt;repositories&gt;<br/>      &lt;repository&gt;<br/>           &lt;id&gt;clojars.org&lt;/id&gt;<br/>           &lt;url&gt;http://clojars.org/repo &lt;/url&gt;<br/>       &lt;/repository&gt;<br/>   &lt;/repositories&gt;<br/></pre>
@@ -54,4 +54,7 @@ Go to https://dev.twitter.com/apps and login. Click on "Create an Application" a
 
 * There are several ways to set oAuth properties. Here's some [example] (http://twitter4j.org/en/configuration.html)
 * You can test that Twitter4j is working properly and that you've got everything set up. You can create a Test class in your project and start playing around with Twitter4j.
+
+##The story so far...
+After properly setting up the project, we started working with Storm and created a Spout that retrieves all the tweets with links from Rome urban area. Test class is used to try methods without involving the Spout.
 
