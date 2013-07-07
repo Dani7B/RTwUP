@@ -3,6 +3,8 @@ package storm.bolts;
 import java.util.HashMap;
 import java.util.Map;
 
+import storage.URLMap;
+import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
@@ -21,26 +23,23 @@ public class URLCounterBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
 
-	private Map<String, Integer> counts = new HashMap<String, Integer>();
+	private Map<String, Integer> counts;
+	
+	public void prepare(Map conf, TopologyContext context){
+		this.counts=URLMap.getInstance();
+	}
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		
 		String url = input.getStringByField("expanded_url");
-		Integer count = this.counts.get(url);
-		
-		if(count==null)
+		Integer count = null;
+		if(!this.counts.containsKey(url))
 			count = 0;
 		count++;
 		this.counts.put(url, count);
-		
-		collector.emit(new Values (url, count));
-
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		
-		declarer.declare(new Fields("domain", "count"));
-
 	}
 
 }
