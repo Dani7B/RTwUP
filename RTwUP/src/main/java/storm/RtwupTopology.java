@@ -3,6 +3,9 @@
  */
 package storm;
 
+import storm.bolts.ExpanderBolt;
+import storm.bolts.URLCounterBolt;
+import storm.spouts.TwitterSpout;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;

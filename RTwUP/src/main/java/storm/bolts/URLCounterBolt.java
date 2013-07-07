@@ -1,4 +1,4 @@
-package storm;
+package storm.bolts;
 
 import java.util.HashMap;
 import java.util.Map;
