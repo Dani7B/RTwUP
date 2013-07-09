@@ -1,4 +1,4 @@
-package storm;
+package storm.bolts;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
