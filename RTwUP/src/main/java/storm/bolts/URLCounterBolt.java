@@ -1,6 +1,5 @@
 package storm.bolts;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import storage.URLMap;
@@ -8,9 +7,7 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
-import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
-import backtype.storm.tuple.Values;
 
 /**
  * This bolt counts the URL.

@@ -13,7 +13,7 @@ import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
 /**
- * This bolt expand the URL, if it is a shortner URL, until we retrieve
+ * This bolt expands the URL, if it is a shortned URL, until we retrieve
  * the effective URL.
  * 
  * @author Gabriele de Capoa, Gabriele Proni
@@ -64,7 +64,6 @@ public class ExpanderBolt extends BaseBasicBolt {
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("expanded_url"));
-		
 	}
 	
 

@@ -7,7 +7,13 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.auth.AccessToken;
 
-
+/**
+ * This class tests uses Twitter Stream API to connect to the Twitter service and prints on screen only 
+ * the statuses with links tweeted from Rome urban area. 
+ * 
+ * @author Daniele Morgantini
+ * 
+ * **/
 public class Test {
 	
 	public static void main(String[]args) {
