@@ -1,8 +1,6 @@
 package storm.bolts;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import storage.URLMap;
 import backtype.storm.task.TopologyContext;
@@ -24,7 +22,7 @@ public class URLCounterBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
 
-	private ConcurrentHashMap<String, Map<String, Integer>> counts;
+	private Map<String, Integer> counts;
 	
 	public void prepare(Map conf, TopologyContext context){
 		this.counts=URLMap.getInstance();
@@ -32,26 +30,18 @@ public class URLCounterBolt extends BaseBasicBolt {
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		
-		String domain = input.getStringByField("expanded_url_domain");
-		String file = input.getStringByField("expanded_url_file");
-		Integer count = null;
-		
-		if (!this.counts.containsKey(domain)||!this.counts.get(domain).containsKey(file))
+		String url = input.getStringByField("expanded_url");
+		Integer count = this.counts.get(url);
+		if(count == null)
 			count = 0;
 		count++;
-		
-		Map<String, Integer> ranking = null;
-		if(!this.counts.get(domain).containsKey(file))
-			ranking = new HashMap<String, Integer>();
-		else
-			ranking = this.counts.get(domain);
-		
-		ranking.put(file, count);
-		this.counts.put(domain, ranking);
-		System.out.println("Domain: " + domain + " File: "+ file+ " Count: " + count);
+		this.counts.put(url, count);
+		System.out.println("Link: " + url + " Count: " + count);
+		collector.emit(new Values(count));
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		declarer.declare(new Fields("count"));
 	}
 
 }

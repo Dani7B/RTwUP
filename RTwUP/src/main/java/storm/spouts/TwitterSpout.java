@@ -34,17 +34,17 @@ public class TwitterSpout extends BaseRichSpout {
 
 	private LinkedBlockingQueue<Status> queue = null;
 	private SpoutOutputCollector collector;
-	private TwitterStream ts = null;
-	
+
 	public void open(Map conf, TopologyContext context,
 			SpoutOutputCollector collector) {
 
 		this.queue = new LinkedBlockingQueue<Status>();
 		this.collector = collector;
-		this.ts = new TwitterStreamFactory().getInstance();
-		this.ts.setOAuthConsumer("P9c5PqNZ2HvANU6B8Rrp1A", "iKUCqCYbvI8Tam7zGgIRiO6Zcyh2hw7Nm0v97lE");
+
+		TwitterStream ts = new TwitterStreamFactory().getInstance();
+		ts.setOAuthConsumer("P9c5PqNZ2HvANU6B8Rrp1A", "iKUCqCYbvI8Tam7zGgIRiO6Zcyh2hw7Nm0v97lE");
 		AccessToken accessToken = new AccessToken("1546231212-TKDS2JM9sBp351uEuvnbn1VSPLR5mUKhZxwmfLr","8krjiVUEAoLvFrLC8ryw8iaU2PKTU80WHZaWevKGk2Y");
-		this.ts.setOAuthAccessToken(accessToken);
+		ts.setOAuthAccessToken(accessToken);
 
 		StatusListener listener = new StatusListener() {
 
@@ -70,11 +70,11 @@ public class TwitterSpout extends BaseRichSpout {
 
 		};
 
-		this.ts.addListener(listener);
+		ts.addListener(listener);
 		FilterQuery query = new FilterQuery();
 		double[][] bbox = { { 12.38, 41.80 }, { 12.60, 42.00 } };
 		query.locations(bbox);
-		this.ts.filter(query);
+		ts.filter(query);
 	}
 
 	public void nextTuple() {
@@ -93,8 +93,4 @@ public class TwitterSpout extends BaseRichSpout {
 		declarer.declare(new Fields("url"));
 	}
 
-	public void close(){
-		this.ts.shutdown();
-	}
-	
 }
