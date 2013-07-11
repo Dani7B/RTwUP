@@ -34,11 +34,11 @@ public class ExpanderBolt extends BaseBasicBolt {
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		String url = input.getStringByField("url");
 		try {
-			URL url_da_verificare;
+			URL testingUrl;
 			boolean flag = false;
 			do {
-				url_da_verificare = new URL(url);
-				HttpURLConnection connection = (HttpURLConnection) url_da_verificare.openConnection();
+				testingUrl = new URL(url);
+				HttpURLConnection connection = (HttpURLConnection) testingUrl.openConnection();
 				connection.setInstanceFollowRedirects(true);
 				byte[] expanded = new byte[256];
 				connection.getInputStream().read(expanded, 0, 256);
@@ -48,12 +48,12 @@ public class ExpanderBolt extends BaseBasicBolt {
 							.indexOf("href") + 6);
 					urlExpanded = urlExpanded.substring(0,
 							urlExpanded.indexOf("\""));
-					url_da_verificare = new URL(urlExpanded);
+					testingUrl = new URL(urlExpanded);
 				} else {
 					flag = true;
 				}
 			} while (!flag);
-			collector.emit(new Values(url_da_verificare.getHost()));
+			collector.emit(new Values(testingUrl.getHost(), testingUrl.getFile()));
 		} catch (MalformedURLException e) {
 
 		} catch (IOException e) {
@@ -62,8 +62,7 @@ public class ExpanderBolt extends BaseBasicBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("expanded_url"));
+		declarer.declare(new Fields("expanded_url_domain", "expanded_url_file")); 
 	}
-	
 
 }
