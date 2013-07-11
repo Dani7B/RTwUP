@@ -1,5 +1,6 @@
 package storage;
 
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,15 +15,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class URLMap {
 
-	private static ConcurrentHashMap<String, Integer> instance;
+	private static ConcurrentHashMap<String, Map<String, Integer>> instance;
 	
 	/**
 	 * Lazy initialization
 	 */
 	
-	public static synchronized ConcurrentHashMap<String, Integer> getInstance(){
+	public static synchronized ConcurrentHashMap<String, Map<String, Integer>> getInstance(){
 		if (instance==null)
-			instance = new ConcurrentHashMap<String, Integer>();
+			instance = new ConcurrentHashMap<String, Map<String, Integer>>();
 		return instance;
 	}
 	
