@@ -41,7 +41,6 @@ public class TwitterSpout extends BaseRichSpout {
 
 		this.queue = new LinkedBlockingQueue<Status>();
 		this.collector = collector;
-
 		this.ts = new TwitterStreamFactory().getInstance();
 		this.ts.setOAuthConsumer("P9c5PqNZ2HvANU6B8Rrp1A", "iKUCqCYbvI8Tam7zGgIRiO6Zcyh2hw7Nm0v97lE");
 		AccessToken accessToken = new AccessToken("1546231212-TKDS2JM9sBp351uEuvnbn1VSPLR5mUKhZxwmfLr","8krjiVUEAoLvFrLC8ryw8iaU2PKTU80WHZaWevKGk2Y");
