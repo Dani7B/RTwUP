@@ -82,7 +82,7 @@ public class TwitterSpout extends BaseRichSpout {
 			Status retrieve = queue.take();
 			URLEntity[] urls = retrieve.getURLEntities();
 			for (URLEntity url : urls)
-				this.collector.emit(new Values(url.getURL()));
+				this.collector.emit(new Values(url.getExpandedURL()));
 		} catch (InterruptedException e) {
 			System.err.println("ERRORE SULLO SPOUT: " + e.getMessage());
 		}
@@ -91,7 +91,6 @@ public class TwitterSpout extends BaseRichSpout {
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("url"));
-
 	}
 
 }

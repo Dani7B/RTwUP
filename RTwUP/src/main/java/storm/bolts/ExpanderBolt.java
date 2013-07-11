@@ -38,8 +38,7 @@ public class ExpanderBolt extends BaseBasicBolt {
 			boolean flag = false;
 			do {
 				url_da_verificare = new URL(url);
-				HttpURLConnection connection = (HttpURLConnection) url_da_verificare
-						.openConnection();
+				HttpURLConnection connection = (HttpURLConnection) url_da_verificare.openConnection();
 				connection.setInstanceFollowRedirects(true);
 				byte[] expanded = new byte[256];
 				connection.getInputStream().read(expanded, 0, 256);
