@@ -28,7 +28,7 @@ public class RtwupTopology {
 		builder.setBolt("expander", new ExpanderBolt(), 5).shuffleGrouping(
 				"filteredStream");
 		builder.setBolt("urlCounter", new URLCounterBolt(), 5).fieldsGrouping(
-				"expander", new Fields("expanded_url"));
+				"expander", new Fields("expanded_url_domain"));
 		
 		Config conf = new Config();
 		conf.setDebug(true);
