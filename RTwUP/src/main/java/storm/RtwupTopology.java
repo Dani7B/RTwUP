@@ -27,8 +27,8 @@ public class RtwupTopology {
 		builder.setSpout("filteredStream", new TwitterSpout(), 1);
 		builder.setBolt("expander", new ExpanderBolt(), 5).shuffleGrouping(
 				"filteredStream");
-		builder.setBolt("urlCounter", new URLCounterBolt(), 5).fieldsGrouping(
-				"expander", new Fields("expanded_url"));
+		builder.setBolt("urlCounter", new URLCounterBolt(), 10).fieldsGrouping(
+				"expander", new Fields("expanded_url_domain"));
 		
 		Config conf = new Config();
 		conf.setDebug(true);

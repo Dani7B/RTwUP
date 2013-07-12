@@ -32,18 +32,19 @@ public class URLCounterBolt extends BaseBasicBolt {
 		
 		String domain = input.getStringByField("expanded_url_domain");
 		String file = input.getStringByField("expanded_url_file");
-		Integer count = null;
-		
-		if (!this.counts.containsKey(domain)||!this.counts.get(domain).containsKey(file)) 
-			count = 0;
-		count++;
-		
+		Integer count = 1;
 		Map<String, Integer> ranking = null;
-		if(!this.counts.get(domain).containsKey(file))
-			ranking = new HashMap<String, Integer>();
-		else
-			ranking = this.counts.get(domain);
 		
+		ranking = this.counts.get(domain);
+		if(ranking == null)
+			ranking = new HashMap<String, Integer>();
+		else {
+			count = ranking.get(file);
+			if(count == null)
+				count = 1;
+			else
+				count++;
+		}
 		ranking.put(file, count);
 		this.counts.put(domain, ranking);
 		System.out.println("Domain: " + domain + " File: "+ file+ " Count: " + count); 

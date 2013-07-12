@@ -40,8 +40,8 @@ public class ExpanderBolt extends BaseBasicBolt {
 				testingUrl = new URL(url);
 				HttpURLConnection connection = (HttpURLConnection) testingUrl.openConnection();
 				connection.setInstanceFollowRedirects(true);
-				byte[] expanded = new byte[256];
-				connection.getInputStream().read(expanded, 0, 256);
+				byte[] expanded = new byte[512];
+				connection.getInputStream().read(expanded, 0, 512);
 				String urlExpanded = new String(expanded);
 				if (urlExpanded.contains("href")) {
 					urlExpanded = urlExpanded.substring(urlExpanded
