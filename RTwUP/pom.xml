@@ -4,7 +4,6 @@
   <groupId>ggd</groupId>
   <artifactId>RTwUP</artifactId>
   <packaging>war</packaging>
-<<<<<<< HEAD
   <version>0.0.1-SNAPSHOT</version>
   <name>RTwUP Maven Webapp</name>
   <url>http://maven.apache.org</url>
@@ -31,43 +30,6 @@
     	<artifactId>twitter4j-stream</artifactId>
     	<version>[3.0,)</version>
     </dependency>
-=======
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
- <repositories>   
-   <repository>   
-       <id>clojars.org</id>   
-       <url>http://clojars.org/repo </url>   
-   </repository>   
-</repositories>
-  <dependencies>
-  	<dependency>
-  		<groupId>junit</groupId>
-  		<artifactId>junit</artifactId>
-  		<version>[3.8.1,)</version>
-  		<scope>test</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.twitter4j</groupId>
-  		<artifactId>twitter4j-stream</artifactId>
-  		<version>[3.0,)</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>storm</groupId>
-  		<artifactId>storm</artifactId>
-  		<version>0.8.2</version>
-  	</dependency>
->>>>>>> 514e4c69113d0e36a4f3606f85d605f9f2e6e105
   </dependencies>
   <build>
     <finalName>RTwUP</finalName>
