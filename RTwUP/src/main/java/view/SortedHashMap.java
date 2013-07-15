@@ -4,6 +4,12 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * This class returns the string containing the all the tuples in the map.
+ * 
+ * @author Daniele Morgantini
+ * 
+ */
 public class SortedHashMap {
 
 	private TreeMap<String,Integer> sorted_map;
