@@ -2,7 +2,7 @@ package storm.bolts;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap; 
+import java.util.concurrent.ConcurrentSkipListMap;
 
 import storage.URLMap;
 import backtype.storm.task.TopologyContext;
@@ -22,7 +22,7 @@ public class URLCounterBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
 
-	private ConcurrentHashMap<String, Map<String, Integer>> counts; 
+	private ConcurrentSkipListMap<String, Map<String, Integer>> counts; 
 	
 	public void prepare(Map conf, TopologyContext context){
 		this.counts=URLMap.getInstance(); 
