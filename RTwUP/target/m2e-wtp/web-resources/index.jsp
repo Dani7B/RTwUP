@@ -15,10 +15,10 @@
 	<ul>
 	   <% for(Entry<String, Map<String, Integer>> domain : entries) { %>
 	   <h3><%= domain.getKey() %></h3>
-	   <!-- <% SortedHashMap ranking = new SortedHashMap(domain.getValue());%>
+	   <% SortedHashMap ranking = new SortedHashMap(domain.getValue());%>
 	   <li>
        	<%=  ranking.toString() %>
-        </li> -->
+        </li>
     <% } %>
     </ul>
 	<div> 
