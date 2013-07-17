@@ -3,14 +3,13 @@ package redis;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPubSub;
 
 import static org.testng.Assert.assertTrue;
 
 /**
  * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com )
  */
-public class RedisPublisherTestCase {
+public class RedisPublisherIntegrationTestCase {
 
     private Jedis jedis;
     private RedisStringPublisher redisPublisher;
