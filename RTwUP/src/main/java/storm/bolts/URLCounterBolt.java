@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 import storage.URLMap;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
@@ -22,16 +25,21 @@ public class URLCounterBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
 
-	private ConcurrentSkipListMap<String, Map<String, Integer>> counts; 
+	private ConcurrentSkipListMap<String, Map<String, Integer>> counts;
+	private JedisPool pool = null;
+	private Jedis jedis = null;
 	
-	public void prepare(Map conf, TopologyContext context){
-		this.counts=URLMap.getInstance(); 
+	public void prepare(Map conf, TopologyContext context) {
+		this.counts = URLMap.getInstance();
+		
+		this.pool = new JedisPool(new JedisPoolConfig(), "localhost");
+		this.jedis = pool.getResource();
 	}
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
 
 		String domain = input.getStringByField("expanded_url_domain");
-		String file = input.getStringByField("expanded_url_file");
+		String path = input.getStringByField("expanded_url_complete");
 		Integer count = 1;
 		Map<String, Integer> ranking = null;
 
@@ -39,18 +47,29 @@ public class URLCounterBolt extends BaseBasicBolt {
 		if (ranking == null)
 			ranking = new HashMap<String, Integer>();
 		else {
-			count = ranking.get(file);
+			count = ranking.get(path);
 			if (count == null)
 				count = 1;
 			else
 				count++;
 		}
-		ranking.put(file, count);
+		ranking.put(path, count);
 		this.counts.put(domain, ranking);
-		System.out.println("Domain: " + domain + " File: "+ file+ " Count: " + count);
+		
+		this.jedis.publish("RTWUP.domain", domain);
+		this.jedis.publish("RTWUP.url", path);
+		this.jedis.publish("RTWUP.count", count.toString());
+		
+		System.out.println("Domain: " + domain + " URL: " + path + " Count: "
+				+ count);
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 	}
 
+	public void cleanup(){
+		this.pool.returnResource(this.jedis);
+		this.pool.destroy();
+	}
+	
 }
