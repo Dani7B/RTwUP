@@ -1,21 +1,19 @@
 package expansion;
-/*
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 /**
- * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com )
+ * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de Capoa
  */
-/*public class UrlExpansionTestCase {
+public class UrlExpansionTestCase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UrlExpansionTestCase.class);
 
@@ -42,9 +40,6 @@ import static org.testng.Assert.assertTrue;
 
         assertEquals(expandedUrl, expectedUrl);
     }
-<<<<<<< HEAD
-}*/
-=======
     
     @Test
     public void shouldExpand_tinyurl() throws IOException {
@@ -95,29 +90,27 @@ import static org.testng.Assert.assertTrue;
     }
 
     @Test
-    public void shouldExpandUrlsShortenedSeveralTimes() throws IOException {
+    public void shouldNotExpand() throws IOException {
 
-        final String shortenedSeveralTimes = "http://bit.ly/111udQI";
-        final URL shortenedUrl = new URL(shortenedSeveralTimes);
+        final String shortened = "https://github.com/Dani7B/RTwUP";
+        final URL shortenedUrl = new URL(shortened);
         final String expected = "https://github.com/Dani7B/RTwUP";
         final URL expectedUrl = new URL(expected);
 
         final URLConnection connection = shortenedUrl.openConnection();
         String temp = connection.getHeaderField("Location");
-        URL expandedUrl = null;
-        if (temp != null){
-            expandedUrl = new URL(temp);
-        }
-        else{
-            connection.getHeaderFields();
-            expandedUrl= connection.getURL();
-        }
+		URL expandedUrl = null;
+		if (temp != null){
+			 expandedUrl = new URL(temp);
+		}
+		else{
+			connection.getHeaderFields();
+			expandedUrl= connection.getURL();
+		}
         LOGGER.info(expandedUrl.getHost());
         LOGGER.info(expandedUrl.toString());
 
         assertEquals(expandedUrl, expectedUrl);
     }
-
     
 }
->>>>>>> 1b460d42fe997c4d0fdd442e93297d8b2ccce85c
