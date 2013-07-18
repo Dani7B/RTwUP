@@ -1,5 +1,5 @@
 package expansion;
-
+/*
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -13,7 +13,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com )
  */
-public class UrlExpansionTestCase {
+/*public class UrlExpansionTestCase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UrlExpansionTestCase.class);
 
@@ -33,4 +33,4 @@ public class UrlExpansionTestCase {
 
         assertEquals(expandedUrl, expectedUrl);
     }
-}
+}*/

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * This class returns the string containing the all the tuples in the map.
+ * This class sorts the tuples by value and returns the string containing the all the tuples in the map.
  * 
  * @author Daniele Morgantini
  * 
