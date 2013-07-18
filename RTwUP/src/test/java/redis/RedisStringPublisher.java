@@ -15,7 +15,6 @@ public class RedisStringPublisher implements StringPublisher {
 
     }
 
-    @Override
     public void publish(String channel, String message) {
         Long value = this.jedis.publish(channel, message);
     }

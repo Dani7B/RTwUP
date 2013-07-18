@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 
 import storage.URLMap;
-import storm.RtwupTopology;
 
 /**
  * Graphic User Interface to display the output of RTwUP
@@ -22,7 +21,6 @@ public class GUI {
 
 	private JFrame frmRtwup;
 	private AutoUpdateJPanel panel;
-	private String[] args;
 
 	/**
 	 * Launch the application.
@@ -31,7 +29,7 @@ public class GUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI window = new GUI(args);
+					GUI window = new GUI();
 					window.frmRtwup.setVisible(true);
 					window.frmRtwup.setSize(600, 500);
 				} catch (Exception e) {
@@ -44,8 +42,7 @@ public class GUI {
 	/**
 	 * Create the application.
 	 */
-	public GUI(String[]args) {
-		this.args = args;
+	public GUI() {
 		initialize();
 		Timer timer = new Timer(5000, panel);
 		timer.start();
