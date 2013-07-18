@@ -33,12 +33,6 @@
     	<version>${twitter4j-stream.version}</version>
     </dependency>
       <dependency>
-          <groupId>redis.clients</groupId>
-          <artifactId>jedis</artifactId>
-          <version>2.1.0</version>
-          <scope>test</scope>
-      </dependency>
-      <dependency>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
           <version>${slf4j-api.version}</version>
