@@ -36,10 +36,17 @@ public class ExpanderBolt extends BaseBasicBolt {
 		try {
 			testingUrl = new URL(url);
 			URLConnection connection = testingUrl.openConnection();
-			connection.getHeaderFields();
-			testingUrl = connection.getURL();
-			collector.emit(new Values(testingUrl.getHost(), testingUrl
-					.getFile()));
+			String temp = connection.getHeaderField("Location");
+			URL	newUrl = null;
+			if (temp != null){
+				 newUrl = new URL(temp);
+			}
+			else{
+				connection.getHeaderFields();
+				newUrl= connection.getURL();
+			}
+			collector.emit(new Values(newUrl.getHost(), newUrl
+					.toString()));
 		} catch (MalformedURLException e) {
 
 		} catch (IOException e) {
@@ -48,7 +55,7 @@ public class ExpanderBolt extends BaseBasicBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("expanded_url_domain", "expanded_url_file"));
+		declarer.declare(new Fields("expanded_url_domain", "expanded_url_complete"));
 	}
 
 }
