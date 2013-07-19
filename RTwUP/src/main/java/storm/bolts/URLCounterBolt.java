@@ -8,6 +8,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import storage.URLMap;
+import view.PageDictionary;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -15,7 +16,7 @@ import backtype.storm.topology.base.BaseBasicBolt;
 import backtype.storm.tuple.Tuple;
 
 /**
- * This bolt counts the URL.
+ * This bolt counts the URL occurrences.
  * 
  * @author Gabriele de Capoa, Gabriele Proni, Daniele Morgantini
  * 
@@ -56,12 +57,18 @@ public class URLCounterBolt extends BaseBasicBolt {
 		ranking.put(path, count);
 		this.counts.put(domain, ranking);
 		
+		/* Added to test PageDictionary */
+		PageDictionary.getInstance(7).addToDictionary(domain, path);
+		
 		this.jedis.publish("RTWUP.domain", domain);
 		this.jedis.publish("RTWUP.url", path);
 		this.jedis.publish("RTWUP.count", count.toString());
 		
+		/*
 		System.out.println("Domain: " + domain + " URL: " + path + " Count: "
-				+ count);
+				+ count); */
+		System.out.println(PageDictionary.getInstance(7).getTopNelementsStringified());
+		
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
