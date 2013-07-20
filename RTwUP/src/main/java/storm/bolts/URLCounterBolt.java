@@ -58,7 +58,7 @@ public class URLCounterBolt extends BaseBasicBolt {
 		this.counts.put(domain, ranking);
 		
 		/* Added to test PageDictionary */
-		PageDictionary.getInstance(7).addToDictionary(domain, path);
+		PageDictionary.getInstance().addToDictionary(domain, path);
 		
 		this.jedis.publish("RTWUP.domain", domain);
 		this.jedis.publish("RTWUP.url", path);
@@ -67,7 +67,7 @@ public class URLCounterBolt extends BaseBasicBolt {
 		/*
 		System.out.println("Domain: " + domain + " URL: " + path + " Count: "
 				+ count); */
-		System.out.println(PageDictionary.getInstance(7).getTopNelementsStringified());
+		System.out.println(PageDictionary.getInstance().getTopNelementsStringified(7));
 		
 	}
 

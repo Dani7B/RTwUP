@@ -16,16 +16,14 @@ public class PageDictionary {
 	
 	private static PageDictionary instance;
 	private Map<DomainPageCouple,Integer> dictionary;
-	private int topN;
 	
-	private PageDictionary(int n) {
+	private PageDictionary() {
 		this.dictionary = new ConcurrentHashMap<DomainPageCouple,Integer>();
-		this.topN = n;
 	}
 	
-	public static synchronized PageDictionary getInstance(int n){
+	public static synchronized PageDictionary getInstance(){
 		if (instance==null)
-			instance = new PageDictionary(n); 
+			instance = new PageDictionary(); 
 		return instance;
 	}
 	
@@ -55,7 +53,7 @@ public class PageDictionary {
 	 * Returns the stringified version of topNelements in the dictionary
 	 * 	 * 
 	 */
-	public String getTopNelementsStringified() {
+	public String getTopNelementsStringified(int topN) {
 		/* Ordering all the pages by counter */
 		ValueComparator bvc =  new ValueComparator(dictionary);
 		TreeMap<DomainPageCouple,Integer> sorted_map = new TreeMap<DomainPageCouple,Integer>(bvc);
@@ -65,7 +63,7 @@ public class PageDictionary {
         int i = 0;
         ConcurrentSkipListMap<String, String> domains = new ConcurrentSkipListMap<String, String> ();
         for(Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
-        	if(i<this.topN) {
+        	if(i<topN) {
         		String domain = dp.getKey().getDomain();
         		String page = dp.getKey().getPage();
         		String pages = null;
