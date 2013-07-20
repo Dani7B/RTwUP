@@ -3,7 +3,8 @@
  */
 package storm;
 
-import storm.bolts.ExpanderBolt; 
+import storm.bolts.ExpanderBolt;
+import storm.bolts.RedisPublisherBolt;
 import storm.bolts.URLCounterBolt;
 import storm.spouts.TwitterSpout;
 import backtype.storm.Config;
@@ -29,14 +30,16 @@ public class RtwupTopology {
 				"filteredStream");
 		builder.setBolt("urlCounter", new URLCounterBolt(), 5).fieldsGrouping(
 				"expander", new Fields("expanded_url_domain"));
-		
+		builder.setBolt("RedisPublisher", new RedisPublisherBolt(), 1).shuffleGrouping(
+				"urlCounter");
+
 		Config conf = new Config();
 		conf.setDebug(true);
 
 		if (args != null && args.length > 0) {
-			
+
 			conf.setNumWorkers(3);
-	
+
 			try {
 				StormSubmitter.submitTopology(args[0], conf,
 						builder.createTopology());
