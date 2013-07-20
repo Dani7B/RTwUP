@@ -15,6 +15,7 @@ import backtype.storm.tuple.Tuple;
 /**
  * This bolt publishes the URL ranking to Redis.
  * 
+<<<<<<< HEAD
  * @author Gabriele de Capoa, Gabriele Proni, Daniele Morgantini
  *
  */
@@ -35,9 +36,7 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 	
 	@Override
 	public void execute(Tuple input, BasicOutputCollector collector) {
-				
 		String ranking = PageDictionary.getInstance().getTopNelementsStringified(this.topN);
-		
 		this.jedis.publish("RTwUP", ranking);
 	}
 
@@ -50,5 +49,4 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 		this.pool.returnResource(this.jedis);
 		this.pool.destroy();
 	}
-	
 }

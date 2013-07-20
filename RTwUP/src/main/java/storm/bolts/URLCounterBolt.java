@@ -32,13 +32,13 @@ public class URLCounterBolt extends BaseBasicBolt {
 	public void execute(Tuple input, BasicOutputCollector collector) {
 
 		String domain = input.getStringByField("expanded_url_domain");
-		String path = input.getStringByField("expanded_url_complete"); 
+		String path = input.getStringByField("expanded_url_complete");
+		
 		Integer count = PageDictionary.getInstance().addToDictionary(domain, path);
 		
-		String message = "Domain: " + domain + " URL: " + path + " Count: "
-				+ count;
+		String message = ("Domain: " + domain + " URL: " + path + " Count: "+ count);
 		LOGGER.info(message);
-
+		
 		collector.emit(new Values(message));
 	}
 
