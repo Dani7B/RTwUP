@@ -36,10 +36,11 @@ public class RtwupTopology {
 		
 		Config conf = new Config();
 		conf.setDebug(true);
-
+		
 		if (args != null && args.length > 0) {
 			
 			conf.setNumWorkers(3);
+			conf.put("topN", Integer.parseInt(args[0])); //assuming topN is the first argument
 	
 			try {
 				StormSubmitter.submitTopology(args[0], conf,
@@ -50,7 +51,7 @@ public class RtwupTopology {
 				e.printStackTrace();
 			}
 		} else {
-
+			conf.put("topN", 10);
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology("RTwUP", conf, builder.createTopology());
 			Utils.sleep(300000);

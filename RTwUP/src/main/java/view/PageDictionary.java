@@ -9,7 +9,8 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import view.DomainPageCouple;
 
 /**
- * This class has a collection of all the links. It returns the stringified version of the TopNelements in the map
+ * This class works as a collector of all the URLs.
+ * It returns the stringified version of the TopNelements in the map
  * 
  * @author Daniele Morgantini
  * 

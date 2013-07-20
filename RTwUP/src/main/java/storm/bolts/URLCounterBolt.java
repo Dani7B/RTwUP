@@ -1,16 +1,10 @@
 package storm.bolts;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-import storage.URLMap;
 import view.PageDictionary;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
