@@ -33,5 +33,6 @@ Tutto questo verrà effettuato in tempo reale, usando [Storm][01]
 * [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP/wiki/Creation-of-a-Twitter-account-to-use)
 
 ##The story so far...
-After properly setting up the project, we started working with Storm and created a Spout that retrieves all the tweets with links from Rome urban area. Test class is used to try methods without involving the Spout.
+Our Storm topology takes care of retrieving the URLs twitted from Rome urban area and sorts them according to their frequency.
+We're currently working on the UI.
 
