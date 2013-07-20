@@ -39,7 +39,7 @@ public class URLCounterBolt extends BaseBasicBolt {
 
 		String domain = input.getStringByField("expanded_url_domain");
 		String path = input.getStringByField("expanded_url_complete"); 
-		Integer count = PageDictionary.getInstance(7).addToDictionary(domain, path);
+		Integer count = PageDictionary.getInstance().addToDictionary(domain, path);
 		
 		String message = "Domain: " + domain + " URL: " + path + " Count: "
 				+ count;

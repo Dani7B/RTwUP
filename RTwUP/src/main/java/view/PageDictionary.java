@@ -6,10 +6,15 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import view.DomainPageCouple;
 
 /**
- * This class has a collection of all the links. It returns the stringified version of the TopNelements in the map
+ * This class has a collection of all the URLs.
+ * It returns the stringified version of the TopNelements in the map.
  * 
  * @author Daniele Morgantini
  * 
@@ -18,16 +23,14 @@ public class PageDictionary {
 	
 	private static PageDictionary instance;
 	private Map<DomainPageCouple,Integer> dictionary;
-	private int topN;
 	
-	private PageDictionary(int n) {
+	private PageDictionary() {
 		this.dictionary = new ConcurrentHashMap<DomainPageCouple,Integer>();
-		this.topN = n;
 	}
 	
-	public static synchronized PageDictionary getInstance(int n){
+	public static synchronized PageDictionary getInstance(){
 		if (instance==null)
-			instance = new PageDictionary(n); 
+			instance = new PageDictionary(); 
 		return instance;
 	}
 	
@@ -55,9 +58,9 @@ public class PageDictionary {
 	
 	/**
 	 * Returns the stringified version of topNelements in the dictionary
-	 * 	 * 
+	 * 	
 	 */
-	public String getTopNelementsStringified() {
+	public String getTopNelementsStringified(int topN) {
 		/* Ordering all the pages by counter */
 		DictionaryValueComparator bvc =  new DictionaryValueComparator(dictionary);
 		TreeMap<DomainPageCouple,Integer> sorted_map = new TreeMap<DomainPageCouple,Integer>(bvc);
@@ -65,27 +68,39 @@ public class PageDictionary {
         
         /* Retrieving the topN pages and split them between appropriate domains */
         int i = 0;
-        ConcurrentSkipListMap<String, String> domains = new ConcurrentSkipListMap<String, String> ();
-        for(Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
-        	if(i<this.topN) {
-        		String domain = dp.getKey().getDomain();
-        		String page = dp.getKey().getPage();
-        		String pages = null;
-        		
-        		pages = domains.get(domain);
-        		if (pages == null)
-        			pages = "";
-        		pages += page + " - " + dp.getValue() + "times \t";
-        		domains.put(domain, pages);
-        	}	
-        }
-        
+        //ConcurrentSkipListMap<String, String> domains = new ConcurrentSkipListMap<String, String> ();
+        JSONObject json = new JSONObject();
+        JSONArray array = new JSONArray();
+        try {
+			for(Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
+				if(i<topN) {
+					String domain = dp.getKey().getDomain();
+					String page = dp.getKey().getPage();
+					String count = dp.getValue().toString()+" times";
+					
+					JSONObject frequency = new JSONObject();
+					frequency.put("domain", domain);
+					frequency.put("page", page);
+					frequency.put("count",count);
+					array.put(frequency);
+					//pages = domains.get(domain);
+					//if (pages == null)
+					//	pages = "";
+					//pages += page + " - " + dp.getValue() + "times \t";
+					//domains.put(domain, pages);
+				} else break;
+				i++;
+			}
+			json.put("ranking", array);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
         /* Formatting the string to be returned */
-        String toReturn = "";
-        for(Map.Entry<String, String> domain : domains.entrySet())
-        	toReturn += domain.getKey() + ":\t" + domain.getValue() + "\n";
+        //String toReturn = "";
+        //for(Map.Entry<String, String> domain : domains.entrySet())
+        //	toReturn += domain.getKey() + ":\t" + domain.getValue() + "\n";
         
-        return toReturn;
+        return json.toString();
 	}
 
 }
