@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -13,7 +16,9 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
+import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
 
 /**
  * This bolt counts the URL occurrences.
@@ -25,58 +30,27 @@ import backtype.storm.tuple.Tuple;
 public class URLCounterBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
-
-	private ConcurrentSkipListMap<String, Map<String, Integer>> counts;
-	private JedisPool pool = null;
-	private Jedis jedis = null;
+	private static final Logger LOGGER = LoggerFactory.getLogger(URLCounterBolt.class);
 	
 	public void prepare(Map conf, TopologyContext context) {
-		this.counts = URLMap.getInstance();
-		
-		this.pool = new JedisPool(new JedisPoolConfig(), "localhost");
-		this.jedis = pool.getResource();
 	}
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
 
 		String domain = input.getStringByField("expanded_url_domain");
-		String path = input.getStringByField("expanded_url_complete");
-		Integer count = 1;
-		Map<String, Integer> ranking = null;
+		String path = input.getStringByField("expanded_url_complete"); 
+		Integer count = PageDictionary.getInstance().addToDictionary(domain, path);
+		
+		String message = "Domain: " + domain + " URL: " + path + " Count: "
+				+ count;
+		LOGGER.info(message);
 
-		ranking = this.counts.get(domain);
-		if (ranking == null)
-			ranking = new HashMap<String, Integer>();
-		else {
-			count = ranking.get(path);
-			if (count == null)
-				count = 1;
-			else
-				count++;
-		}
-		ranking.put(path, count);
-		this.counts.put(domain, ranking);
-		
-		/* Added to test PageDictionary */
-		PageDictionary.getInstance().addToDictionary(domain, path);
-		
-		this.jedis.publish("RTWUP.domain", domain);
-		this.jedis.publish("RTWUP.url", path);
-		this.jedis.publish("RTWUP.count", count.toString());
-		
-		/*
-		System.out.println("Domain: " + domain + " URL: " + path + " Count: "
-				+ count); */
-		System.out.println(PageDictionary.getInstance().getTopNelementsStringified(7));
-		
+		collector.emit(new Values(message));
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		declarer.declare(new Fields("message"));
 	}
 
-	public void cleanup(){
-		this.pool.returnResource(this.jedis);
-		this.pool.destroy();
-	}
 	
 }

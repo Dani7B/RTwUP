@@ -5,12 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.net.MalformedURLException; 
 import java.net.URL;
 import java.net.URLConnection;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+
 
 /**
  * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de Capoa

@@ -6,6 +6,8 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import view.DomainPageCouple;
+
 /**
  * This class has a collection of all the links. It returns the stringified version of the TopNelements in the map
  * 
@@ -55,7 +57,7 @@ public class PageDictionary {
 	 */
 	public String getTopNelementsStringified(int topN) {
 		/* Ordering all the pages by counter */
-		ValueComparator bvc =  new ValueComparator(dictionary);
+		DictionaryValueComparator bvc =  new DictionaryValueComparator(dictionary);
 		TreeMap<DomainPageCouple,Integer> sorted_map = new TreeMap<DomainPageCouple,Integer>(bvc);
         sorted_map.putAll(dictionary);
         
@@ -86,10 +88,10 @@ public class PageDictionary {
 
 }
 
-class ValueComparator implements Comparator<DomainPageCouple> {
+class DictionaryValueComparator implements Comparator<DomainPageCouple> {
 
     Map<DomainPageCouple, Integer> base;
-    public ValueComparator(Map<DomainPageCouple, Integer> base) {
+    public DictionaryValueComparator(Map<DomainPageCouple, Integer> base) {
         this.base = base;
     }
 
