@@ -76,6 +76,7 @@ public class PageDictionary {
         			pages = "";
         		pages += page + " - " + dp.getValue() + "times \t";
         		domains.put(domain, pages);
+        		i++;
         	}	
         }
         
