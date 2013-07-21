@@ -1,18 +1,23 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import view.DomainPageCouple;
 
 /**
- * This class works as a collector of all the URLs.
- * It returns the stringified version of the TopNelements in the map
+ * This class has a collection of all the URLs.
+ * It returns the stringified version of the TopNelements in the map.
  * 
- * @author Daniele Morgantini
+ * @author Daniele Morgantini, Gabriele de Capoa, Gabriele Proni
  * 
  */
 public class PageDictionary {
@@ -54,7 +59,7 @@ public class PageDictionary {
 	
 	/**
 	 * Returns the stringified version of topNelements in the dictionary
-	 * 	 * 
+	 * 	
 	 */
 	public String getTopNelementsStringified(int topN) {
 		/* Ordering all the pages by counter */
@@ -64,28 +69,49 @@ public class PageDictionary {
         
         /* Retrieving the topN pages and split them between appropriate domains */
         int i = 0;
-        ConcurrentSkipListMap<String, String> domains = new ConcurrentSkipListMap<String, String> ();
+        ConcurrentSkipListMap<String, ArrayList<PageCount>> domains = new ConcurrentSkipListMap<String, ArrayList<PageCount>>();
         for(Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
-        	if(i<topN) {
-        		String domain = dp.getKey().getDomain();
-        		String page = dp.getKey().getPage();
-        		String pages = null;
-        		
-        		pages = domains.get(domain);
-        		if (pages == null)
-        			pages = "";
-        		pages += page + " - " + dp.getValue() + "times \t";
-        		domains.put(domain, pages);
-        		i++;
-        	}	
-        }
+			if(i<topN) {
+				String domain = dp.getKey().getDomain();
+				String page = dp.getKey().getPage();
+				String count = dp.getValue().toString()+" times";
+				ArrayList<PageCount>pages = domains.get(domain);
+				if (pages == null)
+					pages = new ArrayList<PageCount>();
+				pages.add(new PageCount(page,count));
+				domains.put(domain, pages);
+				i++;
+			}
+			else break;
+		}
+        
+        JSONObject json = new JSONObject();
+        JSONArray array = new JSONArray();
+        try {
+			for(Map.Entry<String, ArrayList<PageCount>> dp : domains.entrySet()) {
+				String domain = dp.getKey();
+				for(PageCount pc : dp.getValue()) {
+					String page = pc.getPage();
+					String count = pc.getCount();
+					
+					JSONObject frequency = new JSONObject();
+					frequency.put("domain", domain);
+					frequency.put("page", page);
+					frequency.put("count",count);
+					array.put(frequency);
+				}
+			}
+			json.put("ranking", array);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
         
         /* Formatting the string to be returned */
-        String toReturn = "";
-        for(Map.Entry<String, String> domain : domains.entrySet())
-        	toReturn += domain.getKey() + ":\t" + domain.getValue() + "\n";
+        //String toReturn = "";
+        //for(Map.Entry<String, String> domain : domains.entrySet())
+        //	toReturn += domain.getKey() + ":\t" + domain.getValue() + "\n";
         
-        return toReturn;
+        return json.toString();
 	}
 
 }

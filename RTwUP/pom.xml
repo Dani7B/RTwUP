@@ -12,6 +12,10 @@
 			<id>clojars.org</id>
 			<url>http://clojars.org/repo</url>
 		</repository>
+		<repository>
+			<id>codehaus</id>
+			<url>http://repository.codehaus.org/org/codehaus</url>
+		</repository>
 	</repositories>
 	<properties>
 		<storm.version>0.8.2</storm.version>
@@ -20,6 +24,7 @@
 		<slf4j-api.version>1.7.5</slf4j-api.version>
 		<testng.version>6.1.1</testng.version>
 		<redis.version>2.1.0</redis.version>
+		<json.version>20090211</json.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -78,6 +83,11 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<version>${redis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>${json.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

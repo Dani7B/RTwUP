@@ -30,7 +30,7 @@ public class URLCounterBolt extends BaseBasicBolt {
 	}
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
-
+		
 		String domain = input.getStringByField("expanded_url_domain");
 		String path = input.getStringByField("expanded_url_complete");
 		
@@ -45,6 +45,5 @@ public class URLCounterBolt extends BaseBasicBolt {
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("message"));
 	}
-
 	
 }

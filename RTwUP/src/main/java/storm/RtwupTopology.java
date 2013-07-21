@@ -1,6 +1,3 @@
-/**
- * 
- */
 package storm;
 
 import storm.bolts.ExpanderBolt; 
@@ -40,8 +37,9 @@ public class RtwupTopology {
 		if (args != null && args.length > 0) {
 
 			conf.setNumWorkers(3);
-			conf.put("topN", Integer.parseInt(args[0])); //assuming topN is the first argument
 
+			conf.put("topN", Integer.parseInt(args[1])); //assuming that topN is the second argument
+			
 			try {
 				StormSubmitter.submitTopology(args[0], conf,
 						builder.createTopology());
@@ -52,6 +50,7 @@ public class RtwupTopology {
 			}
 		} else {
 			conf.put("topN", 10);
+
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology("RTwUP", conf, builder.createTopology());
 			Utils.sleep(300000);
