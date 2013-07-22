@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ggd</groupId>
 	<artifactId>RTwUP</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>RTwUP Maven Webapp</name>
 	<url>http://maven.apache.org</url>
