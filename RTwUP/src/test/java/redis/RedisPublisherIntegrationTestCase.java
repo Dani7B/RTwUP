@@ -61,6 +61,7 @@ public class RedisPublisherIntegrationTestCase {
 					LOGGER.info("Subscription ended.");
 				} catch (Exception e) {
 					LOGGER.error("Subscribing failed.", e);
+					System.out.println("HERE");
 				}
 			}
 		}).start();

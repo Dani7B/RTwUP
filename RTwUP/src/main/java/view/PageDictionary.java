@@ -1,13 +1,10 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,51 +66,38 @@ public class PageDictionary {
         
         /* Retrieving the topN pages and split them between appropriate domains */
         int i = 0;
-        ConcurrentSkipListMap<String, ArrayList<PageCount>> domains = new ConcurrentSkipListMap<String, ArrayList<PageCount>>();
-        for(Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
-			if(i<topN) {
-				String domain = dp.getKey().getDomain();
-				String page = dp.getKey().getPage();
-				String count = dp.getValue().toString()+" times";
-				ArrayList<PageCount>pages = domains.get(domain);
-				if (pages == null)
-					pages = new ArrayList<PageCount>();
-				pages.add(new PageCount(page,count));
-				domains.put(domain, pages);
-				i++;
-			}
-			else break;
-		}
-        
         JSONObject json = new JSONObject();
-        JSONArray array = new JSONArray();
         try {
-			for(Map.Entry<String, ArrayList<PageCount>> dp : domains.entrySet()) {
-				String domain = dp.getKey();
-				for(PageCount pc : dp.getValue()) {
-					String page = pc.getPage();
-					String count = pc.getCount();
+			for(Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
+				if(i<topN) {
+					String domain = dp.getKey().getDomain();
+					String page = dp.getKey().getPage();
+					String count = dp.getValue().toString()+" times";
 					
+					//JSONArray ranking = json.getJSONArray(domain);
+					//if (ranking == null)
+					//	ranking = new JSONArray();
 					JSONObject frequency = new JSONObject();
-					frequency.put("domain", domain);
 					frequency.put("page", page);
 					frequency.put("count",count);
-					array.put(frequency);
-				}
+					//ranking.put(frequency);
+					json.accumulate(domain, frequency);
+				} else break;
+				i++;
 			}
-			json.put("ranking", array);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-        
-        /* Formatting the string to be returned */
-        //String toReturn = "";
-        //for(Map.Entry<String, String> domain : domains.entrySet())
-        //	toReturn += domain.getKey() + ":\t" + domain.getValue() + "\n";
+
         
         return json.toString();
 	}
 
+	public Integer removeToDictionary(String domain, String page) {
+		DomainPageCouple dp = new DomainPageCouple(domain,page);
+		return this.dictionary.remove(dp);
+	}
+	
 }
 
 class DictionaryValueComparator implements Comparator<DomainPageCouple> {
