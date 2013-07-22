@@ -1,4 +1,4 @@
-package view;
+package storage;
 
 public class DomainPageCouple {
 

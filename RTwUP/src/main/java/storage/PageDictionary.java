@@ -1,4 +1,4 @@
-package view;
+package storage;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import view.DomainPageCouple;
+import storage.DomainPageCouple;
 
 /**
  * This class has a collection of all the URLs.
@@ -88,8 +88,6 @@ public class PageDictionary {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-        
         return json.toString();
 	}
 
