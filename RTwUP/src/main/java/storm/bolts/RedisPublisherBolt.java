@@ -25,18 +25,20 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 	private JedisPool pool = null;
 	private Jedis jedis = null;
 	private int topN;
+	private PageDictionary counts;
 	
 	@Override
 	public void prepare(Map conf, TopologyContext context){
 		this.pool = new JedisPool(new JedisPoolConfig(), "localhost");
 		this.jedis = this.pool.getResource();
 		this.topN = (Integer) conf.get("topN");
+		this.counts = PageDictionary.getInstance();
 	}
 	
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
 				
-		String ranking = PageDictionary.getInstance().getTopNelementsStringified(this.topN);
+		String ranking = this.counts.getTopNelementsStringified(this.topN);
 		
 		this.jedis.publish("RTwUP", ranking);
 	}

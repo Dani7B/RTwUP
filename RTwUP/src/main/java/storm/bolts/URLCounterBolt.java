@@ -1,16 +1,10 @@
 package storm.bolts;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-import storage.URLMap;
 import view.PageDictionary;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
@@ -31,15 +25,18 @@ public class URLCounterBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(URLCounterBolt.class);
+	private PageDictionary counts;
 	
+	@Override
 	public void prepare(Map conf, TopologyContext context) {
+		this.counts = PageDictionary.getInstance();
 	}
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
 
 		String domain = input.getStringByField("expanded_url_domain");
 		String path = input.getStringByField("expanded_url_complete"); 
-		Integer count = PageDictionary.getInstance().addToDictionary(domain, path);
+		Integer count = this.counts.addToDictionary(domain, path);
 		
 		String message = "Domain: " + domain + " URL: " + path + " Count: "
 				+ count;

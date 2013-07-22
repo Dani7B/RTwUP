@@ -15,7 +15,7 @@ import static org.testng.Assert.*;
 
 /**
  * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de
- *         Capoa
+ *         Capoa, Daniele Morgantini
  */
 public class RedisPublisherIntegrationTestCase {
 
@@ -54,12 +54,14 @@ public class RedisPublisherIntegrationTestCase {
 		String message3 = "3";
 
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					jedis_subscriber.subscribe(subscriber, channel);
 					LOGGER.info("Subscription ended.");
 				} catch (Exception e) {
 					LOGGER.error("Subscribing failed.", e);
+					System.out.println("HERE");
 				}
 			}
 		}).start();
@@ -68,7 +70,7 @@ public class RedisPublisherIntegrationTestCase {
 		this.redisPublisher.publish(channel, message2);
 		this.redisPublisher.publish(channel, message3);
 		
-		this.subscriber.unsubscribe();
+		this.subscriber.unsubscribe(channel);
 	}
 
 	@AfterClass
@@ -82,7 +84,7 @@ public class RedisPublisherIntegrationTestCase {
 
 class Subscriber extends JedisPubSub {
 
-	private static Logger logger = LoggerFactory.getLogger(Subscriber.class);
+	private static Logger logger = LoggerFactory.getLogger(RedisPublisherIntegrationTestCase.class);
 
 	@Override
 	public void onMessage(String channel, String message) {

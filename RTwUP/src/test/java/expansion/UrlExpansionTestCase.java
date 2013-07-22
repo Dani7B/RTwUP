@@ -14,6 +14,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de Capoa
  */
+
 public class UrlExpansionTestCase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UrlExpansionTestCase.class);
