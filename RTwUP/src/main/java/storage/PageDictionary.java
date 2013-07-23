@@ -1,22 +1,20 @@
-package view;
+package storage;
 
 import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import view.DomainPageCouple;
+import storage.DomainPageCouple;
 
 /**
  * This class has a collection of all the URLs.
  * It returns the stringified version of the TopNelements in the map.
  * 
- * @author Daniele Morgantini
+ * @author Daniele Morgantini, Gabriele de Capoa, Gabriele Proni
  * 
  */
 public class PageDictionary {
@@ -68,9 +66,7 @@ public class PageDictionary {
         
         /* Retrieving the topN pages and split them between appropriate domains */
         int i = 0;
-        //ConcurrentSkipListMap<String, String> domains = new ConcurrentSkipListMap<String, String> ();
         JSONObject json = new JSONObject();
-        JSONArray array = new JSONArray();
         try {
 			for(Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
 				if(i<topN) {
@@ -78,31 +74,28 @@ public class PageDictionary {
 					String page = dp.getKey().getPage();
 					String count = dp.getValue().toString()+" times";
 					
+					//JSONArray ranking = json.getJSONArray(domain);
+					//if (ranking == null)
+					//	ranking = new JSONArray();
 					JSONObject frequency = new JSONObject();
-					frequency.put("domain", domain);
 					frequency.put("page", page);
 					frequency.put("count",count);
-					array.put(frequency);
-					//pages = domains.get(domain);
-					//if (pages == null)
-					//	pages = "";
-					//pages += page + " - " + dp.getValue() + "times \t";
-					//domains.put(domain, pages);
+					//ranking.put(frequency);
+					json.accumulate(domain, frequency);
 				} else break;
 				i++;
 			}
-			json.put("ranking", array);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-        /* Formatting the string to be returned */
-        //String toReturn = "";
-        //for(Map.Entry<String, String> domain : domains.entrySet())
-        //	toReturn += domain.getKey() + ":\t" + domain.getValue() + "\n";
-        
         return json.toString();
 	}
 
+	public Integer removeToDictionary(String domain, String page) {
+		DomainPageCouple dp = new DomainPageCouple(domain,page);
+		return this.dictionary.remove(dp);
+	}
+	
 }
 
 class DictionaryValueComparator implements Comparator<DomainPageCouple> {

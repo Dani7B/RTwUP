@@ -10,7 +10,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
-
 import static org.testng.Assert.*;
 
 /**
@@ -47,28 +46,28 @@ public class RedisPublisherIntegrationTestCase {
 	}
 
 	@Test
-	public void shouldPublishAndConsumeOnRedis() {
+	public void shouldPublishAndConsumeOnRedis() throws InterruptedException {
 		final String channel = "test";
-		String message1 = "1";
-		String message2 = "2";
-		String message3 = "3";
 
 		new Thread(new Runnable() {
+			@Override
 			public void run() {
 				try {
+					LOGGER.info("Subscription to channel. This thread will be blocked"); 
 					jedis_subscriber.subscribe(subscriber, channel);
-					LOGGER.info("Subscription ended.");
 				} catch (Exception e) {
-					LOGGER.error("Subscribing failed.", e);
+					LOGGER.error("Subscribing failed.", e.getCause());
 				}
 			}
 		}).start();
-		
-		this.redisPublisher.publish(channel, message1);
-		this.redisPublisher.publish(channel, message2);
-		this.redisPublisher.publish(channel, message3);
+		Thread.sleep(15000);
+		    this.redisPublisher.publish(channel, "1");
+		    this.redisPublisher.publish(channel, "2");
+		    this.redisPublisher.publish(channel, "3");
+		    
 		
 		this.subscriber.unsubscribe();
+		LOGGER.info("Subscription ended.");
 	}
 
 	@AfterClass
@@ -82,7 +81,7 @@ public class RedisPublisherIntegrationTestCase {
 
 class Subscriber extends JedisPubSub {
 
-	private static Logger logger = LoggerFactory.getLogger(Subscriber.class);
+	private final Logger logger = LoggerFactory.getLogger(Subscriber.class); 
 
 	@Override
 	public void onMessage(String channel, String message) {

@@ -5,11 +5,11 @@ Dato un flusso di documenti provenienti da una query su Twitter, filtrata in mod
 Le statistiche vengono stampate a schermo ogni N secondi.  
 Le statistiche mostrano i link organizzati in varie categorie di domini, ognuno con il suo conteggio di popolarità:  
 foursquare.com: expanded.url.com/123 - 9 times; expanded.url.com/456 - 8 times  
-youtube.com: ...  
-instagram.com: ...  
-...  
-Other  
-All  
+  youtube.com: ...  
+	instagram.com: ...  
+	...  
+	Other  
+	All  
 
 ###Descrizione del flusso dei dati: 
 I Tweets sono scaricati a partire da una query con le Twitter APIs (ad esempio [Twitter4j][02], [Hosebird][03]), filtrate opportunamente (ad esempio, in base alle coordinate di un poligono centrato su Roma, oppure Milano, etc... a scelta).  
@@ -33,6 +33,5 @@ Tutto questo verrà effettuato in tempo reale, usando [Storm][01]
 * [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP/wiki/Creation-of-a-Twitter-account-to-use)
 
 ##The story so far...
-Our Storm topology takes care of retrieving the URLs twitted from Rome urban area and sorts them according to their frequency.
-We're currently working on the UI.
+After properly setting up the project, we started working with Storm and created a Spout that retrieves all the tweets with links from Rome urban area. Test class is used to try methods without involving the Spout.
 
