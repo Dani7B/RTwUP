@@ -13,8 +13,7 @@ import redis.clients.jedis.JedisPubSub;
 import static org.testng.Assert.*;
 
 /**
- * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de
- *         Capoa, Gabriele Proni
+ * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de Capoa, Daniele Morgantini, Gabriele Proni
  */
 public class RedisPublisherIntegrationTestCase {
 
@@ -55,17 +54,19 @@ public class RedisPublisherIntegrationTestCase {
 				try {
 					LOGGER.info("Subscription to channel. This thread will be blocked");
 					jedis_subscriber.subscribe(subscriber, channel);
+					LOGGER.info("Subscription ended.");
 				} catch (Exception e) {
 					LOGGER.error("Subscribing failed.", e.getCause());
 				}
 			}
 		}).start();
+		
+		this.redisPublisher.publish(channel, "1");
+		this.redisPublisher.publish(channel, "2");
+		this.redisPublisher.publish(channel, "3");
+		
 		Thread.sleep(15000);
-		    this.redisPublisher.publish(channel, "1");
-		    this.redisPublisher.publish(channel, "2");
-		    this.redisPublisher.publish(channel, "3");
-		this.subscriber.unsubscribe();
-		LOGGER.info("Subscription ended.");
+		this.subscriber.unsubscribe(); 
 	}
 
 	@AfterClass
