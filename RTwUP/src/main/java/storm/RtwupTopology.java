@@ -4,15 +4,14 @@ import storm.bolts.ExpanderBolt;
 import storm.bolts.RedisPublisherBolt;
 import storm.bolts.URLCounterBolt;
 import storm.spouts.TwitterSpout;
-
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
+import backtype.storm.utils.*;
 import backtype.storm.generated.AlreadyAliveException;
 import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
-import backtype.storm.utils.Utils;
 
 /**
  * @author Gabriele Proni, Gabriele de Capoa, Daniele Morgantini
