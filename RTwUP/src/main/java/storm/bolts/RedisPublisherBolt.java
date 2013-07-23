@@ -24,14 +24,14 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 	private static final long serialVersionUID = 1L;
 	private JedisPool pool = null;
 	private Jedis jedis = null;
-	private int topN;
+	private long topN;
 	private PageDictionary counts;
 	
 	@Override
 	public void prepare(Map conf, TopologyContext context){
 		this.pool = new JedisPool(new JedisPoolConfig(), "localhost");
 		this.jedis = this.pool.getResource();
-		this.topN = (Integer) conf.get("topN");
+		this.topN = (Long) conf.get("topN");
 		this.counts = PageDictionary.getInstance();
 	}
 	
