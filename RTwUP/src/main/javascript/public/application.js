@@ -39,9 +39,7 @@ var socket = io.connect('http://localhost:8000/');
 
 socket.on('connect', function(data) {
 	setStatus('connected');
-	socket.emit('subscribe', {
-		channel : 'RTwUP'
-	});
+	socket.emit('subscribe', {channel : 'RTwUP'});
 });
 
 socket.on('reconnecting', function(data) {
@@ -54,7 +52,6 @@ socket.on('message', function(data) {
 });
 
 function addMessage(data) {
-
 	d3.json(ranking, function(error, data) {
 		var rankingTable = tabulate(data, [ "domain", "page", "count" ]);
 	});
