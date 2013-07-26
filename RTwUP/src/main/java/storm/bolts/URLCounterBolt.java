@@ -2,6 +2,7 @@ package storm.bolts;
 
 import java.util.Map;
 
+//import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +30,7 @@ public class URLCounterBolt extends BaseBasicBolt {
 	
 	@Override
 	public void prepare(Map conf, TopologyContext context) {
+		//PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		this.counts = PageDictionary.getInstance();
 	}
 

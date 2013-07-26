@@ -1,5 +1,6 @@
 package redis;
 
+//import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
@@ -35,7 +36,9 @@ public class RedisPublisherIntegrationTestCase {
 		this.jedis_subscriber = this.pool.getResource();
 		this.redisPublisher = new RedisStringPublisher(this.jedis_publisher);
 		this.subscriber = new Subscriber();
-
+		
+		//PropertyConfigurator.configure("src/test/resources/log4j.properties");
+		
 		assertTrue(redisIsRunning());
 	}
 
