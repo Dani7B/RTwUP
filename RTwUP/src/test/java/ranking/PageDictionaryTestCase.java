@@ -37,7 +37,7 @@ public class PageDictionaryTestCase {
 				"http://youtube.com/123");
 		LOGGER.info("Counts: " + count2);
 		assertEquals(count2, 2);
-		this.counts.removeToDictionary("youtube.com", "http://youtube.com/123");
+		this.counts.removeFromDictionary("youtube.com", "http://youtube.com/123");
 	}
 
 	@Test

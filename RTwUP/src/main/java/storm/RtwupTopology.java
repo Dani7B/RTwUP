@@ -51,15 +51,10 @@ public class RtwupTopology {
 			conf.put("topN", 10);
 
 			LocalCluster cluster = new LocalCluster();
-			try {
 			cluster.submitTopology("RTwUP", conf, builder.createTopology());
 			Utils.sleep(300000);
 			cluster.killTopology("RTwUP");
 			cluster.shutdown();
-			} catch (Exception e) {
-				System.out.println("Here!");
-				e.printStackTrace();
-			}
 		}
 
 	}
