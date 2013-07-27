@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import twitter4j.FilterQuery;
+import twitter4j.GeoLocation;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
@@ -35,19 +36,35 @@ public class TwitterSpout extends BaseRichSpout {
 	private LinkedBlockingQueue<Status> queue = null;
 	private SpoutOutputCollector collector;
 	private TwitterStream ts = null;
+	private double[][] bbox = null;
 
-	public void open(Map conf, TopologyContext context,
-			SpoutOutputCollector collector) {
+	public void open(Map conf, TopologyContext context,	SpoutOutputCollector collector) {
 
+		this.bbox = new double[2][2];
+		this.bbox[0][0] = (Double) conf.get("sw0");
+		this.bbox[0][1] = (Double) conf.get("sw1");
+		this.bbox[1][0] = (Double) conf.get("ne0");
+		this.bbox[1][1] = (Double) conf.get("ne1");
+		
+		
 		this.queue = new LinkedBlockingQueue<Status>();
 		this.collector = collector;
-
 		this.ts = new TwitterStreamFactory().getInstance();
 		this.ts.setOAuthConsumer("P9c5PqNZ2HvANU6B8Rrp1A", "iKUCqCYbvI8Tam7zGgIRiO6Zcyh2hw7Nm0v97lE");
 		AccessToken accessToken = new AccessToken("1546231212-TKDS2JM9sBp351uEuvnbn1VSPLR5mUKhZxwmfLr","8krjiVUEAoLvFrLC8ryw8iaU2PKTU80WHZaWevKGk2Y");
 		this.ts.setOAuthAccessToken(accessToken);
 
 		StatusListener listener = new StatusListener() {
+			
+			private boolean isInRange(GeoLocation gl, double[][] bbox) {
+				double[] sw = bbox[0];
+				double[] ne = bbox[1];
+				double latitude = gl.getLatitude();
+				double longitude = gl.getLongitude();
+				if((latitude>=sw[1] && latitude<=ne[1])&&(longitude>=sw[0] && longitude<=ne[0]))
+					return true;
+				return false;
+			}
 
 			public void onException(Exception arg0) {
 			}
@@ -62,8 +79,11 @@ public class TwitterSpout extends BaseRichSpout {
 			}
 
 			public void onStatus(Status status) {
-				if(status.getURLEntities().length != 0)
-					queue.add(status);
+				if(status.getURLEntities().length != 0) {
+            		GeoLocation gl = status.getGeoLocation();
+            		if(gl == null || isInRange(gl,bbox))
+            			queue.add(status);
+				}
 			}
 
 			public void onTrackLimitationNotice(int arg0) {
@@ -73,8 +93,7 @@ public class TwitterSpout extends BaseRichSpout {
 
 		this.ts.addListener(listener);
 		FilterQuery query = new FilterQuery();
-		double[][] bbox = { { 12.38, 41.80 }, { 12.60, 42.00 } };
-		query.locations(bbox);
+		query.locations(this.bbox);
 		this.ts.filter(query);
 	}
 

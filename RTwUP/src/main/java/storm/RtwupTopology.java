@@ -38,6 +38,10 @@ public class RtwupTopology {
 			conf.setNumWorkers(3);
 
 			conf.put("topN", Integer.parseInt(args[1])); //assuming that topN is the second argument
+			conf.put("sw0", Double.parseDouble(args[2]));
+			conf.put("sw1", Double.parseDouble(args[3]));
+			conf.put("ne0", Double.parseDouble(args[4]));
+			conf.put("ne1", Double.parseDouble(args[5]));
 			
 			try {
 				StormSubmitter.submitTopology(args[0], conf,
@@ -49,12 +53,17 @@ public class RtwupTopology {
 			}
 		} else {
 			conf.put("topN", 10);
+			conf.put("sw0", 12.20);
+			conf.put("sw1", 41.60);
+			conf.put("ne0", 12.80);
+			conf.put("ne1", 42.10);
+			
 			try{
-			LocalCluster cluster = new LocalCluster();
-			cluster.submitTopology("RTwUP", conf, builder.createTopology());
-			Utils.sleep(300000);
-			cluster.killTopology("RTwUP");
-			cluster.shutdown();
+				LocalCluster cluster = new LocalCluster();
+				cluster.submitTopology("RTwUP", conf, builder.createTopology());
+				Utils.sleep(300000);
+				cluster.killTopology("RTwUP");
+				cluster.shutdown();
 			}catch (Exception e){
 				System.err.println("Error");
 				e.printStackTrace();
