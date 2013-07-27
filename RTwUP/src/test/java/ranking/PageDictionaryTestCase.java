@@ -1,5 +1,6 @@
 package ranking;
 
+//import org.apache.log4j.PropertyConfigurator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ public class PageDictionaryTestCase {
 	@BeforeClass
 	public void setUp() {
 		this.counts = PageDictionary.getInstance();
+		//PropertyConfigurator.configure("src/test/resources/log4j.properties");
 	}
 
 	@Test

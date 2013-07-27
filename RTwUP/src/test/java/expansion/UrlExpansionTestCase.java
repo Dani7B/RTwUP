@@ -1,5 +1,6 @@
 package expansion;
 
+//import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -18,7 +19,7 @@ import static org.testng.Assert.assertEquals;
 public class UrlExpansionTestCase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UrlExpansionTestCase.class);
-
+    
     @Test
     public void shouldExpand_bitly() throws IOException {
 

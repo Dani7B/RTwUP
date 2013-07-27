@@ -2,6 +2,7 @@ package storm.bolts;
 
 import java.util.Map;
 
+//import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +25,12 @@ import backtype.storm.tuple.Values;
 public class URLCounterBolt extends BaseBasicBolt {
 
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(URLCounterBolt.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(URLCounterBolt.class);
+	private PageDictionary counts;
 
 	public void prepare(Map conf, TopologyContext context) {
+		//PropertyConfigurator.configure("src/main/resources/log4j.properties");
+		this.counts = PageDictionary.getInstance();
 	}
 
 	@Override
@@ -35,11 +38,9 @@ public class URLCounterBolt extends BaseBasicBolt {
 
 		String domain = input.getStringByField("expanded_url_domain");
 		String path = input.getStringByField("expanded_url_complete");
-		Integer count = PageDictionary.getInstance().addToDictionary(domain,
-				path);
+		Integer count = this.counts.addToDictionary(domain,	path);
 
-		String message = "Domain: " + domain + " URL: " + path + " Count: "
-				+ count;
+		String message = "Domain: " + domain + " URL: " + path + " Count: "	+ count;
 		LOGGER.info(message);
 
 		collector.emit(new Values(message));

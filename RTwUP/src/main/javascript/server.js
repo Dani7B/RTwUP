@@ -13,7 +13,7 @@ var app = express();
  
 const redis = require('redis');
 const client = redis.createClient();
-log('info', 'connected to redis server');
+log('info', 'Connected to Redis server.');
  
 const io = require('socket.io');
  
@@ -27,19 +27,19 @@ if (!module.parent) {
  
         subscriber.on("message", function(channel, message) {
             client.send(message);
-	    log('msg', "received from channel #" + channel + " : " + message);
+            log('msg', "Received from channel"+ channel+ ": "+ message);
         });
  
         client.on('message', function(msg) {
-            log('debug', msg);
-        });
+        	log('debug', msg);
+        })
  
         client.on('disconnect', function() {
-            log('warn', 'disconnecting from redis');
-            subscriber.quit();
+            log('warn', 'Disconnetting from Redis.');
+        	subscriber.quit();
         });
     });
-}
+};
 
 function log(type, msg) {
 
