@@ -1,29 +1,33 @@
-<!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="UTF-8">
 <meta name="author"
 	content="Gabriele de Capoa, Gabriele Proni, Daniele Morgantini">
 <title>RTwUP - Realtime Twitter URL Popularity</title>
-<script type="text/javascript" src="http://localhost:8000/socket.io/socket.io.js"></script>
+<script type="text/javascript"
+	src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
-
 	function getHTMLcode(data) {
 		var result = "";
 		var json = JSON.parse(data);
-		
-		for(var dElem in json) {
-			result += "<h3>" + dElem +"</h3>";
-			if(json[dElem].constructor === Array) {
-				for(var pElem in json[dElem]) {
-					result += "<p> <a href=\"" + json[dElem][pElem].page + "\">"+ json[dElem][pElem].page + "</a> &nbsp &nbsp &nbsp " + json[dElem][pElem].count + "</p>";
+
+		for ( var dElem in json) {
+			result += "<h3>" + dElem + "</h3>";
+			if (json[dElem].constructor === Array) {
+				for ( var pElem in json[dElem]) {
+					result += "<p> <a href=\"" + json[dElem][pElem].page + "\" target=\"_blank\">"
+							+ json[dElem][pElem].page
+							+ "</a> &nbsp &nbsp &nbsp "
+							+ json[dElem][pElem].count + "</p>";
 				}
+			} else {
+				result += "<p> <a href=\"" + json[dElem].page + "\" target=\"_blank\">"
+						+ json[dElem].page
+						+ "</a> &nbsp &nbsp &nbsp "
+						+ json[dElem].count + "</p>";
 			}
-			else {
-				result += "<p> <a href=\"" + json[dElem].page + "\">"+ json[dElem].page + "</a> &nbsp &nbsp &nbsp " + json[dElem].count + "</p>";
-			}
-		};
+		}
+		;
 		return result;
 	}
 
@@ -31,7 +35,9 @@
 
 	socket.on('connect', function(data) {
 		setStatus('connected');
-		socket.emit('subscribe', {channel : 'RTwUP'});
+		socket.emit('subscribe', {
+			channel : 'RTwUP'
+		});
 	});
 
 	socket.on('reconnecting', function(data) {
@@ -50,22 +56,61 @@
 	function setStatus(msg) {
 		console.log('Connection Status : ' + msg);
 	}
- </script>
+</script>
+<!-- End Preload Script -->
+<style type="text/css">
+.auto-style1 {
+	text-align: center;
+}
+
+.auto-style2 {
+	text-align: center;
+	font-size: large;
+	font-family: "Century Gothic";
+	background-color: #FFCC00;
+}
+
+.auto-style3 {
+	text-align: center;
+	font-size: xx-small;
+	font-family: "Century Gothic";
+	background-color: #FFCC00;
+}
+
+.auto-style4 {
+	text-align: left;
+	font-size: small;
+	font-family: "Century Gothic";
+}
+</style>
 </head>
+<center>
+	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0"
+		marginheight="0" onLoad="preloadImages();">
+		<table width="1000" border="0" cellpadding="0" cellspacing="0"
+			class="frame" id="Table_01">
+			<!--DWLayoutTable-->
+			<tr>
+				<td height="107" colspan="12" class="auto-style1"><img
+					src="images/head.png" width="656" height="107" alt=""></td>
+			</tr>
+			<tr>
+				<td colspan="12" class="auto-style2" style="height: 40px">
+					Gestione Delle Informazioni sul Web</td>
+			</tr>
+			<tr>
+				<td>
+					<div id="ranking" class="auto-style4"></div>
+				</td>
 
-<body>
-	<header>
-		<h1>RTwUP</h1>
-		<p>Realtime Twitter URL Popularity</p>
-	</header>
-
-	<h2>Ranking of most twitted URLs</h2>
-	<div id="ranking">
-	</div>
-
-		
-	<footer id="footer">Copyright &copy; 2013 Gabriele de Capoa, Gabriele Proni &amp; Daniele Morgantini, for "Gestione dell'Informazione sul Web" course </footer>
-	
-</body>
-
+			</tr>
+			<tr>
+				<td colspan="12" class="auto-style3" style="height: 22px">
+					Copyright &copy; 2013 Gabriele de Capoa, Gabriele Proni &amp;
+					Daniele Morgantini, for "Gestione dell'Informazione sul Web" course
+				</td>
+			</tr>
+		</table>
+	</body>
+</center>
 </html>
