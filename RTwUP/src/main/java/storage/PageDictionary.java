@@ -35,8 +35,7 @@ public class PageDictionary {
 	/**
 	 * Adds a linked page to the dictionary
 	 * 
-	 * @param domain
-	 *            and page
+	 * @param domain and page
 	 * @return the updated counter
 	 * 
 	 */
@@ -66,6 +65,7 @@ public class PageDictionary {
 		sorted_map.putAll(dictionary);
 
 		/* Retrieving the topN pages and split them between appropriate domains */
+		
 		long i = 0;
 		JSONObject json = new JSONObject();
 		try {
@@ -76,13 +76,9 @@ public class PageDictionary {
 					String page = dp.getKey().getPage();
 					String count = dp.getValue().toString() + " times";
 
-					// JSONArray ranking = json.getJSONArray(domain);
-					// if (ranking == null)
-					// ranking = new JSONArray();
 					JSONObject frequency = new JSONObject();
 					frequency.put("page", page);
 					frequency.put("count", count);
-					// ranking.put(frequency);
 					json.accumulate(domain, frequency);
 				} else
 					break;
@@ -94,7 +90,7 @@ public class PageDictionary {
 		return json.toString();
 	}
 
-	public Integer removeToDictionary(String domain, String page) {
+	public Integer removeFromDictionary(String domain, String page) {
 		DomainPageCouple dp = new DomainPageCouple(domain, page);
 		return this.dictionary.remove(dp);
 	}
