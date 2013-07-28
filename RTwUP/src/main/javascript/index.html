@@ -8,25 +8,6 @@
 <title>RTwUP - Realtime Twitter URL Popularity</title>
 <script type="text/javascript" src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
-function getHTMLcode(data){
-	var result ="";
-	var json = JSON.parse(data);
-	
-	for(var dElem in json){
-		result += "<h3>" + dElem + "</h3>";
-		if(json[dElem].constructor === Array){
-			for (var pElem in json[dElem]){
-				result += "<p> <a href=\"" + json[dElem][pElem].page + "\">" + json[dElem][pElem].page + "</a> &nbsp &nbsp &nbsp " + json[dElem][pElem].count + "</p>";
-			}
-		}
-		else {
-			result += "<p> <a href=\"" + json[dElem].page + "\">" + json[dElem].page + "</a> &nbsp &nbsp &nbsp " + json[dElem].count + "</p>";
-		}
-	}
-	
-	return result;
-}
-
 var socket = io.connect('http://localhost:8000/');
 
 socket.on('connect', function(data) {
@@ -44,13 +25,30 @@ socket.on('message', function(data) {
 });
 
 function addMessage(data) {
-	d3.json(ranking, function(error, data) {
-		document.getElementById("ranking").innerHTML = getHTMLCode();
-	});
+	document.getElementById("ranking").innerHTML = getHTMLcode();
 }
 
 function setStatus(msg) {
 	console.log('Connection Status : ' + msg);
+}
+
+function getHTMLcode(data){
+	var result ="";
+	var json = JSON.parse(data);
+	
+	for(var dElem in json){
+		result += "<h3>" + dElem + "</h3>";
+		if(json[dElem].constructor === Array){
+			for (var pElem in json[dElem]){
+				result += "<p> <a href=\"" + json[dElem][pElem].page + "\">" + json[dElem][pElem].page + "</a> &nbsp &nbsp &nbsp " + json[dElem][pElem].count + "</p>";
+			}
+		}
+		else {
+			result += "<p> <a href=\"" + json[dElem].page + "\">" + json[dElem].page + "</a> &nbsp &nbsp &nbsp " + json[dElem].count + "</p>";
+		}
+	}
+	
+	return result;
 }
 </script>
 </head>

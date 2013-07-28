@@ -36,7 +36,7 @@ if (!module.parent) {
  
         client.on('disconnect', function() {
             log('warn', 'Disconnetting from Redis.');
-        	subscribe.quit();
+        	subscriber.quit();
         });
     });
 }
