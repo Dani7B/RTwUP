@@ -4,6 +4,8 @@ Given a tweets stream from Twitter, filtered in a suitable way, RTwUP realize th
 These statistics show links by domain.  
 
 For example:
+
+
 | Domain | Link | Frequency |
 | :----: | :--: | :-------: |
 |foursquare.com | expanded.url.com/123 | 9 times |
