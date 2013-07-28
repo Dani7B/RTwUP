@@ -57,7 +57,6 @@
 		console.log('Connection Status : ' + msg);
 	}
 </script>
-<!-- End Preload Script -->
 <style type="text/css">
 .auto-style1 {
 	text-align: center;
@@ -82,14 +81,23 @@
 	font-size: small;
 	font-family: "Century Gothic";
 }
+
+body {
+	text-align : center;
+}
+
+.frame {
+	margin: 0 auto;
+	width: 1000;
+	border-width: 0;
+	border-spacing: 0;
+}
+td, tr {padding: 0;}
 </style>
 </head>
-<center>
-	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0"
-		marginheight="0" onLoad="preloadImages();">
-		<table width="1000" border="0" cellpadding="0" cellspacing="0"
-			class="frame" id="Table_01">
-			<!--DWLayoutTable-->
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0"
+	marginheight="0">
+		<table class="frame" id="Table_01">
 			<tr>
 				<td height="107" colspan="12" class="auto-style1"><img
 					src="images/head.png" width="656" height="107" alt=""></td>
@@ -111,7 +119,6 @@
 				</td>
 			</tr>
 		</table>
-	</body>
-</center>
+</body>
 </html>
->>>>>>> refs/remotes/RTwUP_Core/master
+
