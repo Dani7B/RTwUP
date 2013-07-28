@@ -9,7 +9,7 @@ For example:
 | Domain | Link | Frequency |
 | :----: | :--: | :-------: |
 |foursquare.com | expanded.url.com/123 | 9 times |
-| | expanded.url.com/456 |8 times | 
+| foursquare.com | expanded.url.com/456 |8 times | 
 | youtube.com | ... | ... |  
 | instagram.com | ... | ...|   
 ...  
