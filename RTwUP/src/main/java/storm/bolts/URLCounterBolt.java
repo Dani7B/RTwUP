@@ -27,27 +27,27 @@ public class URLCounterBolt extends BaseBasicBolt {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(URLCounterBolt.class);
 	private PageDictionary counts;
-	
-	@Override
+
 	public void prepare(Map conf, TopologyContext context) {
 		//PropertyConfigurator.configure("src/main/resources/log4j.properties");
 		this.counts = PageDictionary.getInstance();
 	}
 
+	@Override
 	public void execute(Tuple input, BasicOutputCollector collector) {
-		
+
 		String domain = input.getStringByField("expanded_url_domain");
-		String path = input.getStringByField("expanded_url_complete"); 
-		Integer count = this.counts.addToDictionary(domain, path);
-		
-		String message = ("Domain: " + domain + " URL: " + path + " Count: "+ count);
+		String path = input.getStringByField("expanded_url_complete");
+		Integer count = this.counts.addToDictionary(domain,	path);
+
+		String message = "Domain: " + domain + " URL: " + path + " Count: "	+ count;
 		LOGGER.info(message);
-		
+
 		collector.emit(new Values(message));
 	}
 
+	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("message"));
 	}
-	
 }

@@ -3,7 +3,6 @@ package expansion;
 //import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -20,11 +19,6 @@ import static org.testng.Assert.assertEquals;
 public class UrlExpansionTestCase {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UrlExpansionTestCase.class);
-
-	//@BeforeClass
-	//public void setUp() {
-		//PropertyConfigurator.configure("src/test/resources/log4j.properties");
-	//}
     
     @Test
     public void shouldExpand_bitly() throws IOException {

@@ -1,4 +1,5 @@
 import twitter4j.FilterQuery;
+import twitter4j.GeoLocation;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
@@ -16,6 +17,8 @@ import twitter4j.auth.AccessToken;
  * **/
 public class Test {
 	
+	private static double[][] bbox = {{12.20, 41.60},{12.80, 42.10}};
+	
 	public static void main(String[]args) {
 			  
 			TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
@@ -23,10 +26,25 @@ public class Test {
 			AccessToken accessToken = new AccessToken("1546231212-TKDS2JM9sBp351uEuvnbn1VSPLR5mUKhZxwmfLr","8krjiVUEAoLvFrLC8ryw8iaU2PKTU80WHZaWevKGk2Y");
 			twitterStream.setOAuthAccessToken(accessToken);
 			
+			
 			StatusListener listener = new StatusListener() {
+				
+				private boolean isInRange(GeoLocation gl, double[][] bbox) {
+					double[] sw = bbox[0];
+					double[] ne = bbox[1];
+					double latitude = gl.getLatitude();
+					double longitude = gl.getLongitude();
+					if((latitude>=sw[1] && latitude<=ne[1])&&(longitude>=sw[0] && longitude<=ne[0]))
+						return true;
+					return false;
+				}
+				
 	            public void onStatus(Status status) {
-	            	if(status.getURLEntities().length != 0)
-	            		System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+	            	if(status.getURLEntities().length != 0) {
+	            		GeoLocation gl = status.getGeoLocation();
+	            		if(gl == null || isInRange(gl,bbox))
+	            			System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+	            	}
 	            }
 
 	            public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
@@ -52,10 +70,8 @@ public class Test {
 	        
 	        twitterStream.addListener(listener);
 	        FilterQuery query = new FilterQuery();
-			double[][] bbox = {{12.38,41.80}, {12.60, 42.00}};
 			query.locations(bbox);
 	        twitterStream.filter(query);
 		
 	}
-    
 }

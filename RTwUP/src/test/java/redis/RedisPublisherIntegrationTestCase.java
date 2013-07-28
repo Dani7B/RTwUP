@@ -14,8 +14,7 @@ import redis.clients.jedis.JedisPubSub;
 import static org.testng.Assert.*;
 
 /**
- * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de
- *         Capoa, Daniele Morgantini, Gabriele Proni
+ * @author Matteo Moci ( matteo (dot) moci (at) gmail (dot) com ), Gabriele de Capoa, Daniele Morgantini, Gabriele Proni
  */
 public class RedisPublisherIntegrationTestCase {
 
@@ -58,12 +57,12 @@ public class RedisPublisherIntegrationTestCase {
 				try {
 					LOGGER.info("Subscription to channel. This thread will be blocked");
 					jedis_subscriber.subscribe(subscriber, channel);
+					LOGGER.info("Subscription ended.");
 				} catch (Exception e) {
-					LOGGER.error("Subscribing failed.", e);
+					LOGGER.error("Subscribing failed.", e.getCause());
 				}
 			}
 		}).start();
-		Thread.sleep(15000);
 		
 		this.redisPublisher.publish(channel, "1");
 		this.redisPublisher.publish(channel, "2");
@@ -71,7 +70,6 @@ public class RedisPublisherIntegrationTestCase {
 		
 		Thread.sleep(15000);
 		this.subscriber.unsubscribe(); 
-		LOGGER.info("Subscription ended.");
 	}
 
 	@AfterClass
@@ -80,12 +78,11 @@ public class RedisPublisherIntegrationTestCase {
 		this.pool.returnResource(this.jedis_subscriber);
 		this.pool.destroy();
 	}
-
 }
 
 class Subscriber extends JedisPubSub {
 
-	private final static Logger logger = LoggerFactory.getLogger(Subscriber.class);
+	private static final Logger logger = LoggerFactory.getLogger(Subscriber.class);
 
 	@Override
 	public void onMessage(String channel, String message) {

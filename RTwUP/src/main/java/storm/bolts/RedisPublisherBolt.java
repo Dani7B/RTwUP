@@ -24,6 +24,7 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 	private static final long serialVersionUID = 1L;
 	private JedisPool pool = null;
 	private Jedis jedis = null;
+
 	private long topN;
 	private PageDictionary counts;
 	
@@ -36,7 +37,7 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 	}
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
-
+				
 		String ranking = this.counts.getTopNelementsStringified(this.topN);
 		
 		this.jedis.publish("RTwUP", ranking);

@@ -11,7 +11,6 @@ import redis.clients.jedis.Jedis;
 public class RedisStringPublisher implements StringPublisher {
 
     private final Jedis jedis;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(RedisStringPublisher.class);
     
     public RedisStringPublisher(Jedis jedis) {

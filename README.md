@@ -31,8 +31,7 @@ Tutto questo verrà effettuato in tempo reale, usando [Storm][01]
 
 * [Setting up the Maven project] (https://github.com/Dani7B/RTwUP/wiki/Setting-up-the-Maven-project)
 * [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP/wiki/Creation-of-a-Twitter-account-to-use)
-
-##The story so far...
-Our Storm topology takes care of retrieving the URLs twitted from Rome urban area and sorts them according to their frequency.
-We're currently working on the UI.
+* [Installing and setting up Node.js] (https://github.com/Dani7B/RTwUP/wiki/Installing-and-setting-up-Node.js)
+* [Setting up Redis] (https://github.com/Dani7B/RTwUP/wiki/Setting-up-Redis)
+* [How to start RTwUP] (https://github.com/Dani7B/RTwUP/wiki/How-to-start-RTwUP)
 
