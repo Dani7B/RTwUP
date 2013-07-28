@@ -68,6 +68,7 @@
 	font-size: large;
 	font-family: "Century Gothic";
 	background-color: #FFCC00;
+	padding: 0;
 }
 
 .auto-style3 {
@@ -82,13 +83,25 @@
 	font-size: small;
 	font-family: "Century Gothic";
 }
+
+.frame {
+	border-spacing: 0;
+	border-width: 0;
+	width: 1000;
+	}
+	
+.center
+{
+	margin: 0 auto;
+	text-align: left;
+}
+
+
 </style>
 </head>
-<center>
 	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0"
 		marginheight="0" onLoad="preloadImages();">
-		<table width="1000" border="0" cellpadding="0" cellspacing="0"
-			class="frame" id="Table_01">
+		<table class="frame center" id="Table_01">
 			<!--DWLayoutTable-->
 			<tr>
 				<td height="107" colspan="12" class="auto-style1"><img
@@ -96,21 +109,20 @@
 			</tr>
 			<tr>
 				<td colspan="12" class="auto-style2" style="height: 40px">
-					Gestione Delle Informazioni sul Web</td>
+					Gestione dell'Informazione su Web</td>
 			</tr>
 			<tr>
 				<td>
-					<div id="ranking" class="auto-style4"></div>
+					<div id="ranking" class="auto-style4 center"></div>
 				</td>
 
 			</tr>
 			<tr>
 				<td colspan="12" class="auto-style3" style="height: 22px">
 					Copyright &copy; 2013 Gabriele de Capoa, Gabriele Proni &amp;
-					Daniele Morgantini, for "Gestione dell'Informazione sul Web" course
+					Daniele Morgantini, for "Gestione dell'Informazione su Web" course
 				</td>
 			</tr>
 		</table>
 	</body>
-</center>
 </html>
