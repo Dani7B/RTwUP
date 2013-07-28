@@ -57,7 +57,6 @@
 		console.log('Connection Status : ' + msg);
 	}
 </script>
-<!-- End Preload Script -->
 <style type="text/css">
 .auto-style1 {
 	text-align: center;
@@ -68,7 +67,6 @@
 	font-size: large;
 	font-family: "Century Gothic";
 	background-color: #FFCC00;
-	padding: 0;
 }
 
 .auto-style3 {
@@ -84,25 +82,22 @@
 	font-family: "Century Gothic";
 }
 
-.frame {
-	border-spacing: 0;
-	border-width: 0;
-	width: 1000;
-	}
-	
-.center
-{
-	margin: 0 auto;
-	text-align: left;
+body {
+	text-align : center;
 }
 
-
+.frame {
+	margin: 0 auto;
+	width: 1000;
+	border-width: 0;
+	border-spacing: 0;
+}
+td, tr {padding: 0;}
 </style>
 </head>
-	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0"
-		marginheight="0" onLoad="preloadImages();">
-		<table class="frame center" id="Table_01">
-			<!--DWLayoutTable-->
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0"
+	marginheight="0">
+		<table class="frame" id="Table_01">
 			<tr>
 				<td height="107" colspan="12" class="auto-style1"><img
 					src="images/head.png" width="656" height="107" alt=""></td>
@@ -113,7 +108,7 @@
 			</tr>
 			<tr>
 				<td>
-					<div id="ranking" class="auto-style4 center"></div>
+					<div id="ranking" class="auto-style4"></div>
 				</td>
 
 			</tr>
@@ -124,5 +119,5 @@
 				</td>
 			</tr>
 		</table>
-	</body>
+</body>
 </html>
