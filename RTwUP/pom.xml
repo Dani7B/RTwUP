@@ -32,7 +32,7 @@
 			<groupId>storm</groupId>
 			<artifactId>storm</artifactId>
 			<version>${storm.version}</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.twitter4j</groupId>
