@@ -17,7 +17,7 @@ import backtype.storm.tuple.Tuple;
  * 
  * @author Gabriele de Capoa, Gabriele Proni, Daniele Morgantini
  *
- */
+ **/
 
 public class RedisPublisherBolt extends BaseBasicBolt{
 
@@ -37,9 +37,7 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 	}
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
-				
 		String ranking = this.counts.getTopNelementsStringified(this.topN);
-		
 		this.jedis.publish("RTwUP", ranking);
 	}
 
@@ -51,5 +49,4 @@ public class RedisPublisherBolt extends BaseBasicBolt{
 		this.pool.returnResource(this.jedis);
 		this.pool.destroy();
 	}
-
 }

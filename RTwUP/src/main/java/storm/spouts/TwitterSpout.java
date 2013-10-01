@@ -11,7 +11,6 @@ import twitter4j.StatusDeletionNotice;
 import twitter4j.StatusListener;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
-import twitter4j.URLEntity;
 import twitter4j.auth.AccessToken;
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -21,13 +20,11 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 
 /** 
- * 
  * This spout listens to tweet stream, then filters the tweets by location (e.g. city of Rome)
  * and retrieves only the links contained in tweets.
  * 
  * @author Gabriele de Capoa, Gabriele Proni, Daniele Morgantini
- * 
- * **/
+ **/
 
 public class TwitterSpout extends BaseRichSpout {
 
@@ -37,6 +34,7 @@ public class TwitterSpout extends BaseRichSpout {
 	private SpoutOutputCollector collector;
 	private TwitterStream ts = null;
 	private double[][] bbox = null;
+	private String[] keywords;
 
 	public void open(Map conf, TopologyContext context,	SpoutOutputCollector collector) {
 
@@ -45,7 +43,10 @@ public class TwitterSpout extends BaseRichSpout {
 		this.bbox[0][1] = (Double) conf.get("sw1");
 		this.bbox[1][0] = (Double) conf.get("ne0");
 		this.bbox[1][1] = (Double) conf.get("ne1");
-		
+		long numberKeywords = (Long) conf.get("numberKeywords");
+		this.keywords = new String[(int) numberKeywords];
+		for(int i=0; i<numberKeywords; i++)
+			this.keywords[i] = (String) conf.get("keyword"+i);
 		
 		this.queue = new LinkedBlockingQueue<Status>();
 		this.collector = collector;
@@ -94,23 +95,21 @@ public class TwitterSpout extends BaseRichSpout {
 		this.ts.addListener(listener);
 		FilterQuery query = new FilterQuery();
 		query.locations(this.bbox);
+		query.track(this.keywords);
 		this.ts.filter(query);
 	}
 
 	public void nextTuple() {
 		try {
 			Status retrieve = queue.take();
-			URLEntity[] urls = retrieve.getURLEntities();
-			for (URLEntity url : urls)
-				this.collector.emit(new Values(url.getExpandedURL()));
+			this.collector.emit(new Values(retrieve.getUser()));
 		} catch (InterruptedException e) {
 			System.err.println("ERRORE SULLO SPOUT: " + e.getMessage());
 		}
-
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("url"));
+		declarer.declare(new Fields("user"));
 	}
 
 	public void close(){
