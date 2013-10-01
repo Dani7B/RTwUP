@@ -7,23 +7,6 @@
 <script type="text/javascript"
 	src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
-	function getHTMLcode(channel, message) {
-		var result = "<h3> # Active users ";
-		switch(channel){
-			case "hCard":
-				result += "in this hour " + message + "</h3>"; 
-			break;
-			
-			case "dCard":
-				result += "todayday " + message + "</h3>"; 
-			break;
-			
-			case "mCard":
-				result += "in this month " + message + "</h3>"; 
-			break;
-		}
-		return result;
-	}
 
 	var socket = io.connect('http://localhost:8000/');
 
