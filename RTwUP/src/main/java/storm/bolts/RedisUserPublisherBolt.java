@@ -45,9 +45,9 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 		long monthCard = this.jedis.scard(monthKey);
 		long dayCard = this.jedis.scard(dayKey);
 		long hourCard = this.jedis.scard(hourKey);
-		this.jedis.publish("monthCard", Long.toString(monthCard));
-		this.jedis.publish("hourCard", Long.toString(hourCard));
-		this.jedis.publish("dayCard", Long.toString(dayCard));
+		this.jedis.publish("mCard", Long.toString(monthCard));
+		this.jedis.publish("hCard", Long.toString(hourCard));
+		this.jedis.publish("dCard", Long.toString(dayCard));
 
 	}
 

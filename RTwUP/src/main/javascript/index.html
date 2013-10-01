@@ -7,29 +7,22 @@
 <script type="text/javascript"
 	src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
-	function getHTMLcode(data) {
-		var result = "";
-		/*var json = JSON.parse(data);
-
-		for ( var dElem in json) {
-			result += "<h3>" + dElem + "</h3>";
-			if (json[dElem].constructor === Array) {
-				for ( var pElem in json[dElem]) {
-					result += "<p> <a href=\"" + json[dElem][pElem].page + "\" target=\"_blank\">"
-							+ json[dElem][pElem].page
-							+ "</a> &nbsp &nbsp &nbsp "
-							+ json[dElem][pElem].count + "</p>";
-				}
-			} else {
-				result += "<p> <a href=\"" + json[dElem].page + "\" target=\"_blank\">"
-						+ json[dElem].page
-						+ "</a> &nbsp &nbsp &nbsp "
-						+ json[dElem].count + "</p>";
-			}
+	function getHTMLcode(channel, message) {
+		var result = "<h3> # Active users ";
+		switch(channel){
+			case "hCard":
+				result += "in this hour " + message + "</h3>"; 
+			break;
+			
+			case "dCard":
+				result += "todayday " + message + "</h3>"; 
+			break;
+			
+			case "mCard":
+				result += "in this month " + message + "</h3>"; 
+			break;
 		}
-		;
-		return result;*/
-		return data;
+		return result;
 	}
 
 	var socket = io.connect('http://localhost:8000/');
@@ -37,13 +30,13 @@
 	socket.on('connect', function(data) {
 		setStatus('connected');
 		socket.emit('subscribe', {
-			channel : 'hourCard'
+			channel : 'hCard'
 		});
 		socket.emit('subscribe', {
-			channel : 'dayCard'
+			channel : 'dCard'
 		});
 		socket.emit('subscribe', {
-			channel : 'monthCard'
+			channel : 'mCard'
 		});
 	});
 
@@ -51,24 +44,29 @@
 		setStatus('reconnecting');
 	});
 
-	socket.on('message', function(channel, data) {
-		console.log('received a message: ', data);
-		addMessage(channel,data);
+	socket.on('message', function(data) {
+		var channel = data.substring(0,5);
+		var message = data.substring(6);
+		console.log('received a message: ', message);
+		addMessage(channel,message);
 	});
-
-	function addMessage(channel, data) {
-		var htmlCode = getHTMLcode(data);
+	
+	function addMessage(channel, message) {
+		var result = "<h3> # Active users ";
 		switch(channel){
-			case "dayCard":
-				document.getElementById("hour").innerHTML = htmlCode;
+			case "hCard":
+				result += "in this hour: " + message + "</h3>"; 
+				document.getElementById("hour").innerHTML = result;
 			break;
 			
-			case "weekCard":
-				document.getElementById("day").innerHTML = htmlCode;
+			case "dCard":
+				result += "today: " + message + "</h3>"; 
+				document.getElementById("day").innerHTML = result;
 			break;
 			
-			case "monthCard":
-				document.getElementById("month").innerHTML = htmlCode;
+			case "mCard":
+				result += "in this month: " + message + "</h3>"; 
+				document.getElementById("month").innerHTML = result;
 			break;
 		}
 	}
@@ -124,7 +122,7 @@ td, tr {padding: 0;}
 			</tr>
 			<tr>
 				<td colspan="12" class="auto-style2" style="height: 40px">
-					Number of location/keyword filtered users per day/week/month</td>
+					Number of location/keyword filtered users per hour/day/month</td>
 			</tr>
 			<tr>
 				<td>
