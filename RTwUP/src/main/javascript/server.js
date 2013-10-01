@@ -23,11 +23,13 @@ if (!module.parent) {
  
     socket.on('connection', function(client) {
         const subscriber = redis.createClient();
-        subscriber.subscribe('RTwUP');
+	subscriber.subscribe('hourCard');
+	subscriber.subscribe('dayCard');
+	subscriber.subscribe('monthCard');
  
         subscriber.on("message", function(channel, message) {
             client.send(message);
-            log('msg', "Received from channel"+ channel+ ": "+ message);
+            log('msg', "Received from channel "+ channel + ": "+ message);
         });
  
         client.on('message', function(msg) {

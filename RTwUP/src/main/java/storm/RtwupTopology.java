@@ -1,6 +1,7 @@
 package storm;
 
 import storm.bolts.ExpanderUserURLBolt;
+import storm.bolts.RedisUserPublisherBolt;
 import storm.bolts.RepoWriterBolt;
 import storm.spouts.TwitterSpout;
 import backtype.storm.Config;
@@ -36,6 +37,8 @@ public class RtwupTopology {
 				"filteredStream");
 		builder.setBolt("repoWriter", new RepoWriterBolt(), 5).shuffleGrouping(
 				"expander");
+		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), 5).shuffleGrouping(
+				"filteredStream");
 		
 		Config conf = new Config();
 		conf.setDebug(true);

@@ -2,14 +2,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="author"
-	content="Gabriele de Capoa, Gabriele Proni, Daniele Morgantini">
+	content="Daniele Morgantini">
 <title>RTwUP - Realtime Twitter URL Popularity</title>
 <script type="text/javascript"
 	src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	function getHTMLcode(data) {
 		var result = "";
-		var json = JSON.parse(data);
+		/*var json = JSON.parse(data);
 
 		for ( var dElem in json) {
 			result += "<h3>" + dElem + "</h3>";
@@ -28,7 +28,8 @@
 			}
 		}
 		;
-		return result;
+		return result;*/
+		return data;
 	}
 
 	var socket = io.connect('http://localhost:8000/');
@@ -36,7 +37,13 @@
 	socket.on('connect', function(data) {
 		setStatus('connected');
 		socket.emit('subscribe', {
-			channel : 'RTwUP'
+			channel : 'hourCard'
+		});
+		socket.emit('subscribe', {
+			channel : 'dayCard'
+		});
+		socket.emit('subscribe', {
+			channel : 'monthCard'
 		});
 	});
 
@@ -44,13 +51,26 @@
 		setStatus('reconnecting');
 	});
 
-	socket.on('message', function(data) {
+	socket.on('message', function(channel, data) {
 		console.log('received a message: ', data);
-		addMessage(data);
+		addMessage(channel,data);
 	});
 
-	function addMessage(data) {
-		document.getElementById("ranking").innerHTML = getHTMLcode(data);
+	function addMessage(channel, data) {
+		var htmlCode = getHTMLcode(data);
+		switch(channel){
+			case "dayCard":
+				document.getElementById("hour").innerHTML = htmlCode;
+			break;
+			
+			case "weekCard":
+				document.getElementById("day").innerHTML = htmlCode;
+			break;
+			
+			case "monthCard":
+				document.getElementById("month").innerHTML = htmlCode;
+			break;
+		}
 	}
 
 	function setStatus(msg) {
@@ -104,18 +124,19 @@ td, tr {padding: 0;}
 			</tr>
 			<tr>
 				<td colspan="12" class="auto-style2" style="height: 40px">
-					Gestione dell'Informazione su Web</td>
+					Number of location/keyword filtered users per day/week/month</td>
 			</tr>
 			<tr>
 				<td>
-					<div id="ranking" class="auto-style4"></div>
+					<div id="hour" class="auto-style4"></div>
+					<div id="day" class="auto-style4"></div>
+					<div id="month" class="auto-style4"></div>
 				</td>
 
 			</tr>
 			<tr>
 				<td colspan="12" class="auto-style3" style="height: 22px">
-					Copyright &copy; 2013 Gabriele de Capoa, Gabriele Proni &amp;
-					Daniele Morgantini, for "Gestione dell'Informazione su Web" course
+					Copyright &copy; 2013 Daniele Morgantini
 				</td>
 			</tr>
 		</table>
