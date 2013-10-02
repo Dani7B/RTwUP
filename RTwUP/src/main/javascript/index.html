@@ -24,10 +24,13 @@
 		
 		/*To get older values at startup*/
 		var currentdate = new Date();
-		var lastHour = currentdate.getFullYear() + "-" + currentdate.getMonth() +
-		"-" + currentdate.getDate() + "_" + currentdate.getHours();// not taking into account midnight
+		var dayString = currentdate.getFullYear() + "-" + currentdate.getMonth() +
+		"-" + currentdate.getDate() + "_";
+		var one = dayString + (currentdate.getHours()-1);
+		var two = dayString + (currentdate.getHours()-2);		// not taking into account midnight
+		var three = dayString + (currentdate.getHours()-3);
 		socket.emit('old', { 
-			id: lastHour 
+			idOne: one , idTwo: two , idThree: three
 		});
 	});
 
@@ -40,6 +43,14 @@
 		var message = data.message; // data.substring(6);
 		console.log('received a message: ', message);
 		addMessage(channel,message);
+	});
+	
+	socket.on('last', function(data) {
+		console.log('received a message: ', data);
+		var result = "<h3> # Active users at ";
+		document.getElementById("three").innerHTML = result + data.idThree + " " + data.three + "</h3>";
+		document.getElementById("two").innerHTML = result + data.idTwo + " " + data.two + "</h3>";
+		document.getElementById("one").innerHTML = result + data.idOne + " " + data.one + "</h3>";
 	});
 	
 	function addMessage(channel, message) {
@@ -117,6 +128,9 @@ td, tr {padding: 0;}
 			</tr>
 			<tr>
 				<td>
+					<div id="three" class="auto-style4"></div>
+					<div id="two" class="auto-style4"></div>
+					<div id="one" class="auto-style4"></div>
 					<div id="hour" class="auto-style4"></div>
 					<div id="day" class="auto-style4"></div>
 					<div id="month" class="auto-style4"></div>

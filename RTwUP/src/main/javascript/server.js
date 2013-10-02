@@ -38,14 +38,21 @@ if (!module.parent) {
         })
 
 	client.on('old', function(msg) {
-        	log('start', msg.id);
-		subscriberGetter.get(msg.id, function (err, reply) {
-			if(reply===null)
-				result = 'Empty';
-			else
-				result = reply.toString();
-			log('start', result);
-		})
+		var one = msg.idOne;
+		var two = msg.idTwo;
+		var three = msg.idThree;
+		var oneCard; var twoCard; var threeCard;
+        	log('start', one + ", " + two + ", " + three);
+		subscriberGetter.scard(one, function (err, reply) {
+			oneCard = reply;
+		});
+		subscriberGetter.scard(two, function (err, reply) {
+			twoCard = reply;
+		});
+		subscriberGetter.scard(three, function (err, reply) {
+			threeCard = reply;
+		});
+		client.emit("last", {idOne: one, idTwo: two, idThree: three, one: oneCard, two: twoCard, three: threeCard});
         })
  
         client.on('disconnect', function() {
