@@ -26,9 +26,9 @@ if (!module.parent) {
 	subscriber.subscribe('hCard');
 	subscriber.subscribe('dCard');
 	subscriber.subscribe('mCard');
- 
+	
         subscriber.on("message", function(channel, message) {
-            client.send(channel + ":" + message);
+	    client.emit("update", {channel: channel, message: message}); //client.send(channel + ":" + message);
             log('msg', "Received from channel "+ channel + ": "+ message);
         });
  

@@ -44,9 +44,9 @@
 		setStatus('reconnecting');
 	});
 
-	socket.on('message', function(data) {
-		var channel = data.substring(0,5);
-		var message = data.substring(6);
+	socket.on('update', function(data) { // 'message'
+		var channel = data.channel; // data.substring(0,5);
+		var message = data.message; // data.substring(6);
 		console.log('received a message: ', message);
 		addMessage(channel,message);
 	});
