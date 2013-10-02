@@ -41,11 +41,12 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 		int hour = c.get(Calendar.HOUR_OF_DAY);
 		String monthKey = year + "-" + month;
 		String dayKey = monthKey + "-" + day;
-		String hourKey = dayKey + "-" + hour;
+		String hourKey = dayKey + "_" + hour;
 		User user = (User) input.getValueByField("user");
-		this.jedis.sadd(hourKey, Long.toString(user.getId()));
-		this.jedis.sadd(dayKey, Long.toString(user.getId()));
-		this.jedis.sadd(monthKey, Long.toString(user.getId()));
+		String userID = Long.toString(user.getId());
+		this.jedis.sadd(hourKey, userID);
+		this.jedis.sadd(dayKey, userID);
+		this.jedis.sadd(monthKey, userID);
 		
 		long monthCard = this.jedis.scard(monthKey);
 		long dayCard = this.jedis.scard(dayKey);

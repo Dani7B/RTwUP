@@ -26,6 +26,7 @@ if (!module.parent) {
 	subscriber.subscribe('hCard');
 	subscriber.subscribe('dCard');
 	subscriber.subscribe('mCard');
+	const subscriberGetter = redis.createClient();
 	
         subscriber.on("message", function(channel, message) {
 	    client.emit("update", {channel: channel, message: message}); //client.send(channel + ":" + message);
@@ -34,6 +35,17 @@ if (!module.parent) {
  
         client.on('message', function(msg) {
         	log('debug', msg);
+        })
+
+	client.on('old', function(msg) {
+        	log('start', msg.id);
+		subscriberGetter.get(msg.id, function (err, reply) {
+			if(reply===null)
+				result = 'Empty';
+			else
+				result = reply.toString();
+			log('start', result);
+		})
         })
  
         client.on('disconnect', function() {
@@ -54,6 +66,9 @@ function log(type, msg) {
             break;
         case "warn":
             color = '\u001b[33m';
+            break;
+	case "start":
+            color = '\u001b[35m';
             break;
         case "error":
             color = '\u001b[31m';
