@@ -34,9 +34,14 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 	}
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
-		String monthKey = Calendar.YEAR + "-" + (Calendar.MONTH + 1);
-		String dayKey = monthKey + "-" + Calendar.DAY_OF_MONTH;
-		String hourKey = dayKey + "-" + Calendar.HOUR_OF_DAY;
+		Calendar c = Calendar.getInstance();
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH) + 1;
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+		String monthKey = year + "-" + month;
+		String dayKey = monthKey + "-" + day;
+		String hourKey = dayKey + "-" + hour;
 		User user = (User) input.getValueByField("user");
 		this.jedis.sadd(hourKey, Long.toString(user.getId()));
 		this.jedis.sadd(dayKey, Long.toString(user.getId()));
