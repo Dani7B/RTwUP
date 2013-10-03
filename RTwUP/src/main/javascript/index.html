@@ -24,13 +24,14 @@
 		
 		/*To get older values at startup*/
 		var currentDate = new Date();
-		var dayString = currentDate.getFullYear() + "-" + (currentDate.getMonth()+1) +
-		"-" + currentDate.getDate() + "_";
-		var one = dayString + (currentDate.getHours()-1);
-		var two = dayString + (currentDate.getHours()-2);	// not taking into account midnight switch
-		var three = dayString + (currentDate.getHours()-3);
+		var monthId = currentDate.getFullYear() + "-" + (currentDate.getMonth()+1);
+		var dayId = monthId + "-" + currentDate.getDate();
+		var hourId = dayId + "_" + currentDate.getHours();
+		var one = dayId + "_" + (currentDate.getHours()-1);
+		var two = dayId + "_" + (currentDate.getHours()-2);	// not taking into account midnight switch
+		var three = dayId + "_" + (currentDate.getHours()-3);
 		socket.emit('old', { 
-			idOne: one , idTwo: two , idThree: three
+			idOne: one , idTwo: two , idThree: three, hourId: hourId, dayId: dayId, monthId: monthId
 		});
 	});
 
@@ -54,6 +55,12 @@
 			document.getElementById("two").innerHTML = result + data.idTwo + " " + data.two + "</h3>";
 		if(data.idOne != null)
 			document.getElementById("one").innerHTML = result + data.idOne + " " + data.one + "</h3>";
+		if(data.hourId != null)
+			document.getElementById("hour").innerHTML = result + data.hourId + " " + data.hourCard + "</h3>";
+		if(data.dayId != null)
+			document.getElementById("day").innerHTML = result + data.dayId + " " + data.dayCard + "</h3>";
+		if(data.monthId != null)
+			document.getElementById("month").innerHTML = result + data.monthId + " " + data.monthCard + "</h3>";
 	});
 	
 	function addMessage(channel, message) {

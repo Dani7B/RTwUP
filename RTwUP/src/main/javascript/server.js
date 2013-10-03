@@ -62,7 +62,9 @@ if (!module.parent) {
 		var one = msg.idOne;
 		var two = msg.idTwo;
 		var three = msg.idThree;
-		var oneCard, twoCard, threeCard;
+		var hourId = msg.hourId;
+		var dayId = msg.dayId;
+		var monthId = msg.monthId;
         	log('start', one + ", " + two + ", " + three);
 		subscriberGetter.scard(one, function (err, reply) {
 			client.emit("last", {idOne: one, one: reply});
@@ -72,6 +74,15 @@ if (!module.parent) {
 		});
 		subscriberGetter.scard(three, function (err, reply) {
 			client.emit("last", {idThree: three, three: reply});
+		});
+		subscriberGetter.scard(hourId, function (err, reply) {
+			client.emit("last", {hourId: hourId, hourCard: reply});
+		});
+		subscriberGetter.scard(dayId, function (err, reply) {
+			client.emit("last", {dayId: dayId, dayCard: reply});
+		});
+		subscriberGetter.scard(monthId, function (err, reply) {
+			client.emit("last", {monthId: monthId, monthCard: reply});
 		});
         })
  
