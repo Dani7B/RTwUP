@@ -45,17 +45,16 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 		String hourKey = dayKey + "_" + hour;
 		User user = (User) input.getValueByField("user");
 		String userID = Long.toString(user.getId());
-		this.jedis.sadd(hourKey, userID);
-		this.jedis.sadd(dayKey, userID);
-		this.jedis.sadd(monthKey, userID);
+		Long hUpdated = this.jedis.sadd(hourKey, userID);
+		Long dUpdated = this.jedis.sadd(dayKey, userID);
+		Long mUpdated = this.jedis.sadd(monthKey, userID);
 		
-		long monthCard = this.jedis.scard(monthKey);
-		long dayCard = this.jedis.scard(dayKey);
-		long hourCard = this.jedis.scard(hourKey);
-		this.jedis.publish("mCard", Long.toString(monthCard));
-		this.jedis.publish("hCard", Long.toString(hourCard));
-		this.jedis.publish("dCard", Long.toString(dayCard));
-
+		if(hUpdated == 1)
+			this.jedis.publish("active-users-updates", "active-users-hourly");
+		if(dUpdated == 1)
+			this.jedis.publish("active-users-updates", "active-users-daily");
+		if(mUpdated == 1)
+			this.jedis.publish("active-users-updates", "active-users-monthly");
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {

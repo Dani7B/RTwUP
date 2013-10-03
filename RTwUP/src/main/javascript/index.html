@@ -23,12 +23,12 @@
 		});
 		
 		/*To get older values at startup*/
-		var currentdate = new Date();
-		var dayString = currentdate.getFullYear() + "-" + currentdate.getMonth() +
-		"-" + currentdate.getDate() + "_";
-		var one = dayString + (currentdate.getHours()-1);
-		var two = dayString + (currentdate.getHours()-2);		// not taking into account midnight
-		var three = dayString + (currentdate.getHours()-3);
+		var currentDate = new Date();
+		var dayString = currentDate.getFullYear() + "-" + (currentDate.getMonth()+1) +
+		"-" + currentDate.getDate() + "_";
+		var one = dayString + (currentDate.getHours()-1);
+		var two = dayString + (currentDate.getHours()-2);		// not taking into account midnight
+		var three = dayString + (currentDate.getHours()-3);
 		socket.emit('old', { 
 			idOne: one , idTwo: two , idThree: three
 		});
@@ -56,17 +56,17 @@
 	function addMessage(channel, message) {
 		var result = "<h3> # Active users ";
 		switch(channel){
-			case "hCard":
+			case "active-users-hourly":
 				result += "in this hour: " + message + "</h3>"; 
 				document.getElementById("hour").innerHTML = result;
 			break;
 			
-			case "dCard":
+			case "active-users-daily":
 				result += "today: " + message + "</h3>"; 
 				document.getElementById("day").innerHTML = result;
 			break;
 			
-			case "mCard":
+			case "active-users-monthly":
 				result += "in this month: " + message + "</h3>"; 
 				document.getElementById("month").innerHTML = result;
 			break;

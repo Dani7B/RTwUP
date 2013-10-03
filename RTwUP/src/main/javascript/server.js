@@ -23,14 +23,30 @@ if (!module.parent) {
  
     socket.on('connection', function(client) {
         const subscriber = redis.createClient();
-	subscriber.subscribe('hCard');
-	subscriber.subscribe('dCard');
-	subscriber.subscribe('mCard');
+	subscriber.subscribe('active-users-updates');
 	const subscriberGetter = redis.createClient();
 	
         subscriber.on("message", function(channel, message) {
-	    client.emit("update", {channel: channel, message: message}); //client.send(channel + ":" + message);
-            log('msg', "Received from channel "+ channel + ": "+ message);
+		var currentDate = new Date();
+		var monthId = currentDate.getFullYear() + "-" + (currentDate.getMonth()+1);
+		var hourId; var dayId; var count;
+		switch(message){
+			case "active-users-hourly":
+				hourId = monthId + "-" + currentDate.getDate() + "_" + currentDate.getHours();
+				count = subscriberGetter.scard(hourId);
+			break;
+
+			case "active-users-daily":
+				dayId = monthId + "-" + currentDate.getDate();
+				count = subscriberGetter.scard(hourId);
+			break;
+
+			case "active-users-monthly":
+				count = subscriberGetter.scard(monthId);
+			break;
+		}
+	    	client.emit("update", {channel: message, message: count}); //client.send(channel + ":" + message);
+            	log('msg', "Received "+ message + " with content: "+ message);
         });
  
         client.on('message', function(msg) {
