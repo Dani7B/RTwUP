@@ -13,13 +13,13 @@
 	socket.on('connect', function(data) {
 		setStatus('connected');
 		socket.emit('subscribe', {
-			channel : 'hCard'
+			channel : 'active-users-hourly'
 		});
 		socket.emit('subscribe', {
-			channel : 'dCard'
+			channel : 'active-users-daily'
 		});
 		socket.emit('subscribe', {
-			channel : 'mCard'
+			channel : 'active-users-monthly'
 		});
 		
 		/*To get older values at startup*/
@@ -27,7 +27,7 @@
 		var dayString = currentDate.getFullYear() + "-" + (currentDate.getMonth()+1) +
 		"-" + currentDate.getDate() + "_";
 		var one = dayString + (currentDate.getHours()-1);
-		var two = dayString + (currentDate.getHours()-2);		// not taking into account midnight
+		var two = dayString + (currentDate.getHours()-2);	// not taking into account midnight switch
 		var three = dayString + (currentDate.getHours()-3);
 		socket.emit('old', { 
 			idOne: one , idTwo: two , idThree: three
@@ -38,9 +38,9 @@
 		setStatus('reconnecting');
 	});
 
-	socket.on('update', function(data) { // 'message'
-		var channel = data.channel; // data.substring(0,5);
-		var message = data.message; // data.substring(6);
+	socket.on('update', function(data) {
+		var channel = data.channel;
+		var message = data.message;
 		console.log('received a message: ', message);
 		addMessage(channel,message);
 	});
@@ -48,9 +48,12 @@
 	socket.on('last', function(data) {
 		console.log('received a message: ', data);
 		var result = "<h3> # Active users at ";
-		document.getElementById("three").innerHTML = result + data.idThree + " " + data.three + "</h3>";
-		document.getElementById("two").innerHTML = result + data.idTwo + " " + data.two + "</h3>";
-		document.getElementById("one").innerHTML = result + data.idOne + " " + data.one + "</h3>";
+		if(data.idThree != null)
+			document.getElementById("three").innerHTML = result + data.idThree + " " + data.three + "</h3>";
+		if(data.idTwo != null)
+			document.getElementById("two").innerHTML = result + data.idTwo + " " + data.two + "</h3>";
+		if(data.idOne != null)
+			document.getElementById("one").innerHTML = result + data.idOne + " " + data.one + "</h3>";
 	});
 	
 	function addMessage(channel, message) {

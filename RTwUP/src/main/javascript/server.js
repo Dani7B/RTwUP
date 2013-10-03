@@ -29,24 +29,29 @@ if (!module.parent) {
         subscriber.on("message", function(channel, message) {
 		var currentDate = new Date();
 		var monthId = currentDate.getFullYear() + "-" + (currentDate.getMonth()+1);
-		var hourId; var dayId; var count;
+		var hourId, dayId;
 		switch(message){
 			case "active-users-hourly":
 				hourId = monthId + "-" + currentDate.getDate() + "_" + currentDate.getHours();
-				count = subscriberGetter.scard(hourId);
+				subscriberGetter.scard(hourId,function (err, reply) {
+					client.emit("update", {channel: message, message: reply});
+				});
 			break;
 
 			case "active-users-daily":
 				dayId = monthId + "-" + currentDate.getDate();
-				count = subscriberGetter.scard(hourId);
+				subscriberGetter.scard(dayId,function (err, reply) {
+					client.emit("update", {channel: message, message: reply});
+				});
 			break;
 
 			case "active-users-monthly":
-				count = subscriberGetter.scard(monthId);
+				subscriberGetter.scard(monthId,function (err, reply) {
+					client.emit("update", {channel: message, message: reply});
+				});
 			break;
 		}
-	    	client.emit("update", {channel: message, message: count}); //client.send(channel + ":" + message);
-            	log('msg', "Received "+ message + " with content: "+ message);
+            	log('msg', "Received "+ channel + " with content: "+ message);
         });
  
         client.on('message', function(msg) {
@@ -57,18 +62,17 @@ if (!module.parent) {
 		var one = msg.idOne;
 		var two = msg.idTwo;
 		var three = msg.idThree;
-		var oneCard; var twoCard; var threeCard;
+		var oneCard, twoCard, threeCard;
         	log('start', one + ", " + two + ", " + three);
 		subscriberGetter.scard(one, function (err, reply) {
-			oneCard = reply;
+			client.emit("last", {idOne: one, one: reply});
 		});
 		subscriberGetter.scard(two, function (err, reply) {
-			twoCard = reply;
+			client.emit("last", {idTwo: two, two: reply});
 		});
 		subscriberGetter.scard(three, function (err, reply) {
-			threeCard = reply;
+			client.emit("last", {idThree: three, three: reply});
 		});
-		client.emit("last", {idOne: one, idTwo: two, idThree: three, one: oneCard, two: twoCard, three: threeCard});
         })
  
         client.on('disconnect', function() {
