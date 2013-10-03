@@ -46,14 +46,14 @@ public class RtwupTopology {
 		if (args != null && args.length > 0) {
 
 			conf.setNumWorkers(3);
-
-			conf.put("sw0", Double.parseDouble(args[1])); // is location always present?
-			conf.put("sw1", Double.parseDouble(args[2]));
-			conf.put("ne0", Double.parseDouble(args[3]));
-			conf.put("ne1", Double.parseDouble(args[4]));
+			conf.put("host", args[1]);
+			conf.put("sw0", Double.parseDouble(args[2])); // is location always present?
+			conf.put("sw1", Double.parseDouble(args[3]));
+			conf.put("ne0", Double.parseDouble(args[4]));
+			conf.put("ne1", Double.parseDouble(args[5]));
 			int numberKeywords = 0;
-			for(int i = 5; i<args.length; i++) {
-				conf.put("keyword"+(i-5), args[i]);
+			for(int i = 6; i<args.length; i++) {
+				conf.put("keyword"+(i-6), args[i]);
 				numberKeywords++;
 			}
 			conf.put("numberKeywords", numberKeywords);
@@ -66,6 +66,7 @@ public class RtwupTopology {
 				e.printStackTrace();
 			}
 		} else {
+			conf.put("host", "localhost");
 			conf.put("sw0", 12.20);
 			conf.put("sw1", 41.60);
 			conf.put("ne0", 12.80);
