@@ -1,14 +1,12 @@
 package storage;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import storage.DomainPageCouple;
+import com.google.gson.Gson;
 
 /**
  * This class has a collection of all the URLs. It returns the stringified
@@ -58,36 +56,31 @@ public class PageDictionary {
 	 */
 	public String getTopNelementsStringified(long topN) {
 		/* Ordering all the pages by counter */
-		DictionaryValueComparator bvc = new DictionaryValueComparator(
-				dictionary);
-		TreeMap<DomainPageCouple, Integer> sorted_map = new TreeMap<DomainPageCouple, Integer>(
-				bvc);
+		DictionaryValueComparator bvc = new DictionaryValueComparator(dictionary);
+		TreeMap<DomainPageCouple, Integer> sorted_map = new TreeMap<DomainPageCouple, Integer>(bvc);
 		sorted_map.putAll(dictionary);
 
 		/* Retrieving the topN pages and split them between appropriate domains */
-		
-		long i = 0;
-		JSONObject json = new JSONObject();
-		try {
-			for (Map.Entry<DomainPageCouple, Integer> dp : sorted_map
-					.entrySet()) {
-				if (i < topN) {
-					String domain = dp.getKey().getDomain();
-					String page = dp.getKey().getPage();
-					String count = dp.getValue().toString() + " times";
-
-					JSONObject frequency = new JSONObject();
-					frequency.put("page", page);
-					frequency.put("count", count);
-					json.accumulate(domain, frequency);
-				} else
-					break;
-				i++;
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
+		int i = 0;
+		Gson gson = new Gson();
+		Map<String,DomainPageList> topNList = new HashMap<String,DomainPageList>();
+		for (Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
+			if (i < topN) {
+				String domain = dp.getKey().getDomain();
+				String page = dp.getKey().getPage();
+				String count = dp.getValue().toString() + " times";
+				
+				DomainPageList dpl = topNList.get(domain);
+				if(dpl == null)
+					dpl = new DomainPageList(domain);
+				
+				dpl.addPageCountToList(page, count);
+				topNList.put(domain, dpl);
+			} else
+				break;
+			i++;
 		}
-		return json.toString();
+		return gson.toJson(topNList);
 	}
 
 	public Integer removeFromDictionary(String domain, String page) {
