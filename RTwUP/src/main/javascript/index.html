@@ -9,6 +9,25 @@
 <script type="text/javascript">
 
 	var socket = io.connect('http://localhost:8000/');
+	
+	function display(data) {
+		console.log('received message: ', data.fieldId, ' : ', data.fieldValue);
+		var tr = document.getElementById(data.fieldType);
+		tr.innerHTML = "<td> " + data.fieldId + "</td> <td>"  + data.fieldValue + "</td>";
+		switch(data.fieldType){
+			case "hourId":
+				tr.insertAdjacentHTML('beforeend', '<td> Now </td>');
+			break;
+			
+			case "dayId":
+				tr.insertAdjacentHTML('beforeend', '<td> Today </td>');
+			break;
+
+			case "monthId":
+				tr.insertAdjacentHTML('beforeend', '<td> This Month </td>');
+			break;
+		};
+	};
 
 	socket.on('connect', function(data) {
 		setStatus('connected');
@@ -40,38 +59,13 @@
 	});
 
 	socket.on('update', function(data) {
-		var channel = data.channel;
-		var message = data.message;
-		console.log('received a message: ', message);
-		addMessage(channel,message);
+		display(data);
 	});
 	
 	socket.on('last', function(data) {
-		console.log('received a message: ', data);
-		var type = data.fieldType;
-		var result = "<h3> # Active users at ";
-		document.getElementById(data.fieldType).innerHTML = result + data.fieldId + " " + data.fieldValue + "</h3>";
+		display(data);
 	});
 	
-	function addMessage(channel, message) {
-		var result = "<h3> # Active users ";
-		switch(channel){
-			case "active-users-hourly":
-				result += "in this hour: " + message + "</h3>"; 
-				document.getElementById("hour").innerHTML = result;
-			break;
-			
-			case "active-users-daily":
-				result += "today: " + message + "</h3>"; 
-				document.getElementById("day").innerHTML = result;
-			break;
-			
-			case "active-users-monthly":
-				result += "in this month: " + message + "</h3>"; 
-				document.getElementById("month").innerHTML = result;
-			break;
-		}
-	}
 
 	function setStatus(msg) {
 		console.log('Connection Status : ' + msg);
@@ -127,16 +121,13 @@ td, tr {padding: 0;}
 					Number of location/keyword filtered users per hour/day/month</td>
 			</tr>
 			<tr>
-				<td>
-					<div id="idThree" class="auto-style4"></div>
-					<div id="idTwo" class="auto-style4"></div>
-					<div id="idOne" class="auto-style4"></div>
-					<div id="hourId" class="auto-style4"></div>
-					<div id="dayId" class="auto-style4"></div>
-					<div id="monthId" class="auto-style4"></div>
-				</td>
-
-			</tr>
+				<td> Time Window </td> <td> # Active Users </td> <td> Note </td> </tr>
+			<tr id="idThree" class="auto-style4"></tr>
+			<tr id="idTwo" class="auto-style4"></tr>
+			<tr id="idOne" class="auto-style4"></tr>
+			<tr id="hourId" class="auto-style4"> </tr>
+			<tr id="dayId" class="auto-style4"> </tr>
+			<tr id="monthId" class="auto-style4"> </tr>
 			<tr>
 				<td colspan="12" class="auto-style3" style="height: 22px">
 					Copyright &copy; 2013 Daniele Morgantini

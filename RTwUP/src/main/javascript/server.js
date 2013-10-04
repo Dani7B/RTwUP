@@ -39,22 +39,19 @@ if (!module.parent) {
 		switch(message){
 			case "active-users-hourly":
 				hourId = monthId + "-" + currentDate.getDate() + "_" + currentDate.getHours();
-				subscriberGetter.scard(hourId,function (err, reply) {
-					client.emit("update", {channel: message, message: reply});
-				});
+				update("update", "hourId", hourId);
 			break;
 
 			case "active-users-daily":
 				dayId = monthId + "-" + currentDate.getDate();
-				subscriberGetter.scard(dayId,function (err, reply) {
-					client.emit("update", {channel: message, message: reply});
-				});
+				update("update", "dayId", dayId);
 			break;
 
 			case "active-users-monthly":
-				subscriberGetter.scard(monthId,function (err, reply) {
+				/*subscriberGetter.scard(monthId,function (err, reply) {
 					client.emit("update", {channel: message, message: reply});
-				});
+				});*/
+				update("update", "monthId", monthId);
 			break;
 		}
             	log('msg', "Received "+ channel + " with content: "+ message);
