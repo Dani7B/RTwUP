@@ -48,9 +48,6 @@ if (!module.parent) {
 			break;
 
 			case "active-users-monthly":
-				/*subscriberGetter.scard(monthId,function (err, reply) {
-					client.emit("update", {channel: message, message: reply});
-				});*/
 				update("update", "monthId", monthId);
 			break;
 		}
@@ -62,24 +59,19 @@ if (!module.parent) {
         })
 
 	client.on('old', function(msg) {
-		var one = msg.idOne;
-		var two = msg.idTwo;
-		var three = msg.idThree;
-		var hourId = msg.hourId;
-		var dayId = msg.dayId;
-		var monthId = msg.monthId;
-        	log('start', one + ", " + two + ", " + three);
+        	log('start', msg.idOneHago + ", " + msg.idTwoHago + ", " + msg.idThreeHago);
 		/*
 		subscriberGetter.scard(one, function (err, reply) {
 			client.emit("last", {idOne: one, one: reply});
 		});*/
-
-		update("last", "idOne", one);
-		update("last", "idTwo", two);
-		update("last", "idThree", three);
-		update("last", "hourId", hourId);
-		update("last", "dayId", dayId);
-		update("last", "monthId", monthId);
+		update("last", "idYesterday", msg.idYesterday);
+		update("last", "idBeforeYest", msg.idBeforeYest);
+		update("last", "idOneHago", msg.idOneHago);
+		update("last", "idTwoHago", msg.idTwoHago);
+		update("last", "idThreeHago", msg.idThreeHago);
+		update("last", "hourId", msg.hourId);
+		update("last", "dayId", msg.dayId);
+		update("last", "monthId", msg.monthId);
         })
  
         client.on('disconnect', function() {

@@ -46,11 +46,15 @@
 		var monthId = currentDate.getFullYear() + "-" + (currentDate.getMonth()+1);
 		var dayId = monthId + "-" + currentDate.getDate();
 		var hourId = dayId + "_" + currentDate.getHours();
-		var one = dayId + "_" + (currentDate.getHours()-1);
-		var two = dayId + "_" + (currentDate.getHours()-2);	// not taking into account midnight switch
-		var three = dayId + "_" + (currentDate.getHours()-3);
+		var oneHago = dayId + "_" + (currentDate.getHours()-1);
+		var twoHago = dayId + "_" + (currentDate.getHours()-2);	// not taking into account midnight switch
+		var threeHago = dayId + "_" + (currentDate.getHours()-3);
+		var yesterday = monthId + "-" + (currentDate.getDate()-1);
+		var beforeYest = monthId + "-" + (currentDate.getDate()-2);
 		socket.emit('old', { 
-			idOne: one , idTwo: two , idThree: three, hourId: hourId, dayId: dayId, monthId: monthId
+			idOneHago: oneHago , idTwoHago: twoHago , idThreeHago: threeHago,
+			idYesterday: yesterday, idBeforeYest: beforeYest,
+			hourId: hourId, dayId: dayId, monthId: monthId
 		});
 	});
 
@@ -127,9 +131,13 @@ td, tr {padding: 10;}
 			</tr>
 			<tr class="auto-style2">
 			<td> Time Window </td> <td> # Active Users </td> <td> Note </td> </tr>
-			<tr id="idThree" class="auto-style5"></tr>
-			<tr id="idTwo" class="auto-style5"></tr>
-			<tr id="idOne" class="auto-style5"></tr>
+			<tr id="idBeforeYest" class="auto-style5"></tr>
+			<tr id="idYesterday" class="auto-style5"></tr>
+			<tr class="auto-style2"> <td/><td/><td/> </tr>
+			<tr id="idThreeHago" class="auto-style5"></tr>
+			<tr id="idTwoHago" class="auto-style5"></tr>
+			<tr id="idOneHago" class="auto-style5"></tr>
+			<tr class="auto-style2"> <td/><td/><td/> </tr>
 			<tr id="hourId" class="auto-style5"> </tr>
 			<tr id="dayId" class="auto-style5"> </tr>
 			<tr id="monthId" class="auto-style5"> </tr>
