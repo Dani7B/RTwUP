@@ -64,6 +64,8 @@ if (!module.parent) {
 		subscriberGetter.scard(one, function (err, reply) {
 			client.emit("last", {idOne: one, one: reply});
 		});*/
+		update("last", "idBLastMonth", msg.idBLastMonth);
+		update("last", "idLastMonth", msg.idLastMonth);
 		update("last", "idYesterday", msg.idYesterday);
 		update("last", "idBeforeYest", msg.idBeforeYest);
 		update("last", "idOneHago", msg.idOneHago);
