@@ -67,18 +67,33 @@ public class RtwupTopology {
 			}
 		} else {
 			conf.put("host", "localhost");
+			/*
 			conf.put("sw0", 12.20);
 			conf.put("sw1", 41.60);
 			conf.put("ne0", 12.80);
-			conf.put("ne1", 42.10);
-			conf.put("keyword0", "berlusconi");
-			conf.put("keyword1", "letta governo");
-			conf.put("numberKeywords", 2);
+			conf.put("ne1", 42.10); */
+			conf.put("sw0", -11.73);
+			conf.put("sw1", 49.72);
+			conf.put("ne0", 2.37);
+			conf.put("ne1", 59.87);
+			conf.put("keyword0", "to");
+			conf.put("keyword1", "the");
+			conf.put("keyword1", "be");
+			conf.put("keyword1", "of");
+			conf.put("keyword1", "and");
+			conf.put("keyword1", "a");
+			conf.put("keyword1", "in");
+			conf.put("keyword1", "that");
+			conf.put("keyword1", "have");
+			conf.put("keyword1", "I");
+
+
+			conf.put("numberKeywords", 10);
 			
 			try{
 				LocalCluster cluster = new LocalCluster();
 				cluster.submitTopology("RTwUP", conf, builder.createTopology());
-				Utils.sleep(400000);
+				Utils.sleep(4000000); //400000
 				cluster.killTopology("RTwUP");
 				cluster.shutdown();
 			}catch (Exception e){

@@ -15,15 +15,15 @@
 		var tr = document.getElementById(data.fieldType);
 		tr.innerHTML = "<td> " + data.fieldId + "</td> <td>"  + data.fieldValue + "</td>";
 		switch(data.fieldType){
-			case "hourId":
+			case "active-users-hourly":
 				tr.insertAdjacentHTML('beforeend', '<td> Now </td>');
 			break;
 			
-			case "dayId":
+			case "active-users-daily":
 				tr.insertAdjacentHTML('beforeend', '<td> Today </td>');
 			break;
 
-			case "monthId":
+			case "active-users-monthly":
 				tr.insertAdjacentHTML('beforeend', '<td> This Month </td>');
 			break;
 		};
@@ -161,9 +161,9 @@ td, tr {padding: 8;}
 			<tr id="idTwoHago" class="auto-style5"></tr>
 			<tr id="idOneHago" class="auto-style5"></tr>
 			<tr> <td class="auto-style6"/><td class="auto-style6"> Real-time stats</td> <td class="auto-style6"/> </tr>
-			<tr id="hourId" class="auto-style5"> </tr>
-			<tr id="dayId" class="auto-style5"> </tr>
-			<tr id="monthId" class="auto-style5"> </tr>
+			<tr id="active-users-hourly" class="auto-style5"> </tr>
+			<tr id="active-users-daily" class="auto-style5"> </tr>
+			<tr id="active-users-monthly" class="auto-style5"> </tr>
 			<tr>
 				<td colspan="12" class="auto-style3" style="height: 22px">
 					Copyright &copy; 2013 Daniele Morgantini

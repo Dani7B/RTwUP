@@ -39,16 +39,16 @@ if (!module.parent) {
 		switch(message){
 			case "active-users-hourly":
 				hourId = monthId + "-" + currentDate.getDate() + "_" + currentDate.getHours();
-				update("update", "hourId", hourId);
+				update("update", message, hourId);
 			break;
 
 			case "active-users-daily":
 				dayId = monthId + "-" + currentDate.getDate();
-				update("update", "dayId", dayId);
+				update("update", message, dayId);
 			break;
 
 			case "active-users-monthly":
-				update("update", "monthId", monthId);
+				update("update", message, monthId);
 			break;
 		}
             	log('msg', "Received "+ channel + " with content: "+ message);
@@ -71,9 +71,9 @@ if (!module.parent) {
 		update("last", "idOneHago", msg.idOneHago);
 		update("last", "idTwoHago", msg.idTwoHago);
 		update("last", "idThreeHago", msg.idThreeHago);
-		update("last", "hourId", msg.hourId);
-		update("last", "dayId", msg.dayId);
-		update("last", "monthId", msg.monthId);
+		update("last", "active-users-hourly", msg.hourId);
+		update("last", "active-users-daily", msg.dayId);
+		update("last", "active-users-monthly", msg.monthId);
         })
  
         client.on('disconnect', function() {
