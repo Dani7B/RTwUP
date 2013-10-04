@@ -25,6 +25,12 @@ if (!module.parent) {
         const subscriber = redis.createClient();
 	subscriber.subscribe('active-users-updates');
 	const subscriberGetter = redis.createClient();
+
+	function update(type, fieldType, fieldId) {
+		subscriberGetter.scard(fieldId, function (err, reply) {
+			client.emit(type, {fieldType: fieldType, fieldId: fieldId, fieldValue: reply});
+		});
+	};
 	
         subscriber.on("message", function(channel, message) {
 		var currentDate = new Date();
@@ -66,24 +72,17 @@ if (!module.parent) {
 		var dayId = msg.dayId;
 		var monthId = msg.monthId;
         	log('start', one + ", " + two + ", " + three);
+		/*
 		subscriberGetter.scard(one, function (err, reply) {
 			client.emit("last", {idOne: one, one: reply});
-		});
-		subscriberGetter.scard(two, function (err, reply) {
-			client.emit("last", {idTwo: two, two: reply});
-		});
-		subscriberGetter.scard(three, function (err, reply) {
-			client.emit("last", {idThree: three, three: reply});
-		});
-		subscriberGetter.scard(hourId, function (err, reply) {
-			client.emit("last", {hourId: hourId, hourCard: reply});
-		});
-		subscriberGetter.scard(dayId, function (err, reply) {
-			client.emit("last", {dayId: dayId, dayCard: reply});
-		});
-		subscriberGetter.scard(monthId, function (err, reply) {
-			client.emit("last", {monthId: monthId, monthCard: reply});
-		});
+		});*/
+
+		update("last", "idOne", one);
+		update("last", "idTwo", two);
+		update("last", "idThree", three);
+		update("last", "hourId", hourId);
+		update("last", "dayId", dayId);
+		update("last", "monthId", monthId);
         })
  
         client.on('disconnect', function() {
@@ -92,6 +91,8 @@ if (!module.parent) {
         });
     });
 };
+
+
 
 function log(type, msg) {
 

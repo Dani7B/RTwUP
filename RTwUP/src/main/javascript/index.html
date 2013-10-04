@@ -48,19 +48,9 @@
 	
 	socket.on('last', function(data) {
 		console.log('received a message: ', data);
+		var type = data.fieldType;
 		var result = "<h3> # Active users at ";
-		if(data.idThree != null)
-			document.getElementById("three").innerHTML = result + data.idThree + " " + data.three + "</h3>";
-		if(data.idTwo != null)
-			document.getElementById("two").innerHTML = result + data.idTwo + " " + data.two + "</h3>";
-		if(data.idOne != null)
-			document.getElementById("one").innerHTML = result + data.idOne + " " + data.one + "</h3>";
-		if(data.hourId != null)
-			document.getElementById("hour").innerHTML = result + data.hourId + " " + data.hourCard + "</h3>";
-		if(data.dayId != null)
-			document.getElementById("day").innerHTML = result + data.dayId + " " + data.dayCard + "</h3>";
-		if(data.monthId != null)
-			document.getElementById("month").innerHTML = result + data.monthId + " " + data.monthCard + "</h3>";
+		document.getElementById(data.fieldType).innerHTML = result + data.fieldId + " " + data.fieldValue + "</h3>";
 	});
 	
 	function addMessage(channel, message) {
@@ -138,12 +128,12 @@ td, tr {padding: 0;}
 			</tr>
 			<tr>
 				<td>
-					<div id="three" class="auto-style4"></div>
-					<div id="two" class="auto-style4"></div>
-					<div id="one" class="auto-style4"></div>
-					<div id="hour" class="auto-style4"></div>
-					<div id="day" class="auto-style4"></div>
-					<div id="month" class="auto-style4"></div>
+					<div id="idThree" class="auto-style4"></div>
+					<div id="idTwo" class="auto-style4"></div>
+					<div id="idOne" class="auto-style4"></div>
+					<div id="hourId" class="auto-style4"></div>
+					<div id="dayId" class="auto-style4"></div>
+					<div id="monthId" class="auto-style4"></div>
 				</td>
 
 			</tr>
