@@ -3,7 +3,7 @@
 <meta charset="UTF-8">
 <meta name="author"
 	content="Daniele Morgantini">
-<title>RTwUP - Realtime Twitter URL Popularity</title>
+<title>RTwSU - Realtime Twitter Single Users</title>
 <script type="text/javascript"
 	src="http://localhost:8000/socket.io/socket.io.js"></script>
 <script type="text/javascript">
@@ -45,7 +45,7 @@
 		var lastMonth = currentDate.getFullYear() + "-" + currentDate.getMonth();
 		var bLastMonth = currentDate.getFullYear() + "-" + (currentDate.getMonth()-1);
 
-		socket.emit('old', { 
+		socket.emit('last', { 
 			idOneHago: oneHago , idTwoHago: twoHago , idThreeHago: threeHago,
 			idYesterday: yesterday, idBeforeYest: beforeYest,
 			idLastMonth: lastMonth, idBLastMonth: bLastMonth,
@@ -60,11 +60,6 @@
 	socket.on('update', function(data) {
 		display(data);
 	});
-	
-	socket.on('last', function(data) {
-		display(data);
-	});
-	
 
 	function setStatus(msg) {
 		console.log('Connection Status : ' + msg);

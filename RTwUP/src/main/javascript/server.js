@@ -23,14 +23,14 @@ if (!module.parent) {
  
     socket.on('connection', function(client) {
         const subscriber = redis.createClient();
-	subscriber.subscribe('active-users-updates');
-	const subscriberGetter = redis.createClient();
+        subscriber.subscribe('active-users-updates');
+        const subscriberGetter = redis.createClient();
 
-	function update(event, fieldType, fieldId) {
-		subscriberGetter.scard(fieldId, function (err, reply) {
-			client.emit(event, {fieldType: fieldType, fieldId: fieldId, fieldValue: reply});
-		});
-	};
+		function update(fieldType, fieldId) {
+			subscriberGetter.scard(fieldId, function (err, reply) {
+				client.emit("update", {fieldType: fieldType, fieldId: fieldId, fieldValue: reply});
+			});
+		};
 	
         subscriber.on("message", function(channel, message) {
 		var currentDate = new Date();
@@ -39,16 +39,16 @@ if (!module.parent) {
 		switch(message){
 			case "active-users-hourly":
 				hourId = monthId + "-" + currentDate.getDate() + "_" + currentDate.getHours();
-				update("update", message, hourId);
+				update(message, hourId);
 			break;
 
 			case "active-users-daily":
 				dayId = monthId + "-" + currentDate.getDate();
-				update("update", message, dayId);
+				update(message, dayId);
 			break;
 
 			case "active-users-monthly":
-				update("update", message, monthId);
+				update(message, monthId);
 			break;
 		}
             	log('msg', "Received "+ channel + " with content: "+ message);
@@ -58,22 +58,22 @@ if (!module.parent) {
         	log('debug', msg);
         })
 
-	client.on('old', function(msg) {
+        client.on('last', function(msg) {
         	log('start', msg.idOneHago + ", " + msg.idTwoHago + ", " + msg.idThreeHago);
-		/*
-		subscriberGetter.scard(one, function (err, reply) {
-			client.emit("last", {idOne: one, one: reply});
-		});*/
-		update("last", "idBLastMonth", msg.idBLastMonth);
-		update("last", "idLastMonth", msg.idLastMonth);
-		update("last", "idYesterday", msg.idYesterday);
-		update("last", "idBeforeYest", msg.idBeforeYest);
-		update("last", "idOneHago", msg.idOneHago);
-		update("last", "idTwoHago", msg.idTwoHago);
-		update("last", "idThreeHago", msg.idThreeHago);
-		update("last", "active-users-hourly", msg.hourId);
-		update("last", "active-users-daily", msg.dayId);
-		update("last", "active-users-monthly", msg.monthId);
+			/*
+			subscriberGetter.scard(one, function (err, reply) {
+				client.emit("last", {idOne: one, one: reply});
+			});*/
+			update("idBLastMonth", msg.idBLastMonth);
+			update("idLastMonth", msg.idLastMonth);
+			update("idYesterday", msg.idYesterday);
+			update("idBeforeYest", msg.idBeforeYest);
+			update("idOneHago", msg.idOneHago);
+			update("idTwoHago", msg.idTwoHago);
+			update("idThreeHago", msg.idThreeHago);
+			update("active-users-hourly", msg.hourId);
+			update("active-users-daily", msg.dayId);
+			update("active-users-monthly", msg.monthId);
         })
  
         client.on('disconnect', function() {
@@ -82,7 +82,6 @@ if (!module.parent) {
         });
     });
 };
-
 
 
 function log(type, msg) {
