@@ -31,15 +31,6 @@
 
 	socket.on('connect', function(data) {
 		setStatus('connected');
-		socket.emit('subscribe', {
-			channel : 'active-users-hourly'
-		});
-		socket.emit('subscribe', {
-			channel : 'active-users-daily'
-		});
-		socket.emit('subscribe', {
-			channel : 'active-users-monthly'
-		});
 		
 		/*To get older values at startup*/
 		var currentDate = new Date();
@@ -88,14 +79,14 @@
 	text-align: center;
 	font-size: large;
 	font-family: "Century Gothic";
-	background-color: #FFCC00;
+	background-color: #38B8FC;
 }
 
 .auto-style3 {
 	text-align: center;
 	font-size: xx-small;
 	font-family: "Century Gothic";
-	background-color: #FFCC00;
+	background-color: #38B8FC;
 }
 
 .auto-style4 {
@@ -113,14 +104,14 @@
 	text-align: center;
 	font-family: "Century Gothic";
 	padding:1;
-	background-color: #FFCC00;
+	background-color: #38B8FC;
 }
 
 .auto-style7 {
 	font-weight: bold;
 	text-align: center;
 	font-family: "Century Gothic";
-	background-color: #FFCC00;
+	background-color: #38B8FC;
 }
 
 body {
@@ -141,7 +132,7 @@ td, tr {padding: 8;}
 		<table class="frame" id="Table_01">
 			<tr>
 				<td height="107" colspan="12" class="auto-style1"><img
-					src="images/head.png" width="656" height="107" alt=""></td>
+					src="images/head.jpg" width="656" height="107" alt=""></td>
 			</tr>
 			<tr>
 				<td colspan="12" class="auto-style2" style="height: 40px">

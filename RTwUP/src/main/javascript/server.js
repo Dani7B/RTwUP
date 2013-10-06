@@ -26,9 +26,9 @@ if (!module.parent) {
 	subscriber.subscribe('active-users-updates');
 	const subscriberGetter = redis.createClient();
 
-	function update(type, fieldType, fieldId) {
+	function update(event, fieldType, fieldId) {
 		subscriberGetter.scard(fieldId, function (err, reply) {
-			client.emit(type, {fieldType: fieldType, fieldId: fieldId, fieldValue: reply});
+			client.emit(event, {fieldType: fieldType, fieldId: fieldId, fieldValue: reply});
 		});
 	};
 	
