@@ -32,6 +32,10 @@
 	socket.on('connect', function(data) {
 		setStatus('connected');
 		
+		function last(fieldType, fieldId) {
+			socket.emit("last", {fieldType: fieldType, fieldId: fieldId});
+		};
+		
 		/*To get older values at startup*/
 		var currentDate = new Date();
 		var monthId = currentDate.getFullYear() + "-" + (currentDate.getMonth()+1);
@@ -44,13 +48,17 @@
 		var beforeYest = monthId + "-" + (currentDate.getDate()-2);
 		var lastMonth = currentDate.getFullYear() + "-" + currentDate.getMonth();
 		var bLastMonth = currentDate.getFullYear() + "-" + (currentDate.getMonth()-1);
-
-		socket.emit('last', { 
-			idOneHago: oneHago , idTwoHago: twoHago , idThreeHago: threeHago,
-			idYesterday: yesterday, idBeforeYest: beforeYest,
-			idLastMonth: lastMonth, idBLastMonth: bLastMonth,
-			hourId: hourId, dayId: dayId, monthId: monthId
-		});
+		
+		last("idOneHago",oneHago);
+		last("idTwoHago",twoHago);
+		last("idThreeHago",threeHago);
+		last("idYesterday",yesterday);
+		last("idBeforeYest",beforeYest);
+		last("idLastMonth",lastMonth);
+		last("idBLastMonth",bLastMonth);
+		last("active-users-hourly",hourId);
+		last("active-users-daily",dayId);
+		last("active-users-monthly",monthId);
 	});
 
 	socket.on('reconnecting', function(data) {

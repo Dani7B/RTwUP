@@ -59,21 +59,7 @@ if (!module.parent) {
         })
 
         client.on('last', function(msg) {
-        	log('start', msg.idOneHago + ", " + msg.idTwoHago + ", " + msg.idThreeHago);
-			/*
-			subscriberGetter.scard(one, function (err, reply) {
-				client.emit("last", {idOne: one, one: reply});
-			});*/
-			update("idBLastMonth", msg.idBLastMonth);
-			update("idLastMonth", msg.idLastMonth);
-			update("idYesterday", msg.idYesterday);
-			update("idBeforeYest", msg.idBeforeYest);
-			update("idOneHago", msg.idOneHago);
-			update("idTwoHago", msg.idTwoHago);
-			update("idThreeHago", msg.idThreeHago);
-			update("active-users-hourly", msg.hourId);
-			update("active-users-daily", msg.dayId);
-			update("active-users-monthly", msg.monthId);
+			update(msg.fieldType, msg.fieldId);
         })
  
         client.on('disconnect', function() {
