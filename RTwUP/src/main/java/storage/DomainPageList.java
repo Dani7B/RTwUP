@@ -5,20 +5,10 @@ import java.util.ArrayList;
 
 public class DomainPageList {
 
-	private String domain;
 	private List<PageCount> pageCountList;
 	
-	public DomainPageList(String domain) {
-		this.domain = domain;
+	public DomainPageList() {
 		this.pageCountList = new ArrayList<PageCount>();
-	}
-
-	public String getDomain() {
-		return domain;
-	}
-
-	public void setDomain(String domain) {
-		this.domain = domain;
 	}
 
 	public List<PageCount> getPageCountList() {
