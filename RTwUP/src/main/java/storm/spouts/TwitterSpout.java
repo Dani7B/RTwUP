@@ -1,7 +1,12 @@
 package storm.spouts;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import twitter4j.FilterQuery;
 import twitter4j.GeoLocation;
@@ -43,10 +48,18 @@ public class TwitterSpout extends BaseRichSpout {
 		this.bbox[0][1] = (Double) conf.get("sw1");
 		this.bbox[1][0] = (Double) conf.get("ne0");
 		this.bbox[1][1] = (Double) conf.get("ne1");
-		long numberKeywords = (Long) conf.get("numberKeywords");
-		this.keywords = new String[(int) numberKeywords];
-		for(int i=0; i<numberKeywords; i++)
-			this.keywords[i] = (String) conf.get("keyword"+i);
+		
+		String keywordsStringified = (String) conf.get("keywords");
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			this.keywords = mapper.readValue(keywordsStringified, String[].class);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		this.queue = new LinkedBlockingQueue<Status>();
 		this.collector = collector;

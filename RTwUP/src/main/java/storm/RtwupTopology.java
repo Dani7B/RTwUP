@@ -1,5 +1,12 @@
 package storm;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import storm.bolts.ExpanderUserURLBolt;
 import storm.bolts.RedisUserPublisherBolt;
 import storm.bolts.RepoWriterBolt;
@@ -43,6 +50,8 @@ public class RtwupTopology {
 		Config conf = new Config();
 		conf.setDebug(true);
 		
+		ObjectMapper mapper = new ObjectMapper();
+		
 		if (args != null && args.length > 0) {
 
 			conf.setNumWorkers(3);
@@ -51,12 +60,21 @@ public class RtwupTopology {
 			conf.put("sw1", Double.parseDouble(args[3]));
 			conf.put("ne0", Double.parseDouble(args[4]));
 			conf.put("ne1", Double.parseDouble(args[5]));
-			int numberKeywords = 0;
+			ArrayList<String> keywords = new ArrayList<String>();
 			for(int i = 6; i<args.length; i++) {
-				conf.put("keyword"+(i-6), args[i]);
-				numberKeywords++;
+				keywords.add(args[i]);
 			}
-			conf.put("numberKeywords", numberKeywords);
+			String keywordsStringified = "";
+			try {
+				keywordsStringified = mapper.writeValueAsString(keywords.toArray());
+			} catch (JsonGenerationException e1) {
+				e1.printStackTrace();
+			} catch (JsonMappingException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			conf.put("keywords", keywordsStringified);
 			
 			try {
 				StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
@@ -67,28 +85,41 @@ public class RtwupTopology {
 			}
 		} else {
 			conf.put("host", "localhost");
-			/*
+			/* Rome
 			conf.put("sw0", 12.20);
 			conf.put("sw1", 41.60);
 			conf.put("ne0", 12.80);
 			conf.put("ne1", 42.10); */
+			
+			/* UK & Ireland */
 			conf.put("sw0", -11.73);
 			conf.put("sw1", 49.72);
 			conf.put("ne0", 2.37);
 			conf.put("ne1", 59.87);
-			conf.put("keyword0", "to");
-			conf.put("keyword1", "the");
-			conf.put("keyword1", "be");
-			conf.put("keyword1", "of");
-			conf.put("keyword1", "and");
-			conf.put("keyword1", "a");
-			conf.put("keyword1", "in");
-			conf.put("keyword1", "that");
-			conf.put("keyword1", "have");
-			conf.put("keyword1", "I");
-
-
-			conf.put("numberKeywords", 10);
+			
+			ArrayList<String> keywords = new ArrayList<String>();
+			keywords.add("to");
+			keywords.add("the");
+			keywords.add("be");
+			keywords.add("of");
+			keywords.add("and");
+			keywords.add("a");
+			keywords.add("in");
+			keywords.add("that");
+			keywords.add("have");
+			keywords.add("I");
+			
+			String keywordsStringified = "";
+			try {
+				keywordsStringified = mapper.writeValueAsString(keywords.toArray());
+			} catch (JsonGenerationException e1) {
+				e1.printStackTrace();
+			} catch (JsonMappingException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			conf.put("keywords", keywordsStringified);
 			
 			try{
 				LocalCluster cluster = new LocalCluster();
