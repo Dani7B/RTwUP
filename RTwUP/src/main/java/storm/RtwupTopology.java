@@ -55,13 +55,20 @@ public class RtwupTopology {
 		if (args != null && args.length > 0) {
 
 			conf.setNumWorkers(3);
+			/* ElasticSearch Transport Client parameters */
 			conf.put("host", args[1]);
-			conf.put("sw0", Double.parseDouble(args[2])); // is location always present?
-			conf.put("sw1", Double.parseDouble(args[3]));
-			conf.put("ne0", Double.parseDouble(args[4]));
-			conf.put("ne1", Double.parseDouble(args[5]));
+			conf.put("clusterName", args[2]);
+			conf.put("transportPort", Integer.parseInt(args[3]));
+			
+			/* Location parameters */
+			conf.put("sw0", Double.parseDouble(args[4])); // is location always present?
+			conf.put("sw1", Double.parseDouble(args[5]));
+			conf.put("ne0", Double.parseDouble(args[6]));
+			conf.put("ne1", Double.parseDouble(args[7]));
+			
+			/* Keywords */
 			ArrayList<String> keywords = new ArrayList<String>();
-			for(int i = 6; i<args.length; i++) {
+			for(int i = 8; i<args.length; i++) {
 				keywords.add(args[i]);
 			}
 			String keywordsStringified = "";
@@ -85,18 +92,22 @@ public class RtwupTopology {
 			}
 		} else {
 			conf.put("host", "localhost");
+			conf.put("clusterName", "profileRepositoryCluster");
+			conf.put("transportPort", 9300);
+			
 			/* Rome
 			conf.put("sw0", 12.20);
 			conf.put("sw1", 41.60);
 			conf.put("ne0", 12.80);
 			conf.put("ne1", 42.10); */
 			
-			/* UK & Ireland */
+			/* UK & Ireland location parameters*/
 			conf.put("sw0", -11.73);
 			conf.put("sw1", 49.72);
 			conf.put("ne0", 2.37);
 			conf.put("ne1", 59.87);
 			
+			/* Keywords */
 			ArrayList<String> keywords = new ArrayList<String>();
 			keywords.add("to");
 			keywords.add("the");

@@ -10,6 +10,7 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.joda.time.DateTime;
 
+import it.cybion.commons.storage.repository.RepositoryException;
 import it.cybion.commons.storage.repository.impls.ESTwitterUserSnapshotRepository;
 import it.cybion.commons.storage.repository.twitter.TwitterUser;
 import it.cybion.commons.storage.repository.twitter.TwitterUserSnapshot;
@@ -33,31 +34,37 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	
 	private ESTwitterUserSnapshotRepository repository;
 	
-	/*
 	@Override
 	public void prepare(Map conf, TopologyContext context){
 		String host = (String) conf.get("host");
 		String clusterName = (String) conf.get("clusterName");
-		String transportPort = (String) conf.get("transportPort");
+		int transportPort = (Integer) conf.get("transportPort");
 
 		// Create a TransportClient
         final Settings transportClientSettings = ImmutableSettings.settingsBuilder().put(
                 "cluster.name", clusterName).build();
         Client transportClient = new TransportClient(transportClientSettings).addTransportAddress(
-                new InetSocketTransportAddress(host, Integer.parseInt(transportPort)));
+                new InetSocketTransportAddress(host, transportPort));
         
         ObjectMapper mapper = new ObjectMapper();
         
 		this.repository = new ESTwitterUserSnapshotRepository(transportClient, mapper);
-	}*/
+	}
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		User user = (User) input.getValueByField("user");
 		String expandedURL = (String) input.getStringByField("expanded_user_url");
+		
 		TwitterUserSnapshot twitterUserSnapshot = createTwitterUserSnapshot(user, expandedURL);
 		
-		String message = user.getName() + "(" + user.getScreenName() + ") URL: " + expandedURL;
-		System.out.println(message);
+		TwitterUserSnapshot last = null;
+		try {
+			last = this.repository.getLatest(twitterUserSnapshot.getUserId());
+			if(twitterUserSnapshot.user.followersCount != last.user.followersCount) // just to use a condition
+				this.repository.store(twitterUserSnapshot);
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {

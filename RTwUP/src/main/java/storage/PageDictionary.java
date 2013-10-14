@@ -80,30 +80,7 @@ public class PageDictionary {
 				break;
 			i++;
 		}
-		String stringified = gson.toJson(topNList);
-		return stringified;
-		
-		/*
-		JSONObject json = new JSONObject();
-		try {
-			for (Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
-				if (i < topN) {
-					String domain = dp.getKey().getDomain();
-					String page = dp.getKey().getPage();
-					String count = dp.getValue().toString() + " times";
-
-					JSONObject frequency = new JSONObject();
-					frequency.put("page", page);
-					frequency.put("count", count);
-					json.accumulate(domain, frequency);
-				} else
-					break;
-				i++;
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return json.toString();*/
+		return gson.toJson(topNList);
 	}
 
 	public Integer removeFromDictionary(String domain, String page) {
