@@ -38,13 +38,13 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	public void prepare(Map conf, TopologyContext context){
 		String host = (String) conf.get("host");
 		String clusterName = (String) conf.get("clusterName");
-		int transportPort = (Integer) conf.get("transportPort");
+		String transportPort = (String) conf.get("transportPort");
 
 		// Create a TransportClient
         final Settings transportClientSettings = ImmutableSettings.settingsBuilder().put(
                 "cluster.name", clusterName).build();
         Client transportClient = new TransportClient(transportClientSettings).addTransportAddress(
-                new InetSocketTransportAddress(host, transportPort));
+                new InetSocketTransportAddress(host, Integer.parseInt(transportPort)));
         
         ObjectMapper mapper = new ObjectMapper();
         

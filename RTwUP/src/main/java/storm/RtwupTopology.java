@@ -1,11 +1,8 @@
 package storm;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.google.gson.Gson;
 
 import storm.bolts.ExpanderUserURLBolt;
 import storm.bolts.RedisUserPublisherBolt;
@@ -50,15 +47,18 @@ public class RtwupTopology {
 		Config conf = new Config();
 		conf.setDebug(true);
 		
-		ObjectMapper mapper = new ObjectMapper();
+		Gson gson = new Gson();
+		ArrayList<String> keywords = new ArrayList<String>();
+
 		
 		if (args != null && args.length > 0) {
 
 			conf.setNumWorkers(3);
+			
 			/* ElasticSearch Transport Client parameters */
 			conf.put("host", args[1]);
 			conf.put("clusterName", args[2]);
-			conf.put("transportPort", Integer.parseInt(args[3]));
+			conf.put("transportPort", args[3]);
 			
 			/* Location parameters */
 			conf.put("sw0", Double.parseDouble(args[4])); // is location always present?
@@ -67,20 +67,10 @@ public class RtwupTopology {
 			conf.put("ne1", Double.parseDouble(args[7]));
 			
 			/* Keywords */
-			ArrayList<String> keywords = new ArrayList<String>();
 			for(int i = 8; i<args.length; i++) {
 				keywords.add(args[i]);
 			}
-			String keywordsStringified = "";
-			try {
-				keywordsStringified = mapper.writeValueAsString(keywords.toArray());
-			} catch (JsonGenerationException e1) {
-				e1.printStackTrace();
-			} catch (JsonMappingException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+			String keywordsStringified = gson.toJson(keywords.toArray());
 			conf.put("keywords", keywordsStringified);
 			
 			try {
@@ -93,7 +83,7 @@ public class RtwupTopology {
 		} else {
 			conf.put("host", "localhost");
 			conf.put("clusterName", "profileRepositoryCluster");
-			conf.put("transportPort", 9300);
+			conf.put("transportPort", "9300");
 			
 			/* Rome
 			conf.put("sw0", 12.20);
@@ -108,7 +98,6 @@ public class RtwupTopology {
 			conf.put("ne1", 59.87);
 			
 			/* Keywords */
-			ArrayList<String> keywords = new ArrayList<String>();
 			keywords.add("to");
 			keywords.add("the");
 			keywords.add("be");
@@ -120,16 +109,7 @@ public class RtwupTopology {
 			keywords.add("have");
 			keywords.add("I");
 			
-			String keywordsStringified = "";
-			try {
-				keywordsStringified = mapper.writeValueAsString(keywords.toArray());
-			} catch (JsonGenerationException e1) {
-				e1.printStackTrace();
-			} catch (JsonMappingException e1) {
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
+			String keywordsStringified = gson.toJson(keywords.toArray());
 			conf.put("keywords", keywordsStringified);
 			
 			try{
