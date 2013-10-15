@@ -60,7 +60,7 @@ public class RepoWriterBolt extends BaseBasicBolt{
 		TwitterUserSnapshot last = null;
 		try {
 			last = this.repository.getLatest(twitterUserSnapshot.getUserId());
-			if(twitterUserSnapshot.user.followersCount != last.user.followersCount) // just to use a condition
+			if(last == null || twitterUserSnapshot.user.followersCount != last.user.followersCount) // just to use a condition
 				this.repository.store(twitterUserSnapshot);
 		} catch (RepositoryException e) {
 			e.printStackTrace();

@@ -37,11 +37,11 @@ public class RtwupTopology {
 		*/
 		
 		builder.setSpout("filteredStream", new TwitterSpout(), 1);
-		builder.setBolt("expander", new ExpanderUserURLBolt(), 5).shuffleGrouping(
+		builder.setBolt("expander", new ExpanderUserURLBolt(), 10).shuffleGrouping(
 				"filteredStream");
-		builder.setBolt("repoWriter", new RepoWriterBolt(), 5).shuffleGrouping(
+		builder.setBolt("repoWriter", new RepoWriterBolt(), 10).shuffleGrouping(
 				"expander");
-		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), 5).shuffleGrouping(
+		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), 10).shuffleGrouping(
 				"filteredStream");
 		
 		Config conf = new Config();
@@ -82,7 +82,7 @@ public class RtwupTopology {
 			}
 		} else {
 			conf.put("host", "localhost");
-			conf.put("clusterName", "profileRepositoryCluster");
+			conf.put("clusterName", "profileRepository");
 			conf.put("transportPort", "9300");
 			
 			/* Rome

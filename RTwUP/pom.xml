@@ -31,6 +31,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>it.cybion.commons</groupId>
+			<artifactId>utils</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>it.cybion.commons.storage</groupId>
 			<artifactId>entities-repository</artifactId>
 			<version>1.0-SNAPSHOT</version>

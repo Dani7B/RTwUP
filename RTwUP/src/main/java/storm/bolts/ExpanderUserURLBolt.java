@@ -5,7 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import twitter4j.URLEntity;
 import twitter4j.User;
+import twitter4j.internal.logging.Logger;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
@@ -31,23 +33,26 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		User user = (User) input.getValueByField("user");
-		
-		String url = user.getURLEntity().getExpandedURL();
-		URL testingUrl;
-		try {
-			testingUrl = new URL(url);
-			URLConnection connection = testingUrl.openConnection();
-			String temp = connection.getHeaderField("Location");
-			URL	newUrl = null;
-			if (temp != null)
-				 newUrl = new URL(temp);
-			else{
-				connection.getHeaderFields();
-				newUrl= connection.getURL();
+		if(user.getURLEntity().getEnd()==0)
+			collector.emit(new Values(user, ""));
+		else {
+			String url = user.getURLEntity().getExpandedURL();
+			URL testingUrl;
+			try {
+				testingUrl = new URL(url);
+				URLConnection connection = testingUrl.openConnection();
+				String temp = connection.getHeaderField("Location");
+				URL	newUrl = null;
+				if (temp != null)
+					 newUrl = new URL(temp);
+				else{
+					connection.getHeaderFields();
+					newUrl= connection.getURL();
+				}
+				collector.emit(new Values(user, newUrl.toString()));
+			} catch (MalformedURLException e) {
+			} catch (IOException e) {
 			}
-			collector.emit(new Values(user, newUrl.toString()));
-		} catch (MalformedURLException e) {
-		} catch (IOException e) {
 		}
 	}
 
