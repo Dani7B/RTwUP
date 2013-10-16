@@ -5,9 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import twitter4j.URLEntity;
 import twitter4j.User;
-import twitter4j.internal.logging.Logger;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
@@ -33,8 +31,9 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		User user = (User) input.getValueByField("user");
+		String urlToEmit = null;
 		if(user.getURLEntity().getEnd()==0)
-			collector.emit(new Values(user, ""));
+			urlToEmit = "";
 		else {
 			String url = user.getURLEntity().getExpandedURL();
 			URL testingUrl;
@@ -49,9 +48,16 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 					connection.getHeaderFields();
 					newUrl= connection.getURL();
 				}
-				collector.emit(new Values(user, newUrl.toString()));
+				urlToEmit = newUrl.toString();
 			} catch (MalformedURLException e) {
+				urlToEmit = url;
 			} catch (IOException e) {
+				urlToEmit = url;
+			} catch (IllegalArgumentException e) {
+				urlToEmit = url;
+			}
+			finally {
+				collector.emit(new Values(user, urlToEmit));
 			}
 		}
 	}

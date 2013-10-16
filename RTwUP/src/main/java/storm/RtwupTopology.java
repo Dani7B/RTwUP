@@ -39,7 +39,7 @@ public class RtwupTopology {
 		builder.setSpout("filteredStream", new TwitterSpout(), 1);
 		builder.setBolt("expander", new ExpanderUserURLBolt(), 10).shuffleGrouping(
 				"filteredStream");
-		builder.setBolt("repoWriter", new RepoWriterBolt(), 15).shuffleGrouping(
+		builder.setBolt("repoWriter", new RepoWriterBolt(), 25).shuffleGrouping(
 				"expander");
 		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), 10).shuffleGrouping(
 				"filteredStream");
@@ -115,7 +115,7 @@ public class RtwupTopology {
 			try{
 				LocalCluster cluster = new LocalCluster();
 				cluster.submitTopology("RTwUP", conf, builder.createTopology());
-				Utils.sleep(400000); //4000000
+				Utils.sleep(3600000); //wait for 1 hour
 				cluster.killTopology("RTwUP");
 				cluster.shutdown();
 			}catch (Exception e){
