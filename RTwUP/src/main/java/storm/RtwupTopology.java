@@ -39,7 +39,7 @@ public class RtwupTopology {
 		builder.setSpout("filteredStream", new TwitterSpout(), 1);
 		builder.setBolt("expander", new ExpanderUserURLBolt(), 10).shuffleGrouping(
 				"filteredStream");
-		builder.setBolt("repoWriter", new RepoWriterBolt(), 25).shuffleGrouping(
+		builder.setBolt("repoWriter", new RepoWriterBolt(), 20).shuffleGrouping(
 				"expander");
 		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), 10).shuffleGrouping(
 				"filteredStream");

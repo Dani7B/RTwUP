@@ -32,13 +32,13 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		User user = (User) input.getValueByField("user");
 		String urlToEmit = null;
-		if(user.getURLEntity().getEnd()==0)
-			urlToEmit = "";
-		else {
-			String url = user.getURLEntity().getExpandedURL();
-			URL testingUrl;
-			try {
-				testingUrl = new URL(url);
+		String url = null;
+		try {
+			if(user.getURLEntity().getEnd()==0)
+				urlToEmit = "";
+			else {
+				url = user.getURLEntity().getExpandedURL();
+				URL testingUrl = new URL(url);
 				URLConnection connection = testingUrl.openConnection();
 				String temp = connection.getHeaderField("Location");
 				URL	newUrl = null;
@@ -49,16 +49,16 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 					newUrl= connection.getURL();
 				}
 				urlToEmit = newUrl.toString();
-			} catch (MalformedURLException e) {
-				urlToEmit = url;
-			} catch (IOException e) {
-				urlToEmit = url;
-			} catch (IllegalArgumentException e) {
-				urlToEmit = url;
 			}
-			finally {
-				collector.emit(new Values(user, urlToEmit));
-			}
+		} catch (MalformedURLException e) {
+			urlToEmit = url;
+		} catch (IOException e) {
+			urlToEmit = url;
+		} catch (IllegalArgumentException e) {
+			urlToEmit = url;
+		}
+		finally {
+			collector.emit(new Values(user, urlToEmit));
 		}
 	}
 
