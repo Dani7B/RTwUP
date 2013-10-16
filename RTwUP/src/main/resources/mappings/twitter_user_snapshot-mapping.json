@@ -1,0 +1,20 @@
+{
+	"snapshot":	{
+		"properties": {
+			"id":{"type":"string", "index":"analyzed"},
+			"user":	{
+				"properties": {
+						"name":{"type":"string"},
+						"screenname":{"type":"string"},
+						"description":{"type":"string"},
+						"url":{"type":"string"},
+						"followerscount":{"type":"integer"},
+						"friendscount":{"type":"integer"},
+						"statusescount":{"type":"integer"},
+						"isverified":{"type":"boolean"}
+				}
+			},
+			"timestamp":{"type":"long", "index":"analyzed"}
+		}
+	}
+}
