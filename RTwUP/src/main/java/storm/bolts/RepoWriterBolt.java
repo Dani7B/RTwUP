@@ -82,29 +82,17 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	
 	
 	private static TwitterUserSnapshot createTwitterUserSnapshot(User user, String expanded_url) {
-		it.cybion.model.twitter.User twitterUser = new it.cybion.model.twitter.User(user.getId(), user.getScreenName());
-		twitterUser.setCreatedAt(user.getCreatedAt());
-		twitterUser.setFavouritesCount(user.getFavouritesCount());
-		twitterUser.setDescription(user.getDescription());
-		twitterUser.setFollowersCount(user.getFollowersCount());
-		twitterUser.setFriendsCount(user.getFriendsCount());
-		twitterUser.setContributorsEnabled(user.isContributorsEnabled());
-		twitterUser.setGeoEnabled(user.isGeoEnabled());
-		twitterUser.setProtected(user.isProtected());
-		twitterUser.setLang(user.getLang());
-		twitterUser.setListedCount(user.getListedCount());
-		twitterUser.setLocation(user.getLocation());
-		twitterUser.setName(user.getName());
-		twitterUser.setStatusesCount(user.getStatusesCount());
-		twitterUser.setTimeZone(user.getTimeZone());
-		twitterUser.setProfileImageUrl(user.getProfileImageURL());
-		twitterUser.setUrl(user.getURL());
-		twitterUser.setUtcOffset(user.getUtcOffset());
-		twitterUser.setVerified(user.isVerified());
-				
+		it.cybion.model.twitter.User twitterUser = new it.cybion.model.twitter.User(user.getId(), user.getCreatedAt(),
+				true, true, user.getDescription(), null, user.getFavouritesCount(), null,
+	            user.getFollowersCount(), null, user.getFriendsCount(), user.isContributorsEnabled(),
+	            user.isGeoEnabled(), user.isProtected(), user.getLang(), user.getListedCount(), user.getLocation(),
+	            user.getName(), user.getScreenName(), user.getStatusesCount(), user.getTimeZone(),
+	            user.getProfileImageURL(), null, null, user.getURL(), user.getUtcOffset(),
+	            user.isVerified(), null);
+		
 		/* These remain from the constructor of it.cybion.model.twitter.User:
-		    boolean defaultProfileImage, Entities entities, List<User> followers,
-            List<User> friends, String token, String tokenSecret,Tweet status.
+		     boolean defaultProfile, boolean defaultProfileImage, Entities entities,
+		     List<User> followers, List<User> friends, String token, String tokenSecret,Tweet status.
         */
 		
 		return new TwitterUserSnapshot(twitterUser, new DateTime());
