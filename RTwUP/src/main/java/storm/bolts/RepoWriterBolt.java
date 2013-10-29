@@ -10,9 +10,9 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.joda.time.DateTime;
 
+import it.cybion.commons.storage.diff.DiffTwitterUserSnapshot;
 import it.cybion.commons.storage.repository.RepositoryException;
 import it.cybion.commons.storage.repository.impls.ESTwitterUserSnapshotRepository;
-import it.cybion.commons.storage.repository.twitter.TwitterUser;
 import it.cybion.commons.storage.repository.twitter.TwitterUserSnapshot;
 import twitter4j.User;
 import backtype.storm.task.TopologyContext;
@@ -34,6 +34,8 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	
 	private ESTwitterUserSnapshotRepository repository;
 	
+	private DiffTwitterUserSnapshot diff;
+	
 	@Override
 	public void prepare(Map conf, TopologyContext context){
 		String host = (String) conf.get("host");
@@ -49,6 +51,8 @@ public class RepoWriterBolt extends BaseBasicBolt{
         ObjectMapper mapper = new ObjectMapper();
         
 		this.repository = new ESTwitterUserSnapshotRepository(transportClient, mapper);
+		
+		this.diff = new DiffTwitterUserSnapshot();
 	}
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
@@ -60,10 +64,16 @@ public class RepoWriterBolt extends BaseBasicBolt{
 		TwitterUserSnapshot last = null;
 		try {
 			last = this.repository.getLatest(twitterUserSnapshot.getUserId());
-			if(last == null || twitterUserSnapshot.user.followersCount != last.user.followersCount) // just to use a condition
-				this.repository.store(twitterUserSnapshot);
 		} catch (RepositoryException e) {
 			e.printStackTrace();
+		}
+		
+		if(this.diff.differ(twitterUserSnapshot, last)){
+			try {
+				this.repository.store(twitterUserSnapshot);
+			} catch (RepositoryException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -72,10 +82,32 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	
 	
 	private static TwitterUserSnapshot createTwitterUserSnapshot(User user, String expanded_url) {
-		TwitterUser tu = new TwitterUser(Long.toString(user.getId()), user.getName(), user.getScreenName(),
-							user.getDescription(), expanded_url, user.getFollowersCount(), 
-							user.getFriendsCount(), user.getStatusesCount(), user.isVerified());
-		return new TwitterUserSnapshot(tu, new DateTime());
+		it.cybion.model.twitter.User twitterUser = new it.cybion.model.twitter.User(user.getId(), user.getScreenName());
+		twitterUser.setCreatedAt(user.getCreatedAt());
+		twitterUser.setFavouritesCount(user.getFavouritesCount());
+		twitterUser.setDescription(user.getDescription());
+		twitterUser.setFollowersCount(user.getFollowersCount());
+		twitterUser.setFriendsCount(user.getFriendsCount());
+		twitterUser.setContributorsEnabled(user.isContributorsEnabled());
+		twitterUser.setGeoEnabled(user.isGeoEnabled());
+		twitterUser.setProtected(user.isProtected());
+		twitterUser.setLang(user.getLang());
+		twitterUser.setListedCount(user.getListedCount());
+		twitterUser.setLocation(user.getLocation());
+		twitterUser.setName(user.getName());
+		twitterUser.setStatusesCount(user.getStatusesCount());
+		twitterUser.setTimeZone(user.getTimeZone());
+		twitterUser.setProfileImageUrl(user.getProfileImageURL());
+		twitterUser.setUrl(user.getURL());
+		twitterUser.setUtcOffset(user.getUtcOffset());
+		twitterUser.setVerified(user.isVerified());
+				
+		/* These remain from the constructor of it.cybion.model.twitter.User:
+		    boolean defaultProfileImage, Entities entities, List<User> followers,
+            List<User> friends, String token, String tokenSecret,Tweet status.
+        */
+		
+		return new TwitterUserSnapshot(twitterUser, new DateTime());
 	}
 
 }

@@ -1,20 +1,33 @@
 {
 	"snapshot":	{
 		"properties": {
-			"id":{"type":"string", "index":"analyzed"},
+			"id":{"type":"string", "index":"not_analyzed"},
 			"user":	{
 				"properties": {
-						"name":{"type":"string"},
-						"screenname":{"type":"string"},
-						"description":{"type":"string"},
-						"url":{"type":"string"},
-						"followerscount":{"type":"integer"},
-						"friendscount":{"type":"integer"},
-						"statusescount":{"type":"integer"},
-						"isverified":{"type":"boolean"}
+					"createdAt":{"type":"long", "index":"not_analyzed"},
+					"defaultProfile":{"type":"boolean"},
+					"defaultProfileImage":{"type":"boolean"},
+					"description":{"type":"string"},
+					"favouritesCount":{"type":"integer"},
+					"followersCount":{"type":"integer"},
+					"friendsCount":{"type":"integer"},
+					"contributorsEnabled":{"type":"boolean"},
+					"geoEnabled":{"type":"boolean"},
+					"aProtected":{"type":"boolean"},
+					"lang":{"type":"string"},
+					"listedCount":{"type":"integer"},
+					"location":{"type":"string"},
+					"name":{"type":"string"},
+					"screenName":{"type":"string"},
+					"statusesCount":{"type":"integer"},
+					"timeZone":{"type":"string"},
+					"profileImageUrl":{"type":"string"},
+			 		"url":{"type":"string"},
+					"utcOffset":{"type":"integer"},
+					"verified":{"type":"boolean"}
 				}
 			},
-			"timestamp":{"type":"long", "index":"analyzed"}
+			"timestamp":{"type":"long", "index":"not_analyzed"}
 		}
 	}
 }
