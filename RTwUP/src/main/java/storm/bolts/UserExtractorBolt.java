@@ -27,6 +27,7 @@ import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
 /**
+ * Simple bolt to extract the user from the raw json of the Tweet
  * 
  * @author Daniele Morgantini
  **/

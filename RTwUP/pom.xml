@@ -27,7 +27,6 @@
 		<slf4j-log4j12.version>1.6.1</slf4j-log4j12.version>
 		<testng.version>6.1.1</testng.version>
 		<redis.version>2.1.0</redis.version>
-		<gson.version>2.2.4</gson.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -108,11 +107,6 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<version>${redis.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>${gson.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

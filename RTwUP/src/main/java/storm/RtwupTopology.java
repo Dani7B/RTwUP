@@ -1,8 +1,11 @@
 package storm;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import com.google.gson.Gson;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import storm.bolts.ExpanderUserURLBolt;
 import storm.bolts.RedisUserPublisherBolt;
@@ -50,7 +53,7 @@ public class RtwupTopology {
 		Config conf = new Config();
 		conf.setDebug(true);
 		
-		Gson gson = new Gson();
+		ObjectMapper mapper = new ObjectMapper();
 		ArrayList<String> keywords = new ArrayList<String>();
 
 		
@@ -73,8 +76,17 @@ public class RtwupTopology {
 			for(int i = 8; i<args.length; i++) {
 				keywords.add(args[i]);
 			}
-			String keywordsStringified = gson.toJson(keywords.toArray());
-			conf.put("keywords", keywordsStringified);
+
+			try {
+				String keywordsStringified = mapper.writeValueAsString(keywords.toArray());
+				conf.put("keywords", keywordsStringified);
+			} catch (JsonGenerationException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			try {
 				StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
@@ -112,8 +124,16 @@ public class RtwupTopology {
 			keywords.add("have");
 			keywords.add("I");
 			
-			String keywordsStringified = gson.toJson(keywords.toArray());
-			conf.put("keywords", keywordsStringified);
+			try {
+				String keywordsStringified = mapper.writeValueAsString(keywords.toArray());
+				conf.put("keywords", keywordsStringified);
+			} catch (JsonGenerationException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			try{
 				LocalCluster cluster = new LocalCluster();

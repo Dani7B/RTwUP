@@ -1,12 +1,15 @@
 package storage;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.gson.Gson;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * This class has a collection of all the URLs. It returns the stringified
@@ -62,7 +65,7 @@ public class PageDictionary {
 
 		/* Retrieving the topN pages and split them between appropriate domains */
 		int i = 0;
-		Gson gson = new Gson();
+		ObjectMapper mapper = new ObjectMapper();
 		Map<String,DomainPageList> topNList = new HashMap<String,DomainPageList>();
 		for (Map.Entry<DomainPageCouple, Integer> dp : sorted_map.entrySet()) {
 			if (i < topN) {
@@ -80,7 +83,18 @@ public class PageDictionary {
 				break;
 			i++;
 		}
-		return gson.toJson(topNList);
+		
+		String json = null;
+		try {
+			json = mapper.writeValueAsString(topNList);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return json;
 	}
 
 	public Integer removeFromDictionary(String domain, String page) {
