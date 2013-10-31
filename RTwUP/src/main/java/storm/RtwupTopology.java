@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import storm.bolts.ExpanderUserURLBolt;
 import storm.bolts.RedisUserPublisherBolt;
 import storm.bolts.RepoWriterBolt;
+import storm.bolts.UserExtractorBolt;
 import storm.spouts.TwitterSpout;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -37,12 +38,14 @@ public class RtwupTopology {
 		*/
 		
 		builder.setSpout("filteredStream", new TwitterSpout(), 1);
-		builder.setBolt("expander", new ExpanderUserURLBolt(), 10).shuffleGrouping(
+		builder.setBolt("extractor", new UserExtractorBolt(), 10).shuffleGrouping(
 				"filteredStream");
+		builder.setBolt("expander", new ExpanderUserURLBolt(), 10).shuffleGrouping(
+				"extractor");
 		builder.setBolt("repoWriter", new RepoWriterBolt(), 20).shuffleGrouping(
 				"expander");
 		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), 10).shuffleGrouping(
-				"filteredStream");
+				"expander");
 		
 		Config conf = new Config();
 		conf.setDebug(true);

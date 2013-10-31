@@ -14,7 +14,7 @@ import it.cybion.commons.storage.diff.DiffTwitterUserSnapshot;
 import it.cybion.commons.storage.repository.RepositoryException;
 import it.cybion.commons.storage.repository.impls.ESTwitterUserSnapshotRepository;
 import it.cybion.commons.storage.repository.twitter.TwitterUserSnapshot;
-import twitter4j.User;
+import it.cybion.model.twitter.User;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -56,10 +56,9 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	}
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
-		User user = (User) input.getValueByField("user");
-		String expandedURL = (String) input.getStringByField("expanded_user_url");
+		User user = (User) input.getValueByField("user_expanded");
 		
-		TwitterUserSnapshot twitterUserSnapshot = createTwitterUserSnapshot(user, expandedURL);
+		TwitterUserSnapshot twitterUserSnapshot = new TwitterUserSnapshot(user, new DateTime());
 		
 		TwitterUserSnapshot last = null;
 		try {
@@ -68,7 +67,7 @@ public class RepoWriterBolt extends BaseBasicBolt{
 			e.printStackTrace();
 		}
 		
-		if(this.diff.differ(twitterUserSnapshot, last)){
+		if(last== null || this.diff.differ(twitterUserSnapshot, last)){
 			try {
 				this.repository.store(twitterUserSnapshot);
 			} catch (RepositoryException e) {
@@ -78,24 +77,6 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-	}
-	
-	
-	private static TwitterUserSnapshot createTwitterUserSnapshot(User user, String expanded_url) {
-		it.cybion.model.twitter.User twitterUser = new it.cybion.model.twitter.User(user.getId(), user.getCreatedAt(),
-				true, true, user.getDescription(), null, user.getFavouritesCount(), null,
-	            user.getFollowersCount(), null, user.getFriendsCount(), user.isContributorsEnabled(),
-	            user.isGeoEnabled(), user.isProtected(), user.getLang(), user.getListedCount(), user.getLocation(),
-	            user.getName(), user.getScreenName(), user.getStatusesCount(), user.getTimeZone(),
-	            user.getProfileImageURL(), null, null, user.getURL(), user.getUtcOffset(),
-	            user.isVerified(), null);
-		
-		/* These remain from the constructor of it.cybion.model.twitter.User:
-		     boolean defaultProfile, boolean defaultProfileImage, Entities entities,
-		     List<User> followers, List<User> friends, String token, String tokenSecret,Tweet status.
-        */
-		
-		return new TwitterUserSnapshot(twitterUser, new DateTime());
 	}
 
 }

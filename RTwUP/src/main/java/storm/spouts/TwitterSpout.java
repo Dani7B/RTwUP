@@ -14,6 +14,9 @@ import twitter4j.StatusListener;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.auth.AccessToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+import twitter4j.json.DataObjectFactory;
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -32,7 +35,7 @@ public class TwitterSpout extends BaseRichSpout {
 
 	private static final long serialVersionUID = 1L;
 
-	private LinkedBlockingQueue<Status> queue = null;
+	private LinkedBlockingQueue<String> queue = null;
 	private SpoutOutputCollector collector;
 	private TwitterStream ts = null;
 	private double[][] bbox = null;
@@ -50,9 +53,10 @@ public class TwitterSpout extends BaseRichSpout {
 		Gson gson = new Gson();
 		this.keywords = gson.fromJson(keywordsStringified, String[].class);
 		
-		this.queue = new LinkedBlockingQueue<Status>();
+		this.queue = new LinkedBlockingQueue<String>();
 		this.collector = collector;
-		this.ts = new TwitterStreamFactory().getInstance();
+		final Configuration configuration = new ConfigurationBuilder().setJSONStoreEnabled(true).build();
+		this.ts = new TwitterStreamFactory(configuration).getInstance();
 		this.ts.setOAuthConsumer("P9c5PqNZ2HvANU6B8Rrp1A", "iKUCqCYbvI8Tam7zGgIRiO6Zcyh2hw7Nm0v97lE");
 		AccessToken accessToken = new AccessToken("1546231212-TKDS2JM9sBp351uEuvnbn1VSPLR5mUKhZxwmfLr","8krjiVUEAoLvFrLC8ryw8iaU2PKTU80WHZaWevKGk2Y");
 		this.ts.setOAuthAccessToken(accessToken);
@@ -81,8 +85,11 @@ public class TwitterSpout extends BaseRichSpout {
 			public void onStallWarning(StallWarning arg0) {
 			}
 
+			@Override
 			public void onStatus(Status status) {
-				queue.add(status);
+				
+				final String jsonStatus = DataObjectFactory.getRawJSON(status);
+				queue.add(jsonStatus);
 			}
 
 			public void onTrackLimitationNotice(int arg0) {
@@ -99,15 +106,15 @@ public class TwitterSpout extends BaseRichSpout {
 
 	public void nextTuple() {
 		try {
-			Status retrieve = queue.take();
-			this.collector.emit(new Values(retrieve.getUser()));
+			final String jsonStatus = queue.take();
+			this.collector.emit(new Values(jsonStatus));
 		} catch (InterruptedException e) {
 			System.err.println("ERRORE SULLO SPOUT: " + e.getMessage());
 		}
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("user"));
+		declarer.declare(new Fields("statusJSON"));
 	}
 
 	public void close(){

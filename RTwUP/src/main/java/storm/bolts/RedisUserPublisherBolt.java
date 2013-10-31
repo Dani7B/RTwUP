@@ -1,12 +1,13 @@
 package storm.bolts;
 
+import it.cybion.model.twitter.User;
+
 import java.util.Calendar;
 import java.util.Map;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import twitter4j.User;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
@@ -29,7 +30,7 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 	
 	@Override
 	public void prepare(Map conf, TopologyContext context){
-		String host = (String) conf.get("host");
+		final String host = (String) conf.get("host");
 		this.pool = new JedisPool(new JedisPoolConfig(), host);
 		this.jedis = this.pool.getResource();
 	}
@@ -43,7 +44,7 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 		String monthKey = year + "-" + month;
 		String dayKey = monthKey + "-" + day;
 		String hourKey = dayKey + "_" + hour;
-		User user = (User) input.getValueByField("user");
+		User user = (User) input.getValueByField("user_expanded");
 		String userID = Long.toString(user.getId());
 		Long hUpdated = this.jedis.sadd(hourKey, userID);
 		Long dUpdated = this.jedis.sadd(dayKey, userID);

@@ -1,11 +1,12 @@
 package storm.bolts;
 
+import it.cybion.model.twitter.User;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-import twitter4j.User;
 import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
@@ -34,10 +35,10 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 		String urlToEmit = null;
 		String url = null;
 		try {
-			if(user.getURLEntity().getEnd()==0)
+			if(user.getUrl() == null)
 				urlToEmit = "";
 			else {
-				url = user.getURLEntity().getExpandedURL();
+				url = user.getUrl(); // it is no more a t.co
 				URL testingUrl = new URL(url);
 				URLConnection connection = testingUrl.openConnection();
 				String temp = connection.getHeaderField("Location");
@@ -58,11 +59,12 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 			urlToEmit = url;
 		}
 		finally {
-			collector.emit(new Values(user, urlToEmit));
+			user.setUrl(urlToEmit);
+			collector.emit(new Values(user));
 		}
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("user", "expanded_user_url"));
+		declarer.declare(new Fields("user_expanded"));
 	}
 }
