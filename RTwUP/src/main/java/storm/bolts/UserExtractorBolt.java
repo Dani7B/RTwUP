@@ -47,8 +47,7 @@ public class UserExtractorBolt extends BaseBasicBolt {
 				PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
 	    
 		// Mon Mar 05 22:08:25 +0000 2007
-		SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
-		this.mapper.setDateFormat(format);
+		this.mapper.setDateFormat(new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy"));
 	}
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
