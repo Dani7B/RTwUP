@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import storm.bolts.ExpanderUserURLBolt;
 import storm.bolts.RedisUserPublisherBolt;
@@ -30,6 +32,8 @@ public class RtwupTopology {
 	public static void main(String[] args) {
 		TopologyBuilder builder = new TopologyBuilder();
 		
+		final Logger LOGGER = LoggerFactory.getLogger(RtwupTopology.class);
+		
 		/*
 		builder.setSpout("filteredStream", new TwitterSpout(), 1);
 		builder.setBolt("expander", new ExpanderBolt(), 5).shuffleGrouping(
@@ -45,7 +49,7 @@ public class RtwupTopology {
 				"filteredStream");
 		builder.setBolt("expander", new ExpanderUserURLBolt(), 10).shuffleGrouping(
 				"extractor");
-		builder.setBolt("repoWriter", new RepoWriterBolt(), 20).shuffleGrouping(
+		builder.setBolt("repoWriter", new RepoWriterBolt(), 10).shuffleGrouping(
 				"expander");
 		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), 10).shuffleGrouping(
 				"expander");
@@ -62,18 +66,18 @@ public class RtwupTopology {
 			conf.setNumWorkers(3);
 			
 			/* ElasticSearch Transport Client parameters */
-			conf.put("host", args[1]);
-			conf.put("clusterName", args[2]);
-			conf.put("transportPort", args[3]);
+			conf.put("host", args[0]);
+			conf.put("clusterName", args[1]);
+			conf.put("transportPort", args[2]);
 			
 			/* Location parameters */
-			conf.put("sw0", Double.parseDouble(args[4])); // is location always present?
-			conf.put("sw1", Double.parseDouble(args[5]));
-			conf.put("ne0", Double.parseDouble(args[6]));
-			conf.put("ne1", Double.parseDouble(args[7]));
+			conf.put("sw0", Double.parseDouble(args[3]));// is location always present?
+			conf.put("sw1", Double.parseDouble(args[4]));
+			conf.put("ne0", Double.parseDouble(args[5]));
+			conf.put("ne1", Double.parseDouble(args[6]));
 			
 			/* Keywords */
-			for(int i = 8; i<args.length; i++) {
+			for(int i = 7; i<args.length; i++) {
 				keywords.add(args[i]);
 			}
 
@@ -89,7 +93,7 @@ public class RtwupTopology {
 			}
 			
 			try {
-				StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
+				StormSubmitter.submitTopology("RTwUP", conf, builder.createTopology());
 			} catch (AlreadyAliveException e) {
 				e.printStackTrace();
 			} catch (InvalidTopologyException e) {
