@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import storm.bolts.ExpanderUserURLBolt;
 import storm.bolts.RedisUserPublisherBolt;
@@ -31,9 +29,7 @@ public class RtwupTopology {
 
 	public static void main(String[] args) {
 		TopologyBuilder builder = new TopologyBuilder();
-		
-		final Logger LOGGER = LoggerFactory.getLogger(RtwupTopology.class);
-		
+				
 		/*
 		builder.setSpout("filteredStream", new TwitterSpout(), 1);
 		builder.setBolt("expander", new ExpanderBolt(), 5).shuffleGrouping(
