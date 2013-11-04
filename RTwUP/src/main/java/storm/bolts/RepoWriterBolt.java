@@ -38,9 +38,9 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	
 	@Override
 	public void prepare(Map conf, TopologyContext context){
-		String host = (String) conf.get("host");
-		String clusterName = (String) conf.get("clusterName");
-		String transportPort = (String) conf.get("transportPort");
+		String host = (String) conf.get("es_host");
+		String clusterName = (String) conf.get("es_clusterName");
+		String transportPort = (String) conf.get("es_transportPort");
 
 		// Create a TransportClient
         final Settings transportClientSettings = ImmutableSettings.settingsBuilder().put(

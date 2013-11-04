@@ -1,7 +1,11 @@
 package storm;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -14,11 +18,8 @@ import storm.bolts.UserExtractorBolt;
 import storm.spouts.TwitterSpout;
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
-import backtype.storm.StormSubmitter;
-import backtype.storm.utils.*;
-import backtype.storm.generated.AlreadyAliveException;
-import backtype.storm.generated.InvalidTopologyException;
 import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.utils.Utils;
 
 /**
  * Topology class that defines the computational model DAG for Storm
@@ -28,6 +29,76 @@ import backtype.storm.topology.TopologyBuilder;
 public class RtwupTopology {
 
 	public static void main(String[] args) {
+				
+		String topologyName = null;
+		String es_host = null, es_clusterName = null, es_transportPort = null;
+		String redis_host = null;
+		double sw0 = 0, sw1 = 0, ne0 = 0, ne1 = 0;
+		int twitterSpout = 1, userExtractorBolt = 10, expanderUserURLBolt = 10,
+				repoWriterBolt = 10, redisUserPublisherBolt = 10;
+		List<String> keywords = new ArrayList<String>();
+		
+		if (args != null && args.length > 0) {
+
+			try {
+				
+				Properties prop = new Properties();
+	
+	            //load a properties file
+				prop.load(new FileInputStream(args[0]));
+	
+				topologyName = prop.getProperty("topologyName");
+				twitterSpout = Integer.parseInt(prop.getProperty("twitterSpout"));
+				userExtractorBolt = Integer.parseInt(prop.getProperty("userExtractorBolt"));
+				expanderUserURLBolt = Integer.parseInt(prop.getProperty("expanderUserURLBolt"));
+				repoWriterBolt = Integer.parseInt(prop.getProperty("repoWriterBolt"));
+				redisUserPublisherBolt = Integer.parseInt(prop.getProperty("redisUserPublisherBolt"));
+	
+				es_host = prop.getProperty("es.host");
+				es_clusterName = prop.getProperty("es.clusterName");
+				es_transportPort = prop.getProperty("es.transportPort");
+	
+				redis_host = prop.getProperty("redis.host");
+				
+				sw0 = Double.parseDouble(prop.getProperty("location.sw0"));
+				sw1 = Double.parseDouble(prop.getProperty("location.sw1"));
+				ne0 = Double.parseDouble(prop.getProperty("location.ne0"));
+				ne1 = Double.parseDouble(prop.getProperty("location.ne1"));
+	
+				keywords = Arrays.asList(prop.getProperty("keywords").split(","));
+				
+		 	} catch (IOException ex) {
+		 		ex.printStackTrace();
+		     }
+		}
+		
+		else {
+			
+			topologyName = "RTwUP";
+			
+			es_host = "localhost";
+			es_clusterName = "profileRepository";
+			es_transportPort = "9300";
+			
+			redis_host = "localhost";
+
+			/* Rome
+			conf.put("sw0", 12.20);
+			conf.put("sw1", 41.60);
+			conf.put("ne0", 12.80);
+			conf.put("ne1", 42.10); */
+			
+			/* UK & Ireland location parameters*/
+			sw0 = -11.73;
+			sw1 = 49.72;
+			ne0 = 2.37;
+			ne1 = 59.87;
+			
+			/* Keywords */
+			String [] kw = 	{"to","the","be","of","and","a","in","that","have","I"};
+			keywords = Arrays.asList(kw);
+		}
+		
 		TopologyBuilder builder = new TopologyBuilder();
 				
 		/*
@@ -40,111 +111,59 @@ public class RtwupTopology {
 				"urlCounter");
 		*/
 		
-		builder.setSpout("filteredStream", new TwitterSpout(), 1);
-		builder.setBolt("extractor", new UserExtractorBolt(), 10).shuffleGrouping(
-				"filteredStream");
-		builder.setBolt("expander", new ExpanderUserURLBolt(), 10).shuffleGrouping(
-				"extractor");
-		builder.setBolt("repoWriter", new RepoWriterBolt(), 10).shuffleGrouping(
-				"expander");
-		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), 10).shuffleGrouping(
-				"expander");
+		builder.setSpout("filteredStream", new TwitterSpout(), twitterSpout);
+		builder.setBolt("extractor", new UserExtractorBolt(), userExtractorBolt)
+				.shuffleGrouping("filteredStream");
+		builder.setBolt("expander", new ExpanderUserURLBolt(), expanderUserURLBolt)
+				.shuffleGrouping("extractor");
+		builder.setBolt("repoWriter", new RepoWriterBolt(), repoWriterBolt)
+				.shuffleGrouping("expander");
+		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), redisUserPublisherBolt)
+				.shuffleGrouping("expander");
 		
 		Config conf = new Config();
 		conf.setDebug(true);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		ArrayList<String> keywords = new ArrayList<String>();
-
+			
+		/* ElasticSearch Transport Client parameters */
+		conf.put("es_host", es_host);
+		conf.put("es_clusterName", es_clusterName);
+		conf.put("es_transportPort", es_transportPort);
 		
-		if (args != null && args.length > 0) {
+		/* Redis host */
+		conf.put("redis_host", redis_host);
+		
+		/* Location parameters */
+		conf.put("sw0", sw0);
+		conf.put("sw1", sw1);
+		conf.put("ne0", ne0);
+		conf.put("ne1", ne1);
 
-			conf.setNumWorkers(3);
-			
-			/* ElasticSearch Transport Client parameters */
-			conf.put("host", args[0]);
-			conf.put("clusterName", args[1]);
-			conf.put("transportPort", args[2]);
-			
-			/* Location parameters */
-			conf.put("sw0", Double.parseDouble(args[3]));// is location always present?
-			conf.put("sw1", Double.parseDouble(args[4]));
-			conf.put("ne0", Double.parseDouble(args[5]));
-			conf.put("ne1", Double.parseDouble(args[6]));
-			
-			/* Keywords */
-			for(int i = 7; i<args.length; i++) {
-				keywords.add(args[i]);
-			}
-
-			try {
-				String keywordsStringified = mapper.writeValueAsString(keywords.toArray());
-				conf.put("keywords", keywordsStringified);
-			} catch (JsonGenerationException e) {
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				StormSubmitter.submitTopology("RTwUP", conf, builder.createTopology());
-			} catch (AlreadyAliveException e) {
-				e.printStackTrace();
-			} catch (InvalidTopologyException e) {
-				e.printStackTrace();
-			}
-		} else {
-			conf.put("host", "localhost");
-			conf.put("clusterName", "profileRepository");
-			conf.put("transportPort", "9300");
-			
-			/* Rome
-			conf.put("sw0", 12.20);
-			conf.put("sw1", 41.60);
-			conf.put("ne0", 12.80);
-			conf.put("ne1", 42.10); */
-			
-			/* UK & Ireland location parameters*/
-			conf.put("sw0", -11.73);
-			conf.put("sw1", 49.72);
-			conf.put("ne0", 2.37);
-			conf.put("ne1", 59.87);
-			
-			/* Keywords */
-			keywords.add("to");
-			keywords.add("the");
-			keywords.add("be");
-			keywords.add("of");
-			keywords.add("and");
-			keywords.add("a");
-			keywords.add("in");
-			keywords.add("that");
-			keywords.add("have");
-			keywords.add("I");
-			
-			try {
-				String keywordsStringified = mapper.writeValueAsString(keywords.toArray());
-				conf.put("keywords", keywordsStringified);
-			} catch (JsonGenerationException e) {
-				e.printStackTrace();
-			} catch (JsonMappingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			try{
-				LocalCluster cluster = new LocalCluster();
-				cluster.submitTopology("RTwUP", conf, builder.createTopology());
-				Utils.sleep(3600000); //wait for 1 hour
-				cluster.killTopology("RTwUP");
-				cluster.shutdown();
-			}catch (Exception e){
-				System.err.println("Error");
-				e.printStackTrace();
-			}
+		try {
+			String keywordsStringified = mapper.writeValueAsString(keywords);
+			conf.put("keywords", keywordsStringified);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
+		try {
+			LocalCluster cluster = new LocalCluster();
+			cluster.submitTopology(topologyName, conf, builder.createTopology());
+			if (args == null || args.length <= 0) {
+				Utils.sleep(3600000); //wait for 1 hour
+				cluster.killTopology(topologyName);
+				cluster.shutdown();
+			}
+		} catch (Exception e) {
+			System.err.println("Error");
+			e.printStackTrace();
+		}
+		
+			
 	}
 }

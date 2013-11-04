@@ -30,7 +30,7 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 	
 	@Override
 	public void prepare(Map conf, TopologyContext context){
-		final String host = (String) conf.get("host");
+		final String host = (String) conf.get("redis_host");
 		this.pool = new JedisPool(new JedisPoolConfig(), host);
 		this.jedis = this.pool.getResource();
 	}
