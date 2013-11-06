@@ -10,6 +10,8 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.joda.time.DateTime;
 
+import de.danielbechler.diff.Configuration;
+import de.danielbechler.diff.path.PropertyPath;
 import it.cybion.commons.storage.diff.DiffTwitterUserSnapshot;
 import it.cybion.commons.storage.repository.RepositoryException;
 import it.cybion.commons.storage.repository.impls.ESTwitterUserSnapshotRepository;
@@ -34,7 +36,7 @@ public class RepoWriterBolt extends BaseBasicBolt{
 	
 	private ESTwitterUserSnapshotRepository repository;
 	
-	private DiffTwitterUserSnapshot diff;
+	private DiffTwitterUserSnapshot diffTwitterUserSnapshot;
 	
 	@Override
 	public void prepare(Map conf, TopologyContext context){
@@ -48,11 +50,17 @@ public class RepoWriterBolt extends BaseBasicBolt{
         Client transportClient = new TransportClient(transportClientSettings).addTransportAddress(
                 new InetSocketTransportAddress(host, Integer.parseInt(transportPort)));
         
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         
 		this.repository = new ESTwitterUserSnapshotRepository(transportClient, mapper);
 		
-		this.diff = new DiffTwitterUserSnapshot();
+		//ignores timeStamp and userId fields
+    	final Configuration ignoreIdAndTimeStamp = new Configuration();
+    	ignoreIdAndTimeStamp.withoutProperty(PropertyPath.buildWith("timeStamp"));
+    	ignoreIdAndTimeStamp.withoutProperty(PropertyPath.buildWith("userId"));
+    	ignoreIdAndTimeStamp.withoutIgnoredNodes();
+    	
+        this.diffTwitterUserSnapshot= new DiffTwitterUserSnapshot(ignoreIdAndTimeStamp);
 	}
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
@@ -67,12 +75,18 @@ public class RepoWriterBolt extends BaseBasicBolt{
 			e.printStackTrace();
 		}
 		
-		if(last== null || this.diff.differ(twitterUserSnapshot, last)){
-			try {
+		try {
+			if(last == null){
 				this.repository.store(twitterUserSnapshot);
-			} catch (RepositoryException e) {
-				e.printStackTrace();
 			}
+			else {
+				this.diffTwitterUserSnapshot.compareInstances(twitterUserSnapshot, last);
+				if(this.diffTwitterUserSnapshot.getStatus().hasChanged()) {
+						this.repository.store(twitterUserSnapshot);
+				}
+			}
+		} catch (RepositoryException e) {
+			e.printStackTrace();
 		}
 	}
 
