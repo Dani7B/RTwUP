@@ -1,34 +1,21 @@
 #RTwUP
 
-##Realtime Twitter Url Popularity
-Given a suitably filtered stream of documents returned from a Twitter query, calculate real-time statistics and show the ranking of the most twittered URLs since system activation.
-The statistics must be updated on screen every N seconds.  
-They show the links organized into various domain categories, each with its counting popularity:  
-
-| Domain | Link | Frequency |  
-| :----: | :--: | :-------: |  
-| foursquare.com | expanded.url.com/123 | 9 times |  
-| foursquare.com | expanded.url.com/456 |8 times |  
-| youtube.com | ... | ... |  
-| instagram.com | ... | ...|   
-...  
+##Realtime Twitter User Profile
+Given a suitably filtered stream of documents returned by a Twitter query, calculate and show real-time statistics; these consist of the amount of single-time users per hour/day/month.  
+As well as counting, the system stores User profiles in a repository, adding a so called "snapshot" only if some criteria is met (e.g. changed profile image URL or description or more than 1% increase/decrease in friends or follower amounts).  
 
 ##Data Stream Description and Requirements: 
-The system has to use Twitter APIs ([Twitter4j][02], [Hosebird][03] for instance) to perform queries and retrieve Tweets, suitably filter them (e.g. according to the coordinates of a polygon centered on Rome, Milan or a city of your choice).  
-The links of interest are the ones retrieved from the entities/urls field of the Tweet json: 
-* first of all, links have to be expanded, reversing the output of Twitter's shortening service (*t.co*);
-* if the Tweet contains the expanded form of the URL, the count is assigned to it;
-* if the Tweet contains a “shortened” form of the URL (e.g. bit.ly/13NHE7v , goo.gl/uJH2Y , http://instagr.am/p/S3l5rQjCcA/, etc ...), then it has to be expanded in order to obtain the completely expanded form (eventually after several expansions); the count can then be assigned to it.
- 
-Starting from the final expanded form, domain information can be extracted to organize the current results.  
+The system uses Twitter APIs ([Twitter4j][02], [Hosebird][03] for instance) to perform queries and retrieve Tweets, suitably filters them (e.g. according to specified coordinates or keywords).  
+If the URL contained in the user profile is in a shortned form of some kind, it's expanded to its original form (performing the expansion multiple times if required).  
+  
 This must be done in real time, using [Storm][01].
 
 ##Adopted Technologies
 RTwUP is developed in *Java*.  
 To listen to Twitter's stream, it was chosen [Twitter4j][02], *Twitter Stream API* in particular.  
-To process the Tweets real time, it was chosen [Storm][01].  
-The user interface is written as a [Node.js][04] application, making use of [socket.io][05] and [Redis][06] to display results in real time.  
-
+To process the Tweets real time, [Storm][01] was chosen.  
+The user interface is written in *Javascript* as a [Node.js][04] application, making use of [socket.io][05] and [Redis][06] to display statistics in real time.  
+Persistence of the retrieved Twitter User Profiles is obtained by means of a repository based on [Elasticsearch][07].
 For more information, you can refer to the wiki pages.
 
 ##Wiki
@@ -52,3 +39,5 @@ For more information, you can refer to the wiki pages.
 [05]: http://socket.io/ "socket.io web page"
 
 [06]: http://redis.io/ "Redis web page"
+
+[07]: http://www.elasticsearch.org/ "Elasticsearch web page"
