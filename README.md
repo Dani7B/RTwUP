@@ -1,6 +1,6 @@
 #RTwUP
 
-##Realtime Twitter User Profile
+##Realtime Twitter Users' Profiles
 Given a suitably filtered stream of documents returned by a Twitter query, calculate and show real-time statistics; these consist of the amount of single-time users per hour/day/month.  
 As well as counting, the system stores User profiles in a repository, adding a so called "snapshot" only if some criteria is met (e.g. changed profile image URL or description or more than 1% increase/decrease in friends or follower amounts).  
 
