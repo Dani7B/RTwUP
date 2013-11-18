@@ -3,6 +3,7 @@ package storm.bolts;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
@@ -51,6 +52,8 @@ public class RepoWriterBolt extends BaseBasicBolt{
                 new InetSocketTransportAddress(host, Integer.parseInt(transportPort)));
         
         final ObjectMapper mapper = new ObjectMapper();
+		mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL); // to remove entities, friends, followers 
+
         
 		this.repository = new ESTwitterUserSnapshotRepository(transportClient, mapper);
 		
