@@ -62,10 +62,12 @@ public class RepoWriterBolt extends BaseBasicBolt{
     	ignoreIdAndTimeStamp.withoutProperty(PropertyPath.buildWith("timeStamp"));
     	ignoreIdAndTimeStamp.withoutProperty(PropertyPath.buildWith("userId"));
     	ignoreIdAndTimeStamp.withoutIgnoredNodes();
-    	
+
+        //TODO consider creating a new instance on execute(...)
         this.diffTwitterUserSnapshot= new DiffTwitterUserSnapshot(ignoreIdAndTimeStamp);
 	}
 
+    @Override
 	public void execute(Tuple input, BasicOutputCollector collector) {
 		User user = (User) input.getValueByField("user_expanded");
 		
@@ -93,6 +95,7 @@ public class RepoWriterBolt extends BaseBasicBolt{
 		}
 	}
 
+    @Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 	}
 
