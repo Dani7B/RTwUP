@@ -16,6 +16,7 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.indices.IndexMissingException;
 
 /**
+ * //TODO why not moving this class to entities-repository?
  * Simple class to configure ElasticSearch started as a service
  */
 public class ElasticSearchConfigurator 
