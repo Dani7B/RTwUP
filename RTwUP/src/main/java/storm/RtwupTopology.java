@@ -28,7 +28,9 @@ import backtype.storm.utils.Utils;
  **/
 public class RtwupTopology {
 
-	public static void main(String[] args) {
+    public static final int ONE_HOUR_MSEC = 3600000;
+
+    public static void main(String[] args) {
 				
 		String topologyName = null;
 		String es_host = null, es_clusterName = null, es_transportPort = null;
@@ -98,6 +100,8 @@ public class RtwupTopology {
 			String [] kw = 	{"to","the","be","of","and","a","in","that","have","I"};
 			keywords = Arrays.asList(kw);
 		}
+
+        //finished parsing parameters
 		
 		TopologyBuilder builder = new TopologyBuilder();
 				
@@ -150,12 +154,13 @@ public class RtwupTopology {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
+        //start local cluster
 		try {
 			LocalCluster cluster = new LocalCluster();
 			cluster.submitTopology(topologyName, conf, builder.createTopology());
 			if (args == null || args.length <= 0) {
-				Utils.sleep(3600000); //wait for 1 hour
+				Utils.sleep(ONE_HOUR_MSEC); //wait for 1 hour
 				cluster.killTopology(topologyName);
 				cluster.shutdown();
 			}
