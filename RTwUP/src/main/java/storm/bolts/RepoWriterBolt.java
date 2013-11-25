@@ -2,6 +2,7 @@ package storm.bolts;
 
 import java.util.Map;
 
+import it.cybion.commons.storage.repository.configuration.Indices;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.elasticsearch.client.Client;
@@ -54,8 +55,8 @@ public class RepoWriterBolt extends BaseBasicBolt{
         final ObjectMapper mapper = new ObjectMapper();
 		mapper.setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL); // to remove entities, friends, followers 
 
-        
-		this.repository = new ESTwitterUserSnapshotRepository(transportClient, mapper);
+        this.repository = new ESTwitterUserSnapshotRepository(Indices.Aliases.PROFILES,
+                                                              transportClient, mapper);
 		
 		//ignores timeStamp and userId fields
     	final Configuration ignoreIdAndTimeStamp = new Configuration();

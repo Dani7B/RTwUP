@@ -120,10 +120,10 @@ public class RtwupTopology {
 				.shuffleGrouping("filteredStream");
 		builder.setBolt("expander", new ExpanderUserURLBolt(), expanderUserURLBolt)
 				.shuffleGrouping("extractor");
-		builder.setBolt("repoWriter", new RepoWriterBolt(), repoWriterBolt)
-				.shuffleGrouping("expander");
-		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), redisUserPublisherBolt)
-				.shuffleGrouping("expander");
+//		builder.setBolt("repoWriter", new RepoWriterBolt(), repoWriterBolt)
+//				.shuffleGrouping("expander");
+//		builder.setBolt("redisUserPublisher", new RedisUserPublisherBolt(), redisUserPublisherBolt)
+//				.shuffleGrouping("expander");
 		
 		Config conf = new Config();
 		conf.setDebug(true);
