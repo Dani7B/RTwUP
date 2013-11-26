@@ -9,6 +9,19 @@
 
     <name>RTwUP</name>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.6</java.version>
+        <commons.version>1.0-SNAPSHOT</commons.version>
+        <!-- matching storm versions -->
+        <log4j.version>1.2.16</log4j.version>
+        <slf4j-api.version>1.5.8</slf4j-api.version>
+        <storm.version>0.8.2</storm.version>
+        <redis.version>2.1.0</redis.version>
+        <testng.version>6.8.7</testng.version>
+        <twitter4j-stream.version>3.0.3</twitter4j-stream.version>
+    </properties>
+
     <url>http://maven.apache.org</url>
 
     <repositories>
@@ -22,33 +35,21 @@
 		</repository>
 	</repositories>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.6</java.version>
-		<storm.version>0.8.2</storm.version>
-		<twitter4j-stream.version>3.0.3</twitter4j-stream.version>
-        <!-- matching storm versions -->
-		<log4j.version>1.2.16</log4j.version>
-		<slf4j-api.version>1.5.8</slf4j-api.version>
-		<testng.version>6.8.7</testng.version>
-		<redis.version>2.1.0</redis.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>it.cybion.commons</groupId>
 			<artifactId>utils</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>it.cybion.commons.storage</groupId>
 			<artifactId>entities-repository</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
             <groupId>it.cybion.commons.external</groupId>
             <artifactId>twitter-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${commons.version}</version>
         </dependency>
 		<dependency>
 			<groupId>storm</groupId>
