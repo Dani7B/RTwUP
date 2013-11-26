@@ -27,6 +27,8 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 
+import static storm.bolts.Fields.*;
+
 /** 
  * This spout listens to tweet stream, then filters the tweets by location (e.g. city of Rome)
  * and retrieves only the links contained in tweets.
@@ -44,6 +46,7 @@ public class TwitterSpout extends BaseRichSpout {
 	private double[][] bbox = null;
 	private String[] keywords;
 
+    @Override
 	public void open(Map conf, TopologyContext context,	SpoutOutputCollector collector) {
 
 		this.bbox = new double[2][2];
@@ -109,12 +112,15 @@ public class TwitterSpout extends BaseRichSpout {
 		};
 
 		this.ts.addListener(listener);
-		FilterQuery query = new FilterQuery();
+
+        final FilterQuery query = new FilterQuery();
 		query.locations(this.bbox);
 		query.track(this.keywords);
-		this.ts.filter(query);
+
+        this.ts.filter(query);
 	}
 
+    @Override
 	public void nextTuple() {
 		try {
 			final String jsonStatus = queue.take();
@@ -124,10 +130,12 @@ public class TwitterSpout extends BaseRichSpout {
 		}
 	}
 
+    @Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("statusJSON"));
+		declarer.declare(new Fields(STATUS_JSON));
 	}
 
+    @Override
 	public void close(){
 		this.ts.shutdown();
 	} 

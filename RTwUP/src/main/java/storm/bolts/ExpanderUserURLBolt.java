@@ -25,13 +25,11 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Expand the URL. We use code by Andrew Thompson ({@link http://
-	 * stackoverflow.com/questions/10661337/expanding-a-shortened-url-to-its-original
-	 * -full-length-url-in-java}).
+	 * Expand the URL. We use code by Andrew Thompson ({http://stackoverflow.com/questions/10661337/expanding-a-shortened-url-to-its-original-full-length-url-in-java}).
 	 */
 
 	public void execute(Tuple input, BasicOutputCollector collector) {
-		User user = (User) input.getValueByField("user");
+		User user = (User) input.getValueByField(storm.bolts.Fields.USER);
 		String urlToEmit = null;
 		String url = null;
 		try {
@@ -65,6 +63,6 @@ public class ExpanderUserURLBolt extends BaseBasicBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("user_expanded"));
+		declarer.declare(new Fields(storm.bolts.Fields.USER_EXPANDED));
 	}
 }

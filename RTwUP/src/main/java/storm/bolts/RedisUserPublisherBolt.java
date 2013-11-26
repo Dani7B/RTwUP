@@ -13,6 +13,7 @@ import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
 import backtype.storm.tuple.Tuple;
+import redis.clients.jedis.Protocol;
 
 /**
  * This bolt publishes the user to Redis.
@@ -31,7 +32,8 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 	@Override
 	public void prepare(Map conf, TopologyContext context){
 		final String host = (String) conf.get("redis_host");
-		this.pool = new JedisPool(new JedisPoolConfig(), host);
+        //TODO move to configuration
+		this.pool = new JedisPool(new JedisPoolConfig(), host, Protocol.DEFAULT_PORT);
 		this.jedis = this.pool.getResource();
 	}
 	
@@ -44,7 +46,7 @@ public class RedisUserPublisherBolt extends BaseBasicBolt{
 		String monthKey = year + "-" + month;
 		String dayKey = monthKey + "-" + day;
 		String hourKey = dayKey + "_" + hour;
-		User user = (User) input.getValueByField("user_expanded");
+		User user = (User) input.getValueByField(Fields.USER_EXPANDED);
 		String userID = Long.toString(user.getId());
 		Long hUpdated = this.jedis.sadd(hourKey, userID);
 		Long dUpdated = this.jedis.sadd(dayKey, userID);

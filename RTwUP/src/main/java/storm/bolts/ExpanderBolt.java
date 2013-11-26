@@ -25,7 +25,7 @@ public class ExpanderBolt extends BaseBasicBolt {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Expand the URL. We use code by Andrew Thompson ({@link http://
+	 * Expand the URL. We use code by Andrew Thompson ({http://
 	 * stackoverflow.com/questions/10661337/expanding-a-shortened-url-to-its-original
 	 * -full-length-url-in-java}).
 	 */

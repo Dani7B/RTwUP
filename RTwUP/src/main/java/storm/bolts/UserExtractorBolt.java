@@ -26,6 +26,8 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
+import static storm.bolts.Fields.*;
+
 /**
  * Simple bolt to extract the user from the raw json of the Tweet
  * 
@@ -52,7 +54,7 @@ public class UserExtractorBolt extends BaseBasicBolt {
 	}
 	
 	public void execute(Tuple input, BasicOutputCollector collector) {
-		final String statusJSON = (String) input.getValueByField("statusJSON");
+		final String statusJSON = (String) input.getValueByField(storm.bolts.Fields.STATUS_JSON);
 		User user = null;
 		try {
 			final JSONObject statusJSONObject = new JSONObject(statusJSON);
@@ -72,6 +74,6 @@ public class UserExtractorBolt extends BaseBasicBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("user"));
+		declarer.declare(new Fields(USER));
 	}
 }
