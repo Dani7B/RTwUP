@@ -27,8 +27,9 @@
         <java.version>1.6</java.version>
 		<storm.version>0.8.2</storm.version>
 		<twitter4j-stream.version>3.0.3</twitter4j-stream.version>
-		<log4j.version>1.2.17</log4j.version>
-		<slf4j-api.version>1.6.1</slf4j-api.version>
+        <!-- matching storm versions -->
+		<log4j.version>1.2.16</log4j.version>
+		<slf4j-api.version>1.5.8</slf4j-api.version>
 		<testng.version>6.8.7</testng.version>
 		<redis.version>2.1.0</redis.version>
 	</properties>
