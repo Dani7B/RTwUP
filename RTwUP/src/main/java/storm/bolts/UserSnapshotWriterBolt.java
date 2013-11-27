@@ -82,13 +82,15 @@ public class UserSnapshotWriterBolt extends BaseBasicBolt{
         this.diffTwitterUserSnapshot = new DiffTwitterUserSnapshot(ignoreIdAndTimeStamp);
 
 		final User user = (User) input.getValueByField(USER_EXPANDED);
-		
-		TwitterUserSnapshot twitterUserSnapshot = new TwitterUserSnapshot(user, new DateTime());
+
+        final DateTime now = new DateTime();
+
+        final TwitterUserSnapshot current = new TwitterUserSnapshot(user, now);
 
         TwitterUserSnapshot last = null;
 
         try {
-            last = this.repository.getLatest(twitterUserSnapshot.getUserId());
+            last = this.repository.getLatest(current.getUserId());
         } catch (RepositoryException e) {
             System.out.println("error: '" + e.getMessage() + "'");
             LOGGER.error(e.getMessage());
@@ -97,11 +99,11 @@ public class UserSnapshotWriterBolt extends BaseBasicBolt{
 
         try {
             if (last == null) {
-                this.repository.store(twitterUserSnapshot);
+                this.repository.store(current);
             } else {
-                this.diffTwitterUserSnapshot.compareInstances(twitterUserSnapshot, last);
+                this.diffTwitterUserSnapshot.compareInstances(current, last);
                 if (this.diffTwitterUserSnapshot.getStatus().hasChanged()) {
-                    this.repository.store(twitterUserSnapshot);
+                    this.repository.store(current);
                 }
             }
         } catch (RepositoryException e) {
@@ -109,6 +111,7 @@ public class UserSnapshotWriterBolt extends BaseBasicBolt{
             LOGGER.error(e.getMessage());
             e.printStackTrace();
         }
+//        LOGGER.info("wrote profile of user '" + user.toString() + "'");
     }
 
     @Override
