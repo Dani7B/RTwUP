@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.*;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -36,7 +37,10 @@ public class RtwupTopology {
     private static final long ONE_MINUTE_MSEC = 60 * 60 * 1000;
 
     public static void main(String[] args) {
-				
+
+        //needed to override log4j.properties from storm
+        initLog4J();
+
 		String topologyName = null;
 		String es_host = null, es_clusterName = null, es_transportPort = null;
 		String redis_host = null;
@@ -185,4 +189,21 @@ public class RtwupTopology {
 			e.printStackTrace();
 		}
 	}
+
+    private static void initLog4J() {
+
+        org.apache.log4j.Logger.getRootLogger().getLoggerRepository().resetConfiguration();
+
+        final DailyRollingFileAppender dailyRolledFile = new DailyRollingFileAppender();
+        dailyRolledFile.setFile("RTwUP.log");
+        dailyRolledFile.setDatePattern(".yyyy-MM-dd");
+        //configure the appender
+        final String PATTERN = "%d{yyyy-MM-dd HH:mm:ss,SSS/zzz} [%t] %-5p %c %x - %m%n";
+        dailyRolledFile.setLayout(new PatternLayout(PATTERN));
+        dailyRolledFile.setThreshold(Level.INFO);
+        dailyRolledFile.activateOptions();
+
+        //add appender to any Logger (here is root)
+        org.apache.log4j.Logger.getRootLogger().addAppender(dailyRolledFile);
+    }
 }
