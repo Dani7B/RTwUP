@@ -53,7 +53,7 @@ public class RtwupTopology {
 
 			try {
 				
-				Properties prop = new Properties();
+				final Properties prop = new Properties();
 	
 	            //load a properties file
 				prop.load(new FileInputStream(args[0]));
@@ -177,8 +177,11 @@ public class RtwupTopology {
 
         //start local cluster
 		try {
+            //TODO issue#383 how to submit to real cluster?
             final LocalCluster cluster = new LocalCluster();
             cluster.submitTopology(topologyName, topologyConfiguration, builder.createTopology());
+
+
             if (args == null || args.length <= 0) {
                 Utils.sleep(ONE_MINUTE_MSEC);
                 cluster.killTopology(topologyName);
