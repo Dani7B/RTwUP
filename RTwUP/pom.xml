@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>ggd</groupId>
+    <groupId>it.cybion.monitoring</groupId>
     <artifactId>RTwUP</artifactId>
 	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
@@ -156,7 +156,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>storm.RtwupTestTopology</mainClass>
+                            <mainClass>it.cybion.monitoring.rtwup.storm.RtwupTestTopology</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
