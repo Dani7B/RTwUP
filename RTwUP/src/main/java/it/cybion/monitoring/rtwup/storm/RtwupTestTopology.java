@@ -40,8 +40,14 @@ public class RtwupTestTopology {
         String es_host = null, es_clusterName = null, es_transportPort = null;
         String redis_host = null;
         double sw0 = 0, sw1 = 0, ne0 = 0, ne1 = 0;
-        int twitterSpoutParallHint = 1, userExtractorParallHint = 10, expanderUserURLBolt = 10,
-                repoWriterBoltParallHint = 10, redisUserPublisherBolt = 10;
+
+        //How many executors to spawn per component. see http://www.michael-noll.com/blog/2012/10/16/understanding-the-parallelism-of-a-storm-topology/
+        int twitterSpoutParallHint = 1;
+        int userExtractorParallHint = 10;
+        int expanderUserURLBolt = 10;
+        int repoWriterBoltParallHint = 10;
+        int redisUserPublisherBolt = 10;
+
         List<String> keywords = new ArrayList<String>();
         boolean production = false;
         int numWorkers = 20;
@@ -110,6 +116,7 @@ public class RtwupTestTopology {
         final String urlExpanderId = "url-expander";
         final String repoWriterId = "repo-writer";
 
+        //TODO setNumTasks is not configured
         builder.setSpout(filteredStreamId, new TwitterSpout(), twitterSpoutParallHint);
         builder.setBolt(userExtractorId, new UserExtractorBolt(), userExtractorParallHint)
                 .shuffleGrouping(filteredStreamId);
