@@ -1,24 +1,24 @@
-#RTwUP
+# **RTwUP - Realtime Twitter User Profile**
 
-##Realtime Twitter Users' Profiles
 Given a suitably filtered stream of documents returned by a Twitter query, calculate and show real-time statistics; these consist of the amount of single-time users per hour/day/month.  
 As well as counting, the system stores User profiles in a repository, adding a so called "snapshot" only if some criteria is met (e.g. changed profile image URL or description or more than 1% increase/decrease in friends or follower amounts).  
 
-##Data Stream Description and Requirements: 
+## Data Stream Description and Requirements: 
 The system uses Twitter APIs ([Twitter4j][02], [Hosebird][03] for instance) to perform queries and retrieve Tweets, suitably filters them (e.g. according to specified coordinates or keywords).  
 If the URL contained in the user profile is in a shortned form of some kind, it's expanded to its original form (performing the expansion multiple times if required).  
   
 This must be done in real time, using [Storm][01].
 
-##Adopted Technologies
+## Adopted Technologies
 RTwUP is developed in *Java*.  
 To listen to Twitter's stream, it was chosen [Twitter4j][02], *Twitter Stream API* in particular.  
-To process the Tweets real time, [Storm][01] was chosen.  
+To process the Tweets real time, it was chosen [Apache Storm][01].
 The user interface is written in *Javascript* as a [Node.js][04] application, making use of [socket.io][05] and [Redis][06] to display statistics in real time.  
 Persistence of the retrieved Twitter User Profiles is obtained by means of a repository based on [Elasticsearch][07].
+
 For more information, you can refer to the wiki pages.
 
-##Wiki
+## Wiki
 
 * [Setting up the Maven project] (https://github.com/Dani7B/RTwUP/wiki/Setting-up-the-Maven-project)
 * [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP/wiki/Creation-of-a-Twitter-account-to-use)
@@ -28,7 +28,7 @@ For more information, you can refer to the wiki pages.
 
 
 
-[01]: https://github.com/nathanmarz/storm/wiki "Storm Wiki"
+[01]: https://storm.apache.org "Apache Storm"
 
 [02]: http://twitter4j.org/en/ "Twitter APIs in Java"
 
