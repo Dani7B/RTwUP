@@ -7,7 +7,7 @@ As well as counting, the system stores User profiles in a repository, adding a s
 The system uses Twitter APIs ([Twitter4j][02], [Hosebird][03] for instance) to perform queries and retrieve Tweets, suitably filters them (e.g. according to specified coordinates or keywords).  
 If the URL contained in the user profile is in a shortned form of some kind, it's expanded to its original form (performing the expansion multiple times if required).  
   
-This must be done in real time, using [Storm][01].
+This must be done in real time, using [Apache Storm][01].
 
 ## Adopted Technologies
 RTwUP is developed in *Java*.  
@@ -20,12 +20,11 @@ For more information, you can refer to the wiki pages.
 
 ## Wiki
 
-* [Setting up the Maven project] (https://github.com/Dani7B/RTwUP/wiki/Setting-up-the-Maven-project)
-* [Creation of a Twitter account to use] (https://github.com/Dani7B/RTwUP/wiki/Creation-of-a-Twitter-account-to-use)
-* [Installing and setting up Node.js] (https://github.com/Dani7B/RTwUP/wiki/Installing-and-setting-up-Node.js)
-* [Setting up Redis] (https://github.com/Dani7B/RTwUP/wiki/Setting-up-Redis)
-* [How to start RTwUP] (https://github.com/Dani7B/RTwUP/wiki/How-to-start-RTwUP)
-
+* [Setting up the Maven project][08]
+* [Creation of a Twitter account to use][09]
+* [Installing and setting up Node.js][10]
+* [Setting up Redis][11]
+* [How to start RTwUP][12]
 
 
 [01]: https://storm.apache.org "Apache Storm"
@@ -41,3 +40,13 @@ For more information, you can refer to the wiki pages.
 [06]: http://redis.io/ "Redis web page"
 
 [07]: http://www.elasticsearch.org/ "Elasticsearch web page"
+
+[08]: https://github.com/Dani7B/RTwUP/wiki/Setting-up-the-Maven-project "Setting up the Maven project"
+
+[09]: https://github.com/Dani7B/RTwUP/wiki/Creation-of-a-Twitter-account-to-use "Creation of a Twitter account to use"
+
+[10]: https://github.com/Dani7B/RTwUP/wiki/Installing-and-setting-up-Node.js "Installing and setting up Node.js"
+
+[11]: https://github.com/Dani7B/RTwUP/wiki/Setting-up-Redis "Setting up Redis"
+
+[12]: https://github.com/Dani7B/RTwUP/wiki/How-to-start-RTwUP "How to start RTwUP"
